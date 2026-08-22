@@ -68,7 +68,33 @@ export const cardSchema = z.object({
   verificationStatus: z.enum(['draft', 'reviewed', 'verified']),
 })
 
+export const catalogCardFaceSchema = z.object({
+  name: z.string(),
+  manaCost: z.string().optional(),
+  typeLine: z.string(),
+  oracleText: z.string(),
+  imageUri: z.string().url().optional(),
+  artist: z.string().optional(),
+})
+
+export const catalogCardSchema = z.object({
+  id: z.string(),
+  oracleId: z.string().uuid(),
+  scryfallId: z.string().uuid(),
+  setCode: z.literal('HOB'),
+  collectorNumber: z.string(),
+  name: z.string(),
+  manaCost: z.string().optional(),
+  typeLine: z.string(),
+  oracleText: z.string(),
+  imageUri: z.string().url().optional(),
+  scryfallUri: z.string().url(),
+  artist: z.string().optional(),
+  faces: z.array(catalogCardFaceSchema).optional(),
+})
+
 export type Source = z.infer<typeof sourceSchema>
 export type Scenario = z.infer<typeof scenarioSchema>
 export type Concept = z.infer<typeof conceptSchema>
 export type Card = z.infer<typeof cardSchema>
+export type CatalogCard = z.infer<typeof catalogCardSchema>
