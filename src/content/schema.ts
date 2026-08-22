@@ -52,6 +52,7 @@ export const conceptSchema = z.object({
 
 export const cardSchema = z.object({
   id: z.string(),
+  oracleId: z.string().uuid(),
   setCode: z.literal('HOB'),
   collectorNumber: z.string(),
   name: z.string(),
@@ -78,8 +79,8 @@ export const catalogCardFaceSchema = z.object({
 })
 
 export const catalogCardSchema = z.object({
-  id: z.string(),
-  oracleId: z.string().uuid(),
+  id: z.string().uuid(),
+  slug: z.string(),
   scryfallId: z.string().uuid(),
   setCode: z.literal('HOB'),
   collectorNumber: z.string(),

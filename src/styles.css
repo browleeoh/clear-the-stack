@@ -386,6 +386,52 @@ a {
   margin-top: 1.5rem;
 }
 
+.card-visual {
+  align-self: start;
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.3rem;
+  box-shadow: var(--shadow);
+}
+
+.image-status,
+.image-credit {
+  margin: 0.65rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.card-type-line {
+  margin-top: 0.55rem;
+}
+
+.card-faces {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.card-face {
+  border-top: 1px solid var(--line);
+  padding-top: 0.8rem;
+}
+
+.card-face h3 {
+  margin: 0;
+  color: var(--forest);
+  font-size: 1rem;
+}
+
+.card-face p {
+  margin: 0.35rem 0 0;
+}
+
 .card-frame {
   align-self: start;
   border: 0.55rem solid #352c24;

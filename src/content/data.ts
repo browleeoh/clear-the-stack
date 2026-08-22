@@ -141,6 +141,7 @@ export const concepts: Concept[] = conceptSchema.array().parse([
 export const cards: Card[] = cardSchema.array().parse([
   {
     id: 'thorin-oakenshield',
+    oracleId: 'bdd41af0-bbd1-4ecd-a699-99f006f5e5ce',
     setCode: 'HOB',
     collectorNumber: '165',
     name: 'Thorin Oakenshield',
@@ -191,4 +192,10 @@ export function getConcept(id: string) {
 
 export function getCard(id: string) {
   return cards.find((card) => card.id === id)
+}
+
+const cardsByOracleId = new Map(cards.map((card) => [card.oracleId, card]))
+
+export function getCardByOracleId(oracleId: string) {
+  return cardsByOracleId.get(oracleId)
 }
