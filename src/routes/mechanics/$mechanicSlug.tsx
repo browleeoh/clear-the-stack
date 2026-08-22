@@ -1,0 +1,66 @@
+import { createFileRoute, Link, notFound } from '@tanstack/react-router'
+import { DetailAccordion } from '@/components/ui/accordion'
+import { ScenarioCard } from '@/components/scenario-card'
+import { SourceList } from '@/components/source-list'
+import { getConcept } from '@/content/data'
+
+export const Route = createFileRoute('/mechanics/$mechanicSlug')({
+  loader: ({ params }) => {
+    const concept = getConcept(params.mechanicSlug)
+    if (!concept) throw notFound()
+    return concept
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: `${loaderData?.name ?? 'Mechanic'} — MTG Helper` },
+      { name: 'description', content: loaderData?.summary ?? '' },
+    ],
+  }),
+  component: MechanicPage,
+})
+
+function MechanicPage() {
+  const concept = Route.useLoaderData()
+
+  return (
+    <main className="shell page">
+      <div className="breadcrumbs">
+        <Link to="/">Look Up</Link>
+        <span aria-hidden="true">/</span>
+        <span>{concept.name}</span>
+      </div>
+      <p className="eyebrow">Set mechanic · Verified</p>
+      <h1 className="page-title display-font">{concept.name}</h1>
+
+      <div className="content-stack">
+        <section className="content-card">
+          <h2>In plain English</h2>
+          <p>{concept.summary}</p>
+        </section>
+
+        <section className="content-card content-card--memory">
+          <h2>Remember this</h2>
+          <p>{concept.memoryAid}</p>
+        </section>
+
+        <section className="content-card content-card--warning">
+          <h2>Easy to miss</h2>
+          <ul>
+            {concept.easyToMiss.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </section>
+
+        {concept.scenarios.map((scenario) => (
+          <ScenarioCard key={scenario.id} scenario={scenario} />
+        ))}
+
+        <section className="content-card">
+          <DetailAccordion title="Official wording and sources">
+            {concept.officialText ? <p>{concept.officialText}</p> : null}
+            <SourceList sourceIds={concept.sourceIds} />
+          </DetailAccordion>
+        </section>
+      </div>
+    </main>
+  )
+}
