@@ -30,27 +30,36 @@ export function SearchExperience() {
         <div className="search-results" aria-live="polite">
           {results.length ? (
             results.map((result) => {
-              const contentSlug = result.id.split(':')[1]
               const destination =
                 result.kind === 'card'
-                  ? { to: '/cards/$cardSlug' as const, params: { cardSlug: contentSlug } }
+                  ? {
+                      to: '/cards/$cardSlug' as const,
+                      params: { cardSlug: result.slug },
+                    }
                   : result.kind === 'learn'
                     ? { to: '/learn/turn-structure' as const, params: {} }
-                    : { to: '/mechanics/$mechanicSlug' as const, params: { mechanicSlug: contentSlug } }
+                    : {
+                        to: '/mechanics/$mechanicSlug' as const,
+                        params: { mechanicSlug: result.slug },
+                      }
 
               return (
-              <Link key={result.id} {...destination} className="result-link">
-                <span className="result-icon" aria-hidden="true">
-                  {result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : 'M'}
-                </span>
-                <span>
-                  <span className="result-title">{result.title}</span>
-                  <span className="result-description">
-                    {result.description}
+                <Link key={result.id} {...destination} className="result-link">
+                  <span className="result-icon" aria-hidden="true">
+                    {result.kind === 'card'
+                      ? 'C'
+                      : result.kind === 'learn'
+                        ? 'L'
+                        : 'M'}
                   </span>
-                </span>
-                <span className="result-type">{result.kind}</span>
-              </Link>
+                  <span>
+                    <span className="result-title">{result.title}</span>
+                    <span className="result-description">
+                      {result.description}
+                    </span>
+                  </span>
+                  <span className="result-type">{result.kind}</span>
+                </Link>
               )
             })
           ) : (

@@ -41,8 +41,8 @@ function mapCard(card) {
   const faces = card.card_faces?.map(mapFace)
 
   return {
-    id: slugify(card.name.replaceAll(' // ', '-')),
-    oracleId: card.oracle_id,
+    id: card.oracle_id,
+    slug: slugify(card.name.replaceAll(' // ', '-')),
     scryfallId: card.id,
     setCode: 'HOB',
     collectorNumber: card.collector_number,
@@ -104,15 +104,14 @@ async function importCatalog() {
     )
 
   const ids = new Set(catalog.map((card) => card.id))
+  const slugs = new Set(catalog.map((card) => card.slug))
   const collectorNumbers = new Set(catalog.map((card) => card.collectorNumber))
-  const oracleIds = new Set(catalog.map((card) => card.oracleId))
-
   if (
     ids.size !== EXPECTED_CARD_COUNT ||
-    collectorNumbers.size !== EXPECTED_CARD_COUNT ||
-    oracleIds.size !== EXPECTED_CARD_COUNT
+    slugs.size !== EXPECTED_CARD_COUNT ||
+    collectorNumbers.size !== EXPECTED_CARD_COUNT
   ) {
-    throw new Error('Catalog contains duplicate card, collector, or Oracle IDs')
+    throw new Error('Catalog contains duplicate card IDs, slugs, or collectors')
   }
 
   await mkdir(dirname(OUTPUT_PATH), { recursive: true })

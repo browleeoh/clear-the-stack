@@ -1,13 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { catalogCards, getCatalogCard } from '@/content/catalog'
+import {
+  catalogCards,
+  getCardContentBySlug,
+  getCatalogCard,
+  getCatalogCardBySlug,
+} from '@/content/catalog'
 import { cards, concepts, sources } from '@/content/data'
-import { searchContent } from '@/lib/search'
+import { searchContent, searchEntries } from '@/lib/search'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
     expect(catalogCards).toHaveLength(193)
     expect(new Set(catalogCards.map((card) => card.id))).toHaveLength(193)
-    expect(new Set(catalogCards.map((card) => card.oracleId))).toHaveLength(193)
+    expect(new Set(catalogCards.map((card) => card.slug))).toHaveLength(193)
     expect(
       new Set(catalogCards.map((card) => card.collectorNumber)),
     ).toHaveLength(193)
@@ -18,15 +23,24 @@ describe('HOB catalog', () => {
   })
 
   it('provides content-layer lookup for basic catalog data', () => {
-    expect(getCatalogCard('thorin-oakenshield')).toMatchObject({
+    expect(
+      getCatalogCard('bdd41af0-bbd1-4ecd-a699-99f006f5e5ce'),
+    ).toMatchObject({
       collectorNumber: '165',
       name: 'Thorin Oakenshield',
+      slug: 'thorin-oakenshield',
       typeLine: 'Legendary Creature — Dwarf Noble',
     })
+    expect(getCatalogCardBySlug('thorin-oakenshield')?.id).toBe(
+      'bdd41af0-bbd1-4ecd-a699-99f006f5e5ce',
+    )
+    expect(getCatalogCardBySlug('not-a-card')).toBeUndefined()
   })
 
   it('preserves multi-face card data without requiring images', () => {
-    const card = getCatalogCard('bofur-reliable-guardian-concerted-care')
+    const card = getCatalogCardBySlug(
+      'bofur-reliable-guardian-concerted-care',
+    )
 
     expect(card?.faces?.map((face) => face.name)).toEqual([
       'Bofur, Reliable Guardian',
@@ -36,12 +50,15 @@ describe('HOB catalog', () => {
 })
 
 describe('verified content', () => {
-  it('keeps curated Thorin guidance separate from generated catalog data', () => {
+  it('merges curated Thorin guidance by stable card ID', () => {
     const curatedThorin = cards.find((card) => card.id === 'thorin-oakenshield')
+    const content = getCardContentBySlug('thorin-oakenshield')
 
     expect(curatedThorin?.summary).toContain('storied requirement')
     expect(curatedThorin?.scenarios).toHaveLength(1)
-    expect(getCatalogCard('thorin-oakenshield')).not.toHaveProperty('summary')
+    expect(content?.catalogCard.id).toBe(curatedThorin?.oracleId)
+    expect(content?.enrichment).toBe(curatedThorin)
+    expect(content?.catalogCard).not.toHaveProperty('summary')
   })
 
   it('keeps every published source reference resolvable', () => {
@@ -66,5 +83,32 @@ describe('verified content', () => {
 
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
+  })
+})
+
+describe('catalog search', () => {
+  const cardEntries = searchEntries.filter((entry) => entry.kind === 'card')
+
+  it('indexes exactly 193 unique card entries alongside existing content', () => {
+    expect(cardEntries).toHaveLength(193)
+    expect(new Set(cardEntries.map((entry) => entry.id))).toHaveLength(193)
+    expect(new Set(cardEntries.map((entry) => entry.slug))).toHaveLength(193)
+    expect(searchEntries).toHaveLength(193 + concepts.length + 1)
+  })
+
+  it('does not duplicate curated cards', () => {
+    expect(
+      cardEntries.filter((entry) => entry.slug === 'thorin-oakenshield'),
+    ).toHaveLength(1)
+  })
+
+  it('finds basic cards by exact, partial, and fuzzy names', () => {
+    expect(searchContent('Long-Bodied Grey Dog')[0]?.slug).toBe(
+      'long-bodied-grey-dog',
+    )
+    expect(searchContent('grey dog')[0]?.slug).toBe('long-bodied-grey-dog')
+    expect(searchContent('long bodid grey dog')[0]?.slug).toBe(
+      'long-bodied-grey-dog',
+    )
   })
 })
