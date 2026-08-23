@@ -94,6 +94,7 @@ const rawSourceLocators = [
   { id: 'cr-rule-701-9a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 701.9a — Discarding a card' },
   { id: 'cr-rule-117-5', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 117.5 — State-based actions before priority' },
   { id: 'cr-rule-704-3', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 704.3 — State-based-action checks' },
+  { id: 'cr-rule-704-4', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 704.4 — State-based actions ignore intermediate resolution states' },
   { id: 'cr-rule-704-5f', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 704.5f — Creatures with toughness 0 or less' },
   { id: 'cr-rule-602-1', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 602.1 — Activated ability cost and effect' },
   { id: 'cr-rule-602-2', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 602.2 — Activating an ability and paying its costs' },
@@ -115,6 +116,7 @@ const rawSourceLocators = [
   { id: 'cr-rule-608-2c', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2c — Following instructions in order' },
   { id: 'cr-rule-608-2h', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2h — Determining game-state information on resolution' },
   { id: 'cr-rule-701-70a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 701.70a — Recruit' },
+  { id: 'cr-rule-701-47a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 701.47a — Amass a subtype' },
   { id: 'cr-rule-702-195', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 702.195 — Storied' },
   { id: 'hob-release-notes-storied', sourceId: 'hob-release-notes', locatorType: 'named-section', label: 'New Keyword Ability: Storied' },
   { id: 'hob-release-notes-recruit', sourceId: 'hob-release-notes', locatorType: 'named-section', label: 'New Keyword Action: Recruit' },
@@ -139,6 +141,150 @@ const rawSourceLocators = [
 ] satisfies SourceLocator[]
 
 export const concepts: Concept[] = conceptSchema.array().parse([
+  {
+    id: 'amass-goblins',
+    name: 'Amass Goblins',
+    kind: 'keyword-action',
+    aliases: [
+      'amass',
+      'amass Goblins',
+      'Army token',
+      'multiple Armies',
+      'choose an Army',
+      'create Goblin Army',
+      '0/0 Army',
+      'zero toughness Army',
+    ],
+    summary:
+      'To amass Goblins N, create a 0/0 black Goblin Army creature token only if you control no Army. Then choose one Army you control, put N +1/+1 counters on it, and make it a Goblin in addition to its other types if needed.',
+    memoryAid:
+      'No Army? Create one. Then choose one Army, add N counters, and make it a Goblin.',
+    officialText:
+      '701.47a To amass [subtype] N: if you control no Army creature, create a 0/0 black [subtype] Army creature token; choose an Army you control; put N +1/+1 counters on it; and add the subtype if needed.',
+    easyToMiss: [
+      'If you already control any Army creature, you do not create another token.',
+      'If you control multiple Armies, choose exactly one of them to receive the counters.',
+      'The chosen Army becomes a Goblin in addition to its other types; it does not lose existing creature types.',
+      'A newly created Army enters as 0/0 before the counters are placed, but state-based actions are not checked in the middle of the resolving instruction.',
+      'If amass Goblins 0 creates a 0/0 Army and nothing else raises its toughness, it is put into its owner’s graveyard at the next state-based-action check.',
+    ],
+    relatedConceptIds: [
+      'counter',
+      'token',
+      'resolution',
+      'state-based-actions',
+      'zones',
+    ],
+    sourceIds: [
+      'cr-rule-117-2e',
+      'cr-rule-701-47a',
+      'cr-rule-704-4',
+      'cr-rule-704-5f',
+      'hob-release-notes-amass',
+      'hob-mechanics-amass',
+    ],
+    verificationStatus: 'verified',
+    scenarios: [
+      {
+        id: 'amass-create-first-army',
+        title: 'Amass Goblins without an Army',
+        setup: [
+          'You control no Army creatures.',
+          'An effect tells you to amass Goblins 2.',
+          'No other effect changes the new Army’s power or toughness.',
+        ],
+        question: 'What do you create and where do the counters go?',
+        answer: 'explanation',
+        explanation:
+          'Create a 0/0 black Goblin Army creature token, choose that Army, and put two +1/+1 counters on it. It is 2/2 before other effects.',
+        commonMistake: 'Creating a 2/2 token directly instead of a 0/0 token that receives counters.',
+        tags: ['amass Goblins', 'create Army', 'two counters', '2/2'],
+        sourceIds: [
+          'cr-rule-701-47a',
+          'hob-release-notes-amass',
+          'hob-mechanics-amass',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-23',
+      },
+      {
+        id: 'amass-existing-army',
+        title: 'Amass with an Army already in play',
+        setup: [
+          'You control one Army creature.',
+          'An effect tells you to amass Goblins 3.',
+        ],
+        question: 'Do you create another Army token?',
+        answer: 'no',
+        explanation:
+          'Choose the Army you already control and put three +1/+1 counters on it. It also becomes a Goblin if it was not already one.',
+        commonMistake: 'Creating a fresh Army every time you amass.',
+        tags: ['existing Army', 'no new token', 'three counters', 'Goblin'],
+        sourceIds: ['cr-rule-701-47a', 'hob-release-notes-amass'],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-23',
+      },
+      {
+        id: 'amass-multiple-armies',
+        title: 'Choose among multiple Army creatures',
+        setup: [
+          'You control two Army creatures.',
+          'An effect tells you to amass Goblins 2.',
+        ],
+        question: 'Which Army receives counters?',
+        answer: 'explanation',
+        explanation:
+          'You choose one of the Army creatures you control and put both counters on that one. You do not divide the counters or create another token.',
+        commonMistake: 'Putting counters on every Army or splitting them between Armies.',
+        tags: ['multiple Armies', 'choose one', 'counters', 'no division'],
+        sourceIds: ['cr-rule-701-47a', 'hob-release-notes-amass'],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-23',
+      },
+      {
+        id: 'amass-adds-goblin-type',
+        title: 'The chosen Army is not a Goblin yet',
+        setup: [
+          'You control an Army creature that is not a Goblin.',
+          'You amass Goblins 1 and choose that Army.',
+        ],
+        question: 'What creature types does it have afterward?',
+        answer: 'explanation',
+        explanation:
+          'It becomes a Goblin in addition to its existing types. Amass does not remove the types it already had.',
+        commonMistake: 'Replacing all of the Army’s other creature types with Goblin.',
+        tags: ['Goblin type', 'in addition', 'Army', 'creature types'],
+        sourceIds: ['cr-rule-701-47a', 'hob-release-notes-amass'],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-23',
+      },
+      {
+        id: 'amass-zero-toughness-window',
+        title: 'A new Army enters as 0/0 before counters',
+        setup: [
+          'You control no Army and begin resolving amass Goblins N.',
+          'The instruction creates its 0/0 Army token before placing counters.',
+        ],
+        question: 'Is the token put into the graveyard before it receives the counters?',
+        answer: 'depends',
+        explanation:
+          'Not during the resolving instruction: state-based actions are not checked before the counters are placed. After resolution, if its toughness is still 0 or less—such as after amass Goblins 0 with no other boost—it is put into its owner’s graveyard.',
+        canRespond:
+          'No player receives priority between creating the Army and placing the counters.',
+        commonMistake: 'Checking state-based actions in the middle of amass Goblins N.',
+        tags: ['0/0 Army', 'state-based actions', 'resolution', 'amass zero'],
+        sourceIds: [
+          'cr-rule-117-2e',
+          'cr-rule-701-47a',
+          'cr-rule-704-4',
+          'cr-rule-704-5f',
+          'hob-release-notes-amass',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-23',
+      },
+    ],
+  },
   {
     id: 'hone-counters',
     name: 'Hone Counters',

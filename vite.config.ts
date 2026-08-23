@@ -32,6 +32,7 @@ export default defineConfig({
         { path: '/mechanics/this-way' },
         { path: '/mechanics/and-or' },
         { path: '/mechanics/recruit' },
+        { path: '/mechanics/amass-goblins' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {
