@@ -266,6 +266,37 @@ a {
   color: white;
 }
 
+.test-log-controls {
+  margin-top: 1.5rem;
+  margin-bottom: 6rem;
+  color: var(--muted);
+}
+
+.test-log-controls details {
+  border-top: 1px solid var(--line);
+  padding: 1rem 0;
+}
+
+.test-log-controls summary {
+  color: var(--forest);
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.test-log-controls .feedback-actions {
+  flex-wrap: wrap;
+}
+
+.feedback-actions .danger-button {
+  border-color: #9f3f31;
+  color: #8b2f24;
+}
+
+.feedback-actions button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
 .result-link {
   display: grid;
   grid-template-columns: auto 1fr auto;

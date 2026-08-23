@@ -8,6 +8,7 @@ import {
   addSelectedSearch,
   currentLookupKey,
   localTestLogKey,
+  localTestLogUpdatedEvent,
   parseLocalTestLog,
 } from '@/lib/local-test-log'
 
@@ -118,6 +119,7 @@ export function SearchExperience() {
       const record = { id, query: query.trim(), resultSelected: true, selectedResult, timestamp: new Date().toISOString() }
       localStorage.setItem(localTestLogKey, JSON.stringify(addSelectedSearch(records, record)))
       sessionStorage.setItem(currentLookupKey, id)
+      window.dispatchEvent(new Event(localTestLogUpdatedEvent))
     } catch {
       // Navigation remains fully usable when storage is unavailable.
     }
@@ -133,6 +135,7 @@ export function SearchExperience() {
         return
       }
       localStorage.setItem(localTestLogKey, JSON.stringify(next.records))
+      window.dispatchEvent(new Event(localTestLogUpdatedEvent))
       setSaveStatus('saved')
     } catch {
       setSaveStatus('unavailable')

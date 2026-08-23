@@ -3,6 +3,7 @@ import { useLocation } from '@tanstack/react-router'
 import {
   currentLookupKey,
   localTestLogKey,
+  localTestLogUpdatedEvent,
   parseLocalTestLog,
   updateLookupFeedback,
 } from '@/lib/local-test-log'
@@ -14,15 +15,20 @@ export function LocalFeedback() {
   const [status, setStatus] = useState('')
 
   useEffect(() => {
-    setStatus('')
-    try {
-      const id = sessionStorage.getItem(currentLookupKey)
-      const record = parseLocalTestLog(localStorage.getItem(localTestLogKey)).find((item) => item.id === id)
-      if (record?.selectedResult && record.selectedResult.href.split('#')[0] === location.pathname) setLookup(record)
-      else setLookup(undefined)
-    } catch {
-      setLookup(undefined)
+    function refresh() {
+      setStatus('')
+      try {
+        const id = sessionStorage.getItem(currentLookupKey)
+        const record = parseLocalTestLog(localStorage.getItem(localTestLogKey)).find((item) => item.id === id)
+        if (record?.selectedResult && record.selectedResult.href.split('#')[0] === location.pathname) setLookup(record)
+        else setLookup(undefined)
+      } catch {
+        setLookup(undefined)
+      }
     }
+    refresh()
+    window.addEventListener(localTestLogUpdatedEvent, refresh)
+    return () => window.removeEventListener(localTestLogUpdatedEvent, refresh)
   }, [location.pathname])
 
   function save(feedback: Pick<LocalTestLogRecord, 'helpful' | 'report'>, message: string) {
@@ -31,6 +37,7 @@ export function LocalFeedback() {
       const records = parseLocalTestLog(localStorage.getItem(localTestLogKey))
       const next = updateLookupFeedback(records, lookup.id, feedback)
       localStorage.setItem(localTestLogKey, JSON.stringify(next))
+      window.dispatchEvent(new Event(localTestLogUpdatedEvent))
       setLookup(next.find((record) => record.id === lookup.id))
       setStatus(message)
     } catch {
