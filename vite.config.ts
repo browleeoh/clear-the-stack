@@ -39,6 +39,7 @@ export default defineConfig({
         { path: '/mechanics/excess-damage' },
         { path: '/mechanics/ferocious' },
         { path: '/mechanics/intervening-if' },
+        { path: '/mechanics/landfall' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

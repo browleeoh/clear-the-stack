@@ -473,7 +473,7 @@ describe('verified content', () => {
         'sba-zero-toughness-before-response',
         'sba-repeat-until-clear',
       ],
-      'this-way': ['this-way-recruit-own-discard', 'this-way-different-discard'],
+      'this-way': ['this-way-recruit-own-discard', 'this-way-different-discard', 'this-way-discarded-land-return'],
       'and-or': ['and-or-different-qualities', 'and-or-one-object-once'],
     }
 
@@ -633,6 +633,32 @@ describe('verified content', () => {
   it('discovers Ferocious timing with beginner language', () => {
     expect(searchContent('ferocious power 4')[0]?.title).toBe('Ferocious')
     expect(searchContent('condition checks twice')[0]?.title).toBe('Intervening “If” Clause')
+  })
+
+  it('publishes the verified Landfall foundation with bounded cases', () => {
+    const landfall = getConcept('landfall')
+
+    expect(landfall).toMatchObject({
+      kind: 'set-mechanic',
+      verificationStatus: 'verified',
+      sourceIds: expect.arrayContaining(['cr-rule-207-2c', 'cr-rule-305-4', 'cr-rule-603-6a', 'hob-release-notes-landfall']),
+    })
+    expect(landfall?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'landfall-play-land',
+      'landfall-effect-puts-land',
+      'landfall-permanent-becomes-land',
+      'landfall-triggers-after-resolution',
+      'landfall-multiple-triggers-order',
+    ])
+    expect(landfall?.scenarios.every((scenario) =>
+      scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+    )).toBe(true)
+    expect(landfall?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+  })
+
+  it('discovers Landfall and land-return causality with beginner language', () => {
+    expect(searchContent('put land onto battlefield')[0]?.title).toBe('Landfall')
+    expect(searchContent('same discarded land')[0]?.title).toBe('“This Way”')
   })
 
   it('discovers Recruit from beginner questions', () => {
