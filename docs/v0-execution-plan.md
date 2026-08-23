@@ -216,7 +216,7 @@ Phase A scope and acceptance:
 | `V0-35` | Down in the Valley curated guidance | complete | `V0-34` | `codex/down-in-the-valley-guidance` |
 | `V0-36` | Dancing from Dark to Dawn curated guidance | complete | `V0-35` | `codex/dancing-guidance` |
 | `V0-37` | Goblin Plate Mail curated guidance | complete | `V0-36` | `codex/goblin-plate-mail-guidance` |
-| `V0-38` | Rhovanion Rampager curated guidance | ready | `V0-37` | `codex/rhovanion-rampager-guidance` |
+| `V0-38` | Rhovanion Rampager curated guidance | complete | `V0-37` | `codex/rhovanion-rampager-guidance` |
 
 Phase B scope and acceptance:
 
@@ -238,7 +238,7 @@ Phase B scope and acceptance:
 
 | ID | Unit | Status | Depends on | Suggested branch |
 | --- | --- | --- | --- | --- |
-| `V0-39` | Existing Turn Structure Learn page completion audit | queued | `V0-38` | `codex/learn-turn-structure-audit` |
+| `V0-39` | Existing Turn Structure Learn page completion audit | ready | `V0-38` | `codex/learn-turn-structure-audit` |
 | `V0-40` | Learn: casting and resolving a spell | queued | `V0-39` | `codex/learn-casting-resolution` |
 | `V0-41` | Learn: attacking and blocking | queued | `V0-40` | `codex/learn-combat` |
 | `V0-42` | Learn: tokens versus counters, targeting, stack, and priority | queued | `V0-41` | `codex/learn-core-concepts` |

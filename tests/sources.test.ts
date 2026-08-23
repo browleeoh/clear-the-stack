@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(19)
+    expect(cardLocators).toHaveLength(20)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -55,6 +55,7 @@ describe('authoritative source records', () => {
         'Celebrate the Mountain-king',
         'Dancing from Dark to Dawn',
         'Nasty Little Rabbit',
+        'Rhovanion Rampager',
         'The Chief Warg',
         'The Queen of Dale',
       ]),
@@ -339,6 +340,10 @@ describe('authoritative source records', () => {
 
   it('keeps the amassed-Army identity locator precise', () => {
     expect(sourceLocators.find((locator) => locator.id === 'cr-rule-701-47c')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 701.47c — “The amassed Army” is the chosen Army' })
+  })
+
+  it('keeps the negative-result locator precise', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'cr-rule-107-1b')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 107.1b — Negative calculation results use zero unless otherwise defined' })
   })
 
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
