@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(14)
+    expect(cardLocators).toHaveLength(15)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -54,6 +54,7 @@ describe('authoritative source records', () => {
         'Celebrate the Mountain-king',
         'Nasty Little Rabbit',
         'The Chief Warg',
+        'The Queen of Dale',
       ]),
     )
     expect(byType['mechanic-example']).toHaveLength(2)

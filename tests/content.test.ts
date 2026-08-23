@@ -386,6 +386,33 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Queen of Dale guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'the-queen-of-dale')
+    const content = getCardContentBySlug('the-queen-of-dale')
+
+    expect(curated).toMatchObject({
+      oracleId: 'a2ec1dd0-86c7-423d-b562-ed95b79bf8f7',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['recruit', 'triggered-ability', 'stack', 'priority', 'resolution']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'queen-first-noncreature-after-entry',
+      'queen-earlier-spell-before-entry',
+      'queen-creature-spells-do-not-count',
+      'queen-second-noncreature-same-opponent',
+      'queen-separate-opponents',
+      'queen-mixed-preentry-opponents',
+      'queen-trigger-response-window',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Queen of Dale enrichment through search', () => {
+    expect(searchContent('Queen separate opponents first noncreature')[0]).toMatchObject({ title: 'The Queen of Dale', href: '/cards/the-queen-of-dale' })
+  })
+
   it("exposes Bard's Company enrichment through search", () => {
     expect(searchContent('Bards Company sacrifice Human mana')[0]).toMatchObject({ title: "Bard's Company", href: '/cards/bard-s-company' })
   })
