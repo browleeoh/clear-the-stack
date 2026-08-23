@@ -203,6 +203,33 @@ a {
   text-transform: uppercase;
 }
 
+.empty-state p {
+  margin: 0;
+}
+
+.save-question {
+  margin-top: 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--forest);
+  padding: 0.6rem 0.85rem;
+  color: white;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.save-question:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.save-status {
+  min-height: 1.35rem;
+  margin-top: 0.55rem !important;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .result-link {
   display: grid;
   grid-template-columns: auto 1fr auto;

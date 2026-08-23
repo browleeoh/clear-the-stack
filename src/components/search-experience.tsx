@@ -3,6 +3,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowIcon, SearchIcon } from './icons'
 import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
+import {
+  addUnansweredSearch,
+  localTestLogKey,
+  parseLocalTestLog,
+} from '@/lib/local-test-log'
 
 const suggestions = [
   'Storied',
@@ -81,6 +86,7 @@ export function getSearchDestination(result: SearchEntry) {
 export function SearchExperience() {
   const [query, setQuery] = useState('')
   const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'duplicate' | 'unavailable'>('idle')
   const results = useMemo(() => searchContent(query), [query])
   const groupedResults = useMemo(() => groupSearchResults(results, query), [query, results])
 
@@ -103,6 +109,22 @@ export function SearchExperience() {
     }
   }
 
+  function saveUnansweredSearch() {
+    try {
+      const records = parseLocalTestLog(localStorage.getItem(localTestLogKey))
+      const id = globalThis.crypto?.randomUUID?.() ?? `lookup-${Date.now()}`
+      const next = addUnansweredSearch(records, query, id, new Date().toISOString())
+      if (!next.added) {
+        setSaveStatus('duplicate')
+        return
+      }
+      localStorage.setItem(localTestLogKey, JSON.stringify(next.records))
+      setSaveStatus('saved')
+    } catch {
+      setSaveStatus('unavailable')
+    }
+  }
+
   return (
     <>
       <div className="search-panel">
@@ -114,6 +136,7 @@ export function SearchExperience() {
             autoComplete="off"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
+            onInput={() => setSaveStatus('idle')}
             placeholder="Search a card, mechanic, or question"
           />
         </label>
@@ -141,8 +164,15 @@ export function SearchExperience() {
             ))
           ) : (
             <div className="empty-state">
-              We don’t have an explanation for that yet. Try a card or mechanic
-              name.
+              <p>We don’t have an explanation for that yet. Try a card or mechanic name.</p>
+              <button className="save-question" type="button" onClick={saveUnansweredSearch} disabled={saveStatus === 'saved' || saveStatus === 'duplicate'}>
+                {saveStatus === 'saved' || saveStatus === 'duplicate' ? 'Question saved' : 'Save this question'}
+              </button>
+              <p className="save-status" role="status">
+                {saveStatus === 'saved' ? 'Saved on this device for later review.' : null}
+                {saveStatus === 'duplicate' ? 'This question was already saved on this device.' : null}
+                {saveStatus === 'unavailable' ? 'This browser could not save the question.' : null}
+              </p>
             </div>
           )}
         </div>
