@@ -174,8 +174,8 @@ All units inherit these requirements:
 | `V0-18` | Azog, Moria's Ruin curated guidance | complete | `V0-17` | `codex/azog-guidance` |
 | `V0-19` | Bolg of the North curated guidance | complete | `V0-18` | `codex/bolg-guidance` |
 | `V0-20` | Ferocious and intervening-if foundation | complete | `V0-19` | `codex/ferocious-foundation` |
-| `V0-21` | Nasty Little Rabbit curated guidance | ready | `V0-20` | `codex/nasty-little-rabbit-guidance` |
-| `V0-22` | Landfall, land entry, and “this way” zone-change foundation | queued | `V0-21` | `codex/landfall-foundation` |
+| `V0-21` | Nasty Little Rabbit curated guidance | complete | `V0-20` | `codex/nasty-little-rabbit-guidance` |
+| `V0-22` | Landfall, land entry, and “this way” zone-change foundation | ready | `V0-21` | `codex/landfall-foundation` |
 | `V0-23` | Silvan Reveler curated guidance | queued | `V0-22` | `codex/silvan-reveler-guidance` |
 | `V0-24` | Artifact, legendary permanent, and static-ability foundation | queued | `V0-23` | `codex/artifact-legendary-foundation` |
 | `V0-25` | Bifur, Melodic Rider curated guidance | queued | `V0-24` | `codex/bifur-guidance` |
