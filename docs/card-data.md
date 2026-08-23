@@ -2,6 +2,12 @@
 
 The generated HOB catalog is sourced from the [Scryfall API](https://scryfall.com/docs/api). Scryfall provides card data and imagery under its published API use guidelines and the Wizards of the Coast Fan Content Policy.
 
+The source registry records the exact Scryfall API query and retrieval date used for
+the catalog. Scryfall is the catalog and Oracle-text data provider; Wizards of the
+Coast remains the publisher of Magic's rules. Before authoring or re-verifying card
+guidance, refresh the catalog if needed and check the current Wizards Comprehensive
+Rules effective date and the relevant normalized source locators.
+
 Clear the Stack uses this data to provide additional beginner-focused explanations and gameplay scenarios. Access to card data is not paywalled, and the project does not imply endorsement by Scryfall or Wizards of the Coast.
 
 The importer sends an application-specific `User-Agent` and an `Accept` header, performs a bounded search for the 193 numbered HOB main-set cards, and writes only the fields needed by the application. Run it with:
