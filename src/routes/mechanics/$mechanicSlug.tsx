@@ -4,6 +4,14 @@ import { ScenarioCard } from '@/components/scenario-card'
 import { SourceList } from '@/components/source-list'
 import { getConcept } from '@/content/data'
 
+const conceptKindLabels = {
+  'keyword-ability': 'Keyword ability',
+  'keyword-action': 'Keyword action',
+  'set-mechanic': 'Set mechanic',
+  'game-concept': 'Rules concept',
+  object: 'Game object',
+} as const
+
 export const Route = createFileRoute('/mechanics/$mechanicSlug')({
   loader: ({ params }) => {
     const concept = getConcept(params.mechanicSlug)
@@ -29,7 +37,9 @@ function MechanicPage() {
         <span aria-hidden="true">/</span>
         <span>{concept.name}</span>
       </div>
-      <p className="eyebrow">Set mechanic · Verified</p>
+      <p className="eyebrow">
+        {conceptKindLabels[concept.kind]} · Verified
+      </p>
       <h1 className="page-title display-font">{concept.name}</h1>
 
       <div className="content-stack">

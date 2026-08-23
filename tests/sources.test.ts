@@ -84,6 +84,32 @@ describe('authoritative source records', () => {
     ])
   })
 
+  it('keeps precise Counter, Equipment, attach, and equip locators', () => {
+    expect(
+      sourceLocators
+        .filter((locator) =>
+          [
+            'cr-rule-122-1',
+            'cr-rule-122-2',
+            'cr-rule-301-5',
+            'cr-rule-301-5b',
+            'cr-rule-301-5c',
+            'cr-rule-701-3',
+            'cr-rule-702-6a',
+          ].includes(locator.id),
+        )
+        .map((locator) => locator.id),
+    ).toEqual([
+      'cr-rule-122-1',
+      'cr-rule-122-2',
+      'cr-rule-301-5',
+      'cr-rule-301-5b',
+      'cr-rule-301-5c',
+      'cr-rule-701-3',
+      'cr-rule-702-6a',
+    ])
+  })
+
   it('links every card locator to a catalog Oracle ID', () => {
     const catalogIds = new Set(catalogCards.map((card) => card.id))
     expect(
