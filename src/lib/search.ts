@@ -56,8 +56,8 @@ export const searchEntries: SearchEntry[] = [
     kind: 'learn',
     href: '/learn/turn-structure',
     slug: 'turn-structure',
-    aliases: 'how to take a turn what can I do now phases steps',
-    body: 'Untap upkeep draw precombat main combat postcombat main end cleanup',
+    aliases: 'how to take a turn what can I do now phases steps when can I play a land cast a sorcery',
+    body: 'Untap upkeep draw precombat main combat attackers blockers postcombat main end cleanup example turn priority stack',
   },
 ]
 

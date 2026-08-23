@@ -238,8 +238,8 @@ Phase B scope and acceptance:
 
 | ID | Unit | Status | Depends on | Suggested branch |
 | --- | --- | --- | --- | --- |
-| `V0-39` | Existing Turn Structure Learn page completion audit | ready | `V0-38` | `codex/learn-turn-structure-audit` |
-| `V0-40` | Learn: casting and resolving a spell | queued | `V0-39` | `codex/learn-casting-resolution` |
+| `V0-39` | Existing Turn Structure Learn page completion audit | complete | `V0-38` | `codex/learn-turn-structure-audit` |
+| `V0-40` | Learn: casting and resolving a spell | ready | `V0-39` | `codex/learn-casting-resolution` |
 | `V0-41` | Learn: attacking and blocking | queued | `V0-40` | `codex/learn-combat` |
 | `V0-42` | Learn: tokens versus counters, targeting, stack, and priority | queued | `V0-41` | `codex/learn-core-concepts` |
 | `V0-43` | Search journey completion: grouping, scenario links, recent searches, and beginner-query behavior | queued | `V0-42` | `codex/search-journey-completion` |
