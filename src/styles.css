@@ -80,6 +80,7 @@ a {
   align-items: center;
   gap: 0.7rem;
   text-decoration: none;
+  min-height: 44px;
 }
 
 .brand__mark {
@@ -226,6 +227,7 @@ a {
   color: white;
   cursor: pointer;
   font-weight: 750;
+  min-height: 44px;
 }
 
 .save-question:disabled {
@@ -268,6 +270,7 @@ a {
   color: var(--forest);
   cursor: pointer;
   font-weight: 750;
+  min-height: 44px;
 }
 
 .feedback-actions button[aria-pressed="true"] {
@@ -291,6 +294,8 @@ a {
   color: var(--forest);
   cursor: pointer;
   font-weight: 750;
+  min-height: 44px;
+  align-content: center;
 }
 
 .test-log-controls .feedback-actions {
@@ -374,6 +379,7 @@ a {
   cursor: pointer;
   font-size: 0.83rem;
   font-weight: 700;
+  min-height: 44px;
 }
 
 .recent-searches {
@@ -486,6 +492,7 @@ html {
   cursor: pointer;
   font-weight: 780;
   text-align: left;
+  min-height: 44px;
 }
 
 .accordion-trigger::after {
