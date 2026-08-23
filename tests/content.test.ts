@@ -22,6 +22,7 @@ import {
   parseRecentSearches,
   updateRecentSearches,
 } from '@/components/search-experience'
+import { addUnansweredSearch, parseLocalTestLog } from '@/lib/local-test-log'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -1159,6 +1160,39 @@ describe('catalog search', () => {
     expect(updateRecentSearches(['five', 'four', 'three', 'two', 'one'], 'six')).toEqual(['six', 'five', 'four', 'three', 'two'])
     expect(parseRecentSearches('["one",2,"three"]')).toEqual(['one', 'three'])
     expect(parseRecentSearches('{bad')).toEqual([])
+  })
+
+  it('records normalized unanswered searches once without identity or game state', () => {
+    const first = addUnansweredSearch([], '  unknown interaction  ', 'lookup-1', '2026-08-23T16:00:00.000Z')
+    expect(first).toEqual({
+      added: true,
+      records: [{ id: 'lookup-1', query: 'unknown interaction', resultSelected: false, timestamp: '2026-08-23T16:00:00.000Z' }],
+    })
+    expect(addUnansweredSearch(first.records, 'UNKNOWN INTERACTION', 'lookup-2', '2026-08-23T17:00:00.000Z')).toEqual({ records: first.records, added: false })
+    expect(first.records[0]).not.toHaveProperty('name')
+    expect(first.records[0]).not.toHaveProperty('gameState')
+  })
+
+  it('recovers safely from malformed local test-log data', () => {
+    expect(parseLocalTestLog('{bad')).toEqual([])
+    expect(parseLocalTestLog('[{"id":"incomplete"}]')).toEqual([])
+    expect(parseLocalTestLog('[{"id":"","query":"q","resultSelected":false,"timestamp":"2026-08-23T16:00:00.000Z"},{"id":"x","query":" ","resultSelected":false,"timestamp":"bad"}]')).toEqual([])
+  })
+
+  it('strips unknown identity and game-state fields from persisted records', () => {
+    expect(parseLocalTestLog(JSON.stringify([{
+      id: ' lookup-1 ',
+      query: ' unknown interaction ',
+      resultSelected: false,
+      timestamp: '2026-08-23T16:00:00.000Z',
+      name: 'Alice',
+      gameState: 'secret board',
+    }]))).toEqual([{
+      id: 'lookup-1',
+      query: 'unknown interaction',
+      resultSelected: false,
+      timestamp: '2026-08-23T16:00:00.000Z',
+    }])
   })
 
   it('does not duplicate curated cards', () => {
