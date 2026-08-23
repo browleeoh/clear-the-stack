@@ -480,6 +480,20 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Dancing from Dark to Dawn guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'dancing-from-dark-to-dawn')
+    const content = getCardContentBySlug('dancing-from-dark-to-dawn')
+    expect(curated).toMatchObject({ oracleId: '5ba482e9-fbb0-4d9f-a3a9-414892bcdfed', verificationStatus: 'verified', conceptIds: expect.arrayContaining(['landfall', 'triggered-ability', 'target', 'counter', 'token']) })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual(['dancing-cast-trigger-before-spell', 'dancing-spell-cannot-target-itself', 'dancing-invalid-target-spell-continues', 'dancing-mana-value-fixed-cost', 'dancing-x-spell-mana-value', 'dancing-creature-enters-not-cast', 'dancing-landfall-bear-independent'])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Dancing from Dark to Dawn enrichment through search', () => {
+    expect(searchContent('Dancing X creature spell Bear independent')[0]).toMatchObject({ title: 'Dancing from Dark to Dawn', href: '/cards/dancing-from-dark-to-dawn' })
+  })
+
   it('exposes Down in the Valley enrichment through search', () => {
     expect(searchContent('Down Valley gains Landfall later Elf final chapter')[0]).toMatchObject({ title: 'Down in the Valley', href: '/cards/down-in-the-valley' })
   })
