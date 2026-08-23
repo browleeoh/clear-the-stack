@@ -439,6 +439,42 @@ describe('verified content', () => {
     ).toBe(true)
   })
 
+  it('publishes the verified Amass Goblins foundation with bounded cases', () => {
+    const amass = getConcept('amass-goblins')
+
+    expect(amass).toMatchObject({
+      kind: 'keyword-action',
+      verificationStatus: 'verified',
+      sourceIds: expect.arrayContaining([
+        'cr-rule-701-47a',
+        'hob-release-notes-amass',
+        'hob-mechanics-amass',
+      ]),
+    })
+    expect(amass?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'amass-create-first-army',
+      'amass-existing-army',
+      'amass-multiple-armies',
+      'amass-adds-goblin-type',
+      'amass-zero-toughness-window',
+    ])
+    expect(
+      amass?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-23',
+      ),
+    ).toBe(true)
+    expect(
+      amass?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+    ).toBe(true)
+  })
+
+  it('discovers Amass Goblins from beginner questions', () => {
+    expect(searchContent('multiple Armies')[0]?.title).toBe('Amass Goblins')
+    expect(searchContent('zero toughness Army')[0]?.title).toBe('Amass Goblins')
+  })
+
   it('discovers Recruit from beginner questions', () => {
     expect(searchContent('draw discard token')[0]?.title).toBe('Recruit')
     expect(searchContent('respond during recruit')[0]?.title).toBe('Recruit')

@@ -204,6 +204,22 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps the precise operative Amass locator', () => {
+    expect(
+      sourceLocators.find((locator) => locator.id === 'cr-rule-701-47a'),
+    ).toMatchObject({
+      sourceId: 'magic-comprehensive-rules',
+      locatorType: 'rule-number',
+      label: 'Rule 701.47a — Amass a subtype',
+    })
+    expect(
+      sourceLocators.find((locator) => locator.id === 'cr-rule-704-4'),
+    ).toMatchObject({
+      sourceId: 'magic-comprehensive-rules',
+      locatorType: 'rule-number',
+    })
+  })
+
   it('keeps the Dwalin resolution-information locator precise', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),
