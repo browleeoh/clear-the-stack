@@ -167,6 +167,27 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps precise zone, state-based action, and wording locators', () => {
+    const ids = [
+      'cr-rule-400-1',
+      'cr-rule-400-7',
+      'cr-rule-400-7j',
+      'cr-rule-403-1',
+      'cr-rule-404-1',
+      'cr-rule-406-1',
+      'cr-rule-608-3a',
+      'cr-rule-117-5',
+      'cr-rule-704-3',
+      'cr-rule-704-5f',
+    ]
+
+    expect(
+      sourceLocators
+        .filter((locator) => ids.includes(locator.id))
+        .map((locator) => locator.id),
+    ).toEqual(ids)
+  })
+
   it('keeps the Dwalin resolution-information locator precise', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),

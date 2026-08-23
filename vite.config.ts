@@ -27,6 +27,10 @@ export default defineConfig({
         { path: '/mechanics/priority' },
         { path: '/mechanics/activated-ability' },
         { path: '/mechanics/static-ability' },
+        { path: '/mechanics/zones' },
+        { path: '/mechanics/state-based-actions' },
+        { path: '/mechanics/this-way' },
+        { path: '/mechanics/and-or' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

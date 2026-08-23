@@ -329,6 +329,48 @@ describe('verified content', () => {
     expect(searchContent('always on ability')[0]?.title).toBe('Static Ability')
   })
 
+  it('publishes the verified zones, state-based actions, and wording foundations', () => {
+    const expected = {
+      zones: [
+        'zones-permanent-spell-to-battlefield',
+        'zones-leave-and-return-new-object',
+      ],
+      'state-based-actions': [
+        'sba-zero-toughness-before-response',
+        'sba-repeat-until-clear',
+      ],
+      'this-way': ['this-way-recruit-own-discard', 'this-way-different-discard'],
+      'and-or': ['and-or-different-qualities', 'and-or-one-object-once'],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(
+        scenarioIds,
+      )
+      expect(
+        concept?.scenarios.every(
+          (scenario) =>
+            scenario.verificationStatus === 'verified' &&
+            scenario.reviewedAt === '2026-08-23',
+        ),
+      ).toBe(true)
+      expect(
+        concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+      ).toBe(true)
+    }
+  })
+
+  it('discovers zone, state-based action, and wording concepts', () => {
+    expect(searchContent('zone change new object')[0]?.title).toBe('Zones')
+    expect(searchContent('0 toughness creature dies')[0]?.title).toBe(
+      'State-Based Actions',
+    )
+    expect(searchContent('discarded this way')[0]?.title).toBe('“This Way”')
+    expect(searchContent('multiple qualities')[0]?.title).toBe('“And/Or”')
+  })
+
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })
