@@ -432,6 +432,34 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it("merges curated Beorn's Hospitality guidance by stable Oracle UUID and route slug", () => {
+    const curated = cards.find((card) => card.id === 'beorn-s-hospitality')
+    const content = getCardContentBySlug('beorn-s-hospitality')
+
+    expect(curated).toMatchObject({
+      oracleId: 'd9ed7252-11d1-432b-9101-ac08cd28826d',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['landfall', 'activated-ability', 'target', 'counter', 'resolution']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'beorns-landfall-target-counter',
+      'beorns-landfall-target-illegal',
+      'beorns-transformation-retains-types',
+      'beorns-transformation-persists',
+      'beorns-power-follows-land-count',
+      'beorns-animation-not-landfall',
+      'beorns-transformed-self-target',
+      'beorns-leaves-and-returns',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it("exposes Beorn's Hospitality enrichment through search", () => {
+    expect(searchContent('Beorns Hospitality lasting Bear land count')[0]).toMatchObject({ title: "Beorn's Hospitality", href: '/cards/beorn-s-hospitality' })
+  })
+
   it('exposes Chief Warg enrichment through search', () => {
     expect(searchContent('Chief Warg power drops no recheck')[0]).toMatchObject({ title: 'The Chief Warg', href: '/cards/the-chief-warg' })
   })

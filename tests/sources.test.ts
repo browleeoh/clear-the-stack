@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(15)
+    expect(cardLocators).toHaveLength(16)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -49,6 +49,7 @@ describe('authoritative source records', () => {
         'Bard, King of Dale',
         'Bard the Bowman',
         "Bard's Company",
+        "Beorn's Hospitality",
         'Bifur, Melodic Rider',
         'Bolg of the North',
         'Celebrate the Mountain-king',
@@ -308,6 +309,11 @@ describe('authoritative source records', () => {
   it('keeps precise attack-event and per-event trigger locators', () => {
     const ids = ['cr-rule-508-1m', 'cr-rule-603-2c']
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual(ids)
+  })
+
+  it('keeps precise lasting-animation and power/toughness locators', () => {
+    const ids = ['cr-rule-205-1b', 'cr-rule-208-3', 'cr-rule-611-2a', 'cr-rule-613-1', 'cr-rule-613-4b']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
   })
 
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
