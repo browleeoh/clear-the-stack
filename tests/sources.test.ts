@@ -110,6 +110,29 @@ describe('authoritative source records', () => {
     ])
   })
 
+  it('keeps precise triggered-ability, target, and resolution locators', () => {
+    const ids = [
+      'cr-rule-113-3c',
+      'cr-rule-113-7a',
+      'cr-rule-117-4',
+      'cr-rule-115-1',
+      'cr-rule-115-1d',
+      'cr-rule-115-6',
+      'cr-rule-603-1',
+      'cr-rule-603-2',
+      'cr-rule-603-3',
+      'cr-rule-603-3b',
+      'cr-rule-608-2b',
+      'cr-rule-608-2c',
+    ]
+
+    expect(
+      sourceLocators
+        .filter((locator) => ids.includes(locator.id))
+        .map((locator) => locator.id),
+    ).toEqual(ids)
+  })
+
   it('links every card locator to a catalog Oracle ID', () => {
     const catalogIds = new Set(catalogCards.map((card) => card.id))
     expect(
