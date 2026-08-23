@@ -32,7 +32,7 @@ describe('authoritative source records', () => {
     })
   })
 
-  it('distinguishes first-ten release-note coverage', () => {
+  it('distinguishes tracked release-note coverage', () => {
     const cardLocators = sourceLocators.filter((locator) => locator.cardOracleId)
     const byType = cardLocators.reduce<
       Record<string, typeof cardLocators>
@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(10)
+    expect(cardLocators).toHaveLength(11)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -50,6 +50,7 @@ describe('authoritative source records', () => {
         'Bolg of the North',
         'Celebrate the Mountain-king',
         'Nasty Little Rabbit',
+        'The Chief Warg',
       ]),
     )
     expect(byType['mechanic-example']).toHaveLength(2)
@@ -147,6 +148,16 @@ describe('authoritative source records', () => {
         .filter((locator) => ids.includes(locator.id))
         .map((locator) => locator.id),
     ).toEqual(ids)
+  })
+
+  it('keeps precise ability-word and intervening-if locators', () => {
+    const ids = ['cr-rule-207-2c', 'cr-rule-109-2', 'cr-rule-603-4']
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+    expect(sourceLocators.find((locator) => locator.id === 'hob-release-notes-chief-warg')).toMatchObject({
+      locatorType: 'card-specific-entry',
+      cardOracleId: '5ebe8de1-aa3d-410d-b43d-1685259c7a97',
+    })
   })
 
   it('keeps Azog controller, destroy, and indestructible locators precise', () => {

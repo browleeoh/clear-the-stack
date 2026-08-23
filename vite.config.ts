@@ -37,6 +37,8 @@ export default defineConfig({
         { path: '/mechanics/last-known-information' },
         { path: '/mechanics/reflexive-triggered-ability' },
         { path: '/mechanics/excess-damage' },
+        { path: '/mechanics/ferocious' },
+        { path: '/mechanics/intervening-if' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

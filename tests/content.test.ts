@@ -576,6 +576,33 @@ describe('verified content', () => {
     expect(searchContent('damage over lethal')[0]?.title).toBe('Excess Damage')
   })
 
+  it('publishes the verified Ferocious and intervening-if foundations', () => {
+    const expected = {
+      ferocious: ['ferocious-ability-word-not-rule', 'ferocious-creature-counts-itself'],
+      'intervening-if': [
+        'intervening-if-false-at-event',
+        'intervening-if-becomes-true-late',
+        'intervening-if-false-on-resolution',
+        'intervening-if-stays-true',
+      ],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(scenarioIds)
+      expect(concept?.scenarios.every((scenario) =>
+        scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+      )).toBe(true)
+      expect(concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+    }
+  })
+
+  it('discovers Ferocious timing with beginner language', () => {
+    expect(searchContent('ferocious power 4')[0]?.title).toBe('Ferocious')
+    expect(searchContent('condition checks twice')[0]?.title).toBe('Intervening “If” Clause')
+  })
+
   it('discovers Recruit from beginner questions', () => {
     expect(searchContent('draw discard token')[0]?.title).toBe('Recruit')
     expect(searchContent('respond during recruit')[0]?.title).toBe('Recruit')
