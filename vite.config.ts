@@ -23,6 +23,10 @@ export default defineConfig({
         { path: '/mechanics/triggered-ability' },
         { path: '/mechanics/target' },
         { path: '/mechanics/resolution' },
+        { path: '/mechanics/stack' },
+        { path: '/mechanics/priority' },
+        { path: '/mechanics/activated-ability' },
+        { path: '/mechanics/static-ability' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

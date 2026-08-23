@@ -165,8 +165,8 @@ All units inherit these requirements:
 
 | ID | Unit | Status | Depends on | Suggested branch |
 | --- | --- | --- | --- | --- |
-| `V0-12` | Stack, priority, responding, and activated/static ability foundation | ready | `V0-11` | `codex/stack-priority-foundation` |
-| `V0-13` | Zones, state-based actions, “this way,” and “and/or” foundation | queued | `V0-12` | `codex/zones-wording-foundation` |
+| `V0-12` | Stack, priority, responding, and activated/static ability foundation | complete | `V0-11` | `codex/stack-priority-foundation` |
+| `V0-13` | Zones, state-based actions, “this way,” and “and/or” foundation | ready | `V0-12` | `codex/zones-wording-foundation` |
 | `V0-14` | Recruit mechanic foundation | queued | `V0-13` | `codex/recruit-foundation` |
 | `V0-15` | Celebrate the Mountain-king curated guidance | queued | `V0-14` | `codex/celebrate-guidance` |
 | `V0-16` | Amass Goblins and Army token foundation | queued | `V0-15` | `codex/amass-foundation` |
