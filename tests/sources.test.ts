@@ -291,6 +291,11 @@ describe('authoritative source records', () => {
     })
   })
 
+  it('keeps precise Saga chapter, lore-counter, and sacrifice locators', () => {
+    const ids = ['cr-rule-714-2', 'cr-rule-714-3', 'cr-rule-714-4']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+  })
+
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
     const ids = [
       'cr-rule-701-21a',

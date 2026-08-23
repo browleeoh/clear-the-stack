@@ -574,6 +574,27 @@ describe('verified content', () => {
     expect(searchContent('same named legendary permanents')[0]?.title).toBe('Legendary Permanent')
   })
 
+  it('publishes the minimum verified Saga and lore-counter foundation', () => {
+    const saga = getConcept('saga')
+
+    expect(saga).toMatchObject({ kind: 'object', verificationStatus: 'verified' })
+    expect(saga?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'saga-enters-chapter-one',
+      'saga-precombat-lore-action',
+      'saga-effect-adds-lore',
+      'saga-crosses-multiple-chapters',
+      'saga-final-chapter-sacrifice',
+      'saga-leaves-chapter-remains',
+    ])
+    expect(saga?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+    expect(saga?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+  })
+
+  it('discovers Saga timing and lore-counter questions', () => {
+    expect(searchContent('final chapter sacrifice')[0]?.title).toBe('Saga')
+    expect(searchContent('lore counter precombat main')[0]?.title).toBe('Saga')
+  })
+
   it('publishes replacement-effect, draw, and discard foundations', () => {
     const expected = {
       'replacement-effect': ['replacement-original-event-never-happens', 'replacement-must-exist-first', 'replacement-multiple-effects', 'replacement-no-self-loop'],
