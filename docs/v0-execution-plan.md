@@ -168,8 +168,8 @@ All units inherit these requirements:
 | `V0-12` | Stack, priority, responding, and activated/static ability foundation | complete | `V0-11` | `codex/stack-priority-foundation` |
 | `V0-13` | Zones, state-based actions, “this way,” and “and/or” foundation | complete | `V0-12` | `codex/zones-wording-foundation` |
 | `V0-14` | Recruit mechanic foundation | complete | `V0-13` | `codex/recruit-foundation` |
-| `V0-15` | Celebrate the Mountain-king curated guidance | ready | `V0-14` | `codex/celebrate-guidance` |
-| `V0-16` | Amass Goblins and Army token foundation | queued | `V0-15` | `codex/amass-foundation` |
+| `V0-15` | Celebrate the Mountain-king curated guidance | complete | `V0-14` | `codex/celebrate-guidance` |
+| `V0-16` | Amass Goblins and Army token foundation | ready | `V0-15` | `codex/amass-foundation` |
 | `V0-17` | Sacrifice, last known information, reflexive triggers, and excess damage foundation | queued | `V0-16` | `codex/amass-interaction-foundation` |
 | `V0-18` | Azog, Moria's Ruin curated guidance | queued | `V0-17` | `codex/azog-guidance` |
 | `V0-19` | Bolg of the North curated guidance | queued | `V0-18` | `codex/bolg-guidance` |

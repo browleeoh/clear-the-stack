@@ -137,6 +137,43 @@ describe('verified content', () => {
     ).toBe(true)
   })
 
+  it('merges curated Celebrate guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find(
+      (card) => card.id === 'celebrate-the-mountain-king',
+    )
+    const content = getCardContentBySlug('celebrate-the-mountain-king')
+
+    expect(curated).toMatchObject({
+      oracleId: 'd51136fa-3c13-48a5-83fd-51fe00010a4b',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['recruit', 'zones', 'attachment']),
+    })
+    expect(content?.catalogCard.slug).toBe('celebrate-the-mountain-king')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'celebrate-order-enter-triggers',
+      'celebrate-leaves-before-exile',
+      'celebrate-exiles-token',
+      'celebrate-exiles-attached-permanent',
+      'celebrate-return-is-immediate',
+    ])
+    expect(
+      curated?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-23',
+      ),
+    ).toBe(true)
+  })
+
+  it('exposes Celebrate enrichment through search', () => {
+    expect(searchContent('Celebrate attached Equipment')[0]).toMatchObject({
+      title: 'Celebrate the Mountain-king',
+      href: '/cards/celebrate-the-mountain-king',
+    })
+  })
+
   it('exposes Sting enrichment through search', () => {
     expect(searchContent('Sting choose no creature')[0]).toMatchObject({
       title: "Sting, Bilbo's Sword",
