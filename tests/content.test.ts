@@ -371,6 +371,43 @@ describe('verified content', () => {
     expect(searchContent('multiple qualities')[0]?.title).toBe('“And/Or”')
   })
 
+  it('publishes the verified Recruit foundation with bounded cases', () => {
+    const recruit = getConcept('recruit')
+
+    expect(recruit).toMatchObject({
+      kind: 'keyword-action',
+      verificationStatus: 'verified',
+      sourceIds: expect.arrayContaining([
+        'cr-rule-701-70a',
+        'hob-release-notes-recruit',
+        'hob-mechanics-recruit',
+      ]),
+    })
+    expect(recruit?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'recruit-nonland-happy-path',
+      'recruit-land-no-token',
+      'recruit-no-mid-resolution-response',
+      'recruit-replaced-draw',
+      'recruit-empty-library-or-no-discard',
+    ])
+    expect(
+      recruit?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-23',
+      ),
+    ).toBe(true)
+    expect(
+      recruit?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+    ).toBe(true)
+  })
+
+  it('discovers Recruit from beginner questions', () => {
+    expect(searchContent('draw discard token')[0]?.title).toBe('Recruit')
+    expect(searchContent('respond during recruit')[0]?.title).toBe('Recruit')
+    expect(searchContent('empty library recruit')[0]?.title).toBe('Recruit')
+  })
+
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })

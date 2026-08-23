@@ -188,6 +188,22 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps precise Recruit draw, discard, and impossible-action locators', () => {
+    const ids = [
+      'cr-rule-101-3',
+      'cr-rule-121-1',
+      'cr-rule-121-4',
+      'cr-rule-121-6',
+      'cr-rule-701-9a',
+    ]
+
+    expect(
+      sourceLocators
+        .filter((locator) => ids.includes(locator.id))
+        .map((locator) => locator.id),
+    ).toEqual(ids)
+  })
+
   it('keeps the Dwalin resolution-information locator precise', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),
