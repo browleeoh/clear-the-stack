@@ -340,6 +340,33 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Bard the Bowman guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'bard-the-bowman')
+    const content = getCardContentBySlug('bard-the-bowman')
+
+    expect(curated).toMatchObject({
+      oracleId: 'ec076f5b-b0e3-4b6f-9293-a8fc42f20bd8',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['draw', 'triggered-ability', 'target', 'stack', 'recruit', 'token']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'bard-bowman-enters-after-first-draw',
+      'bard-bowman-misses-second-draw',
+      'bard-bowman-leaves-before-second',
+      'bard-bowman-recruit-soldier-target',
+      'bard-bowman-recruit-no-soldier',
+      'bard-bowman-draw-two-sequence',
+      'bard-bowman-target-illegal',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Bard the Bowman enrichment through search', () => {
+    expect(searchContent('Bard second draw Soldier target')[0]).toMatchObject({ title: 'Bard the Bowman', href: '/cards/bard-the-bowman' })
+  })
+
   it('exposes Bard, King of Dale enrichment through search', () => {
     expect(searchContent('Bard two Armies 0/0')[0]).toMatchObject({ title: 'Bard, King of Dale', href: '/cards/bard-king-of-dale' })
   })
