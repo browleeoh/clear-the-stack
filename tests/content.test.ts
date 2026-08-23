@@ -291,6 +291,32 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Balin guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'balin-loremaster')
+    const content = getCardContentBySlug('balin-loremaster')
+
+    expect(curated).toMatchObject({
+      oracleId: '0d420e41-43e9-41d6-832c-5a9f410c994e',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['storied', 'discard', 'draw', 'this-way', 'resolution']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'balin-decline-discard',
+      'balin-empty-hand',
+      'balin-discard-three-with-story',
+      'balin-discard-three-without-story',
+      'balin-choice-during-resolution',
+      'balin-story-earned-before-resolution',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Balin enrichment through search', () => {
+    expect(searchContent('Balin discard empty hand')[0]).toMatchObject({ title: 'Balin, Loremaster', href: '/cards/balin-loremaster' })
+  })
+
   it('merges curated Bard, King of Dale guidance by stable Oracle UUID and route slug', () => {
     const curated = cards.find((card) => card.id === 'bard-king-of-dale')
     const content = getCardContentBySlug('bard-king-of-dale')
