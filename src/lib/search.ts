@@ -69,6 +69,16 @@ export const searchEntries: SearchEntry[] = [
     aliases: 'how to cast a spell pay mana choose targets respond resolution what happens next',
     body: 'Put spell on stack make choices choose targets determine costs activate mana abilities pay costs pass priority resolve top object permanent battlefield instant sorcery graveyard',
   },
+  {
+    id: 'learn:combat',
+    title: 'Attacking and blocking',
+    description: 'Declare combat choices, respond, and deal damage',
+    kind: 'learn',
+    href: '/learn/combat',
+    slug: 'combat',
+    aliases: 'how do I attack block when can I respond combat order summoning sickness vigilance',
+    body: 'beginning of combat declare attackers tap attackers attack triggers priority declare blockers block triggers combat damage end of combat unblocked creature defending player',
+  },
 ]
 
 const miniSearch = new MiniSearch<SearchEntry>({

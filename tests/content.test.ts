@@ -14,6 +14,7 @@ import {
 import { searchContent, searchEntries } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
+import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -74,6 +75,15 @@ describe('verified content', () => {
 
   it('discovers casting and resolution from beginner questions', () => {
     expect(searchContent('pay mana choose targets respond resolve spell')[0]).toMatchObject({ title: 'Casting and resolving a spell', href: '/learn/casting-resolution' })
+  })
+
+  it('keeps the verified attacking and blocking Learn outline and sources complete', () => {
+    expect(combatSteps.map(([title]) => title)).toEqual(['1. Begin combat', '2. Declare attackers', '3. Handle attack triggers and responses', '4. Declare blockers', '5. Handle block triggers and responses', '6. Deal combat damage', '7. End combat'])
+    expect(combatSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
+  })
+
+  it('discovers attacking and blocking from beginner questions', () => {
+    expect(searchContent('when can I respond after blockers combat damage')[0]).toMatchObject({ title: 'Attacking and blocking', href: '/learn/combat' })
   })
 
   it('merges curated Thorin guidance by stable card ID', () => {
@@ -1090,7 +1100,7 @@ describe('catalog search', () => {
     expect(cardEntries).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.id))).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.slug))).toHaveLength(193)
-    expect(searchEntries).toHaveLength(193 + concepts.length + 2)
+    expect(searchEntries).toHaveLength(193 + concepts.length + 3)
   })
 
   it('does not duplicate curated cards', () => {
