@@ -32,3 +32,10 @@
 ## Content rule
 
 All published outcome claims must reference an authoritative source and carry a verification status. Relationships among cards, mechanics, concepts, scenarios, and sources aid navigation and retrieval; they are not an executable Magic rules engine.
+
+Source records represent documents once. Normalized source locators point to a parent
+source and identify a named section, rule number, or card-specific coverage status.
+Card coverage explicitly distinguishes a dedicated release-note entry, a card used only
+as a general mechanic example, and the verified absence of a card-specific entry.
+Dataset validation rejects duplicate source and locator IDs, invalid locator parents,
+and source references that resolve to neither a document nor a locator.
