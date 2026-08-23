@@ -11,6 +11,7 @@ import { BookIcon, SearchIcon } from '@/components/icons'
 import { PwaRegister } from '@/components/pwa-register'
 import { LocalFeedback } from '@/components/local-feedback'
 import { TestLogControls } from '@/components/test-log-controls'
+import { OfflineStatus } from '@/components/offline-status'
 import '@/styles.css'
 
 export const Route = createRootRoute({
@@ -67,6 +68,8 @@ function RootComponent() {
           </nav>
         </div>
       </header>
+
+      <OfflineStatus />
 
       <Outlet />
       <LocalFeedback />
