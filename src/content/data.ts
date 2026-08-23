@@ -259,8 +259,26 @@ const validatedContentData = validateContentData({
 export const sources = validatedContentData.sources
 export const sourceLocators = validatedContentData.sourceLocators
 
+const sourcesById = new Map(sources.map((source) => [source.id, source]))
+const sourceLocatorsById = new Map(
+  sourceLocators.map((locator) => [locator.id, locator]),
+)
+
 export function getSource(id: string) {
-  return sources.find((source) => source.id === id)
+  return sourcesById.get(id)
+}
+
+export function resolveSourceReference(id: string) {
+  const source = sourcesById.get(id)
+  if (source) return { id, source }
+
+  const locator = sourceLocatorsById.get(id)
+  if (!locator) return undefined
+
+  const parentSource = sourcesById.get(locator.sourceId)
+  if (!parentSource) return undefined
+
+  return { id, source: parentSource, locator }
 }
 
 export function getConcept(id: string) {

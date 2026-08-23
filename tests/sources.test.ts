@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { SourceList } from '@/components/source-list'
 import { catalogCards } from '@/content/catalog'
 import {
   cards,
@@ -110,5 +112,19 @@ describe('authoritative source records', () => {
     const data = validData()
     data.cards[0].sourceIds = ['missing-source']
     expect(() => validateContentData(data)).toThrow(/Dangling source reference/)
+  })
+
+  it('renders a locator reference using its parent document and label', () => {
+    const data = validData()
+    const locatorId = 'hob-release-notes-bifur'
+    data.cards[0].sourceIds = [locatorId]
+
+    expect(() => validateContentData(data)).not.toThrow()
+
+    const html = renderToStaticMarkup(SourceList({ sourceIds: [locatorId] }))
+    expect(html).toContain(
+      'https://magic.wizards.com/en/news/feature/the-hobbit-release-notes',
+    )
+    expect(html).toContain('Bifur, Melodic Rider')
   })
 })
