@@ -285,6 +285,50 @@ describe('verified content', () => {
     expect(searchContent('partial resolution')[0]?.title).toBe('Resolution')
   })
 
+  it('publishes the verified stack, priority, and ability foundations', () => {
+    const expected = {
+      stack: ['stack-response-resolves-first', 'stack-one-object-at-a-time'],
+      priority: [
+        'priority-respond-before-resolution',
+        'priority-action-restarts-passing',
+      ],
+      'activated-ability': [
+        'activated-cost-paid-first',
+        'activated-source-leaves',
+      ],
+      'static-ability': ['static-no-response-window', 'static-source-leaves'],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(
+        scenarioIds,
+      )
+      expect(
+        concept?.scenarios.every(
+          (scenario) =>
+            scenario.verificationStatus === 'verified' &&
+            scenario.reviewedAt === '2026-08-23',
+        ),
+      ).toBe(true)
+      expect(
+        concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+      ).toBe(true)
+    }
+  })
+
+  it('discovers stack and ability concepts with beginner language', () => {
+    expect(searchContent('what resolves first')[0]?.title).toBe('Stack')
+    expect(searchContent('can I respond')[0]?.title).toBe(
+      'Priority and Responding',
+    )
+    expect(searchContent('cost colon effect')[0]?.title).toBe(
+      'Activated Ability',
+    )
+    expect(searchContent('always on ability')[0]?.title).toBe('Static Ability')
+  })
+
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })

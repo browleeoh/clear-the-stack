@@ -142,6 +142,31 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps precise stack, priority, activated, and static ability locators', () => {
+    const ids = [
+      'cr-rule-113-3b',
+      'cr-rule-113-3d',
+      'cr-rule-117-1',
+      'cr-rule-117-2e',
+      'cr-rule-117-3d',
+      'cr-rule-117-7',
+      'cr-rule-405-1',
+      'cr-rule-405-2',
+      'cr-rule-405-5',
+      'cr-rule-405-6b',
+      'cr-rule-602-1',
+      'cr-rule-602-2',
+      'cr-rule-604-1',
+      'cr-rule-604-2',
+    ]
+
+    expect(
+      sourceLocators
+        .filter((locator) => ids.includes(locator.id))
+        .map((locator) => locator.id),
+    ).toEqual(ids)
+  })
+
   it('keeps the Dwalin resolution-information locator precise', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),
