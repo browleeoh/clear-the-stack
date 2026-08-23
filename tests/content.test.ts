@@ -409,6 +409,33 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Chief Warg guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'the-chief-warg')
+    const content = getCardContentBySlug('the-chief-warg')
+
+    expect(curated).toMatchObject({
+      oracleId: '5ebe8de1-aa3d-410d-b43d-1685259c7a97',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['ferocious', 'triggered-ability', 'stack', 'resolution', 'draw']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'chief-warg-condition-true-at-attack',
+      'chief-warg-power-drops-after-trigger',
+      'chief-warg-condition-false-at-attack',
+      'chief-warg-stays-back',
+      'chief-warg-many-attackers-one-trigger',
+      'chief-warg-extra-combat',
+      'chief-warg-resolution-order',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Chief Warg enrichment through search', () => {
+    expect(searchContent('Chief Warg power drops no recheck')[0]).toMatchObject({ title: 'The Chief Warg', href: '/cards/the-chief-warg' })
+  })
+
   it('exposes Queen of Dale enrichment through search', () => {
     expect(searchContent('Queen separate opponents first noncreature')[0]).toMatchObject({ title: 'The Queen of Dale', href: '/cards/the-queen-of-dale' })
   })

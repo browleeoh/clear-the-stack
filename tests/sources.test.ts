@@ -305,6 +305,11 @@ describe('authoritative source records', () => {
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
   })
 
+  it('keeps precise attack-event and per-event trigger locators', () => {
+    const ids = ['cr-rule-508-1m', 'cr-rule-603-2c']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual(ids)
+  })
+
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
     const ids = [
       'cr-rule-701-21a',
