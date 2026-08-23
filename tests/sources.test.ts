@@ -133,6 +133,16 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps the Dwalin resolution-information locator precise', () => {
+    expect(
+      sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),
+    ).toMatchObject({
+      sourceId: 'magic-comprehensive-rules',
+      locatorType: 'rule-number',
+      label: 'Rule 608.2h — Determining game-state information on resolution',
+    })
+  })
+
   it('links every card locator to a catalog Oracle ID', () => {
     const catalogIds = new Set(catalogCards.map((card) => card.id))
     expect(

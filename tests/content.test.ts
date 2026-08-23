@@ -66,6 +66,47 @@ describe('verified content', () => {
     expect(content?.catalogCard).not.toHaveProperty('summary')
   })
 
+  it('merges curated Dwalin guidance by stable Oracle UUID and route slug', () => {
+    const curatedDwalin = cards.find((card) => card.id === 'dwalin-weaponmaster')
+    const content = getCardContentBySlug('dwalin-weaponmaster')
+
+    expect(curatedDwalin).toMatchObject({
+      oracleId: 'cee583b7-7cc3-40ea-a227-b760839ec291',
+      verificationStatus: 'verified',
+      conceptIds: [
+        'hone-counters',
+        'counter',
+        'equipment',
+        'attachment',
+        'triggered-ability',
+      ],
+    })
+    expect(content?.catalogCard.slug).toBe('dwalin-weaponmaster')
+    expect(content?.catalogCard.id).toBe(curatedDwalin?.oracleId)
+    expect(content?.enrichment).toBe(curatedDwalin)
+    expect(curatedDwalin?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'dwalin-each-equipment',
+      'dwalin-repeated-triggers',
+      'dwalin-unattached-equipment',
+      'dwalin-move-equipment',
+      'dwalin-equipment-loses-abilities',
+    ])
+    expect(
+      curatedDwalin?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-23',
+      ),
+    ).toBe(true)
+  })
+
+  it('exposes Dwalin enrichment through search', () => {
+    expect(searchContent('Dwalin each Equipment')[0]).toMatchObject({
+      title: 'Dwalin, Weaponmaster',
+      href: '/cards/dwalin-weaponmaster',
+    })
+  })
+
   it('keeps every published source reference resolvable', () => {
     const referencedIds = [
       ...cards.flatMap((card) => [
