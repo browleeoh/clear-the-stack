@@ -166,6 +166,16 @@ describe('authoritative source records', () => {
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
   })
 
+  it('keeps precise Silvan graveyard and resolution-payment locators', () => {
+    const ids = ['cr-rule-113-6m', 'cr-rule-608-2g']
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+    expect(sourceLocators.find((locator) => locator.id === 'hob-release-notes-silvan-reveler')).toMatchObject({
+      locatorType: 'no-card-specific-entry',
+      cardOracleId: '11932191-4b19-49b1-bfe4-abb7b83b2e59',
+    })
+  })
+
   it('keeps Azog controller, destroy, and indestructible locators precise', () => {
     const ids = ['cr-rule-109-5', 'cr-rule-701-8', 'cr-rule-702-12b']
 

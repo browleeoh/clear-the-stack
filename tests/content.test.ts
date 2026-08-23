@@ -243,6 +243,38 @@ describe('verified content', () => {
     )).toBe(true)
   })
 
+  it('merges curated Silvan Reveler guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'silvan-reveler')
+    const content = getCardContentBySlug('silvan-reveler')
+
+    expect(curated).toMatchObject({
+      oracleId: '11932191-4b19-49b1-bfe4-abb7b83b2e59',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['landfall', 'this-way', 'zones', 'priority', 'resolution']),
+    })
+    expect(content?.catalogCard.slug).toBe('silvan-reveler')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'silvan-draw-then-discard',
+      'silvan-discard-land-return-tapped',
+      'silvan-returned-land-triggers-landfall',
+      'silvan-own-landfall-graveyard-only',
+      'silvan-does-not-trigger-on-battlefield',
+      'silvan-pay-during-resolution',
+    ])
+    expect(curated?.scenarios.every((scenario) =>
+      scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+    )).toBe(true)
+  })
+
+  it('exposes Silvan Reveler enrichment through search', () => {
+    expect(searchContent('Silvan graveyard only')[0]).toMatchObject({
+      title: 'Silvan Reveler',
+      href: '/cards/silvan-reveler',
+    })
+  })
+
   it('exposes Nasty Little Rabbit enrichment through search', () => {
     expect(searchContent('Rabbit creature appears late')[0]).toMatchObject({
       title: 'Nasty Little Rabbit',
