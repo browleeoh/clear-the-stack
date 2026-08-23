@@ -215,8 +215,8 @@ Phase A scope and acceptance:
 | `V0-34` | Beorn's Hospitality curated guidance | complete | `V0-33` | `codex/beorns-hospitality-guidance` |
 | `V0-35` | Down in the Valley curated guidance | complete | `V0-34` | `codex/down-in-the-valley-guidance` |
 | `V0-36` | Dancing from Dark to Dawn curated guidance | complete | `V0-35` | `codex/dancing-guidance` |
-| `V0-37` | Goblin Plate Mail curated guidance | ready | `V0-36` | `codex/goblin-plate-mail-guidance` |
-| `V0-38` | Rhovanion Rampager curated guidance | queued | `V0-37` | `codex/rhovanion-rampager-guidance` |
+| `V0-37` | Goblin Plate Mail curated guidance | complete | `V0-36` | `codex/goblin-plate-mail-guidance` |
+| `V0-38` | Rhovanion Rampager curated guidance | ready | `V0-37` | `codex/rhovanion-rampager-guidance` |
 
 Phase B scope and acceptance:
 

@@ -490,6 +490,20 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Goblin Plate Mail guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'goblin-plate-mail')
+    const content = getCardContentBySlug('goblin-plate-mail')
+    expect(curated).toMatchObject({ oracleId: 'eda99a16-6a7c-4f39-8a6b-a284e6afd3fc', verificationStatus: 'verified', conceptIds: expect.arrayContaining(['amass-goblins', 'equipment', 'attachment', 'counter']) })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual(['plate-mail-no-army-create-attach', 'plate-mail-existing-army', 'plate-mail-multiple-armies', 'plate-mail-uninterrupted-resolution', 'plate-mail-attach-no-equip-cost', 'plate-mail-illegal-attachment', 'plate-mail-equip-later'])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Goblin Plate Mail enrichment through search', () => {
+    expect(searchContent('Goblin Plate Mail same amassed Army no equip cost')[0]).toMatchObject({ title: 'Goblin Plate Mail', href: '/cards/goblin-plate-mail' })
+  })
+
   it('exposes Dancing from Dark to Dawn enrichment through search', () => {
     expect(searchContent('Dancing X creature spell Bear independent')[0]).toMatchObject({ title: 'Dancing from Dark to Dawn', href: '/cards/dancing-from-dark-to-dawn' })
   })
