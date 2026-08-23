@@ -40,6 +40,8 @@ export default defineConfig({
         { path: '/mechanics/ferocious' },
         { path: '/mechanics/intervening-if' },
         { path: '/mechanics/landfall' },
+        { path: '/mechanics/artifact' },
+        { path: '/mechanics/legendary-permanent' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

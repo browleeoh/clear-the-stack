@@ -495,6 +495,28 @@ describe('verified content', () => {
     expect(searchContent('always on ability')[0]?.title).toBe('Static Ability')
   })
 
+  it('publishes artifact, legendary permanent, permanent, and token foundations', () => {
+    const expected = {
+      artifact: ['artifact-token-counts', 'artifact-creature-counts-once', 'artifact-color-independent'],
+      'legendary-permanent': ['legendary-artifact-overlap', 'legendary-card-off-battlefield', 'legend-rule-same-controller-name'],
+      permanent: ['permanent-battlefield-only', 'permanent-multiple-types-one-object'],
+      token: ['token-is-permanent-not-card', 'token-characteristics-qualify'],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(scenarioIds)
+      expect(concept?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+      expect(concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+    }
+  })
+
+  it('discovers artifact and legendary permanent questions', () => {
+    expect(searchContent('does treasure count as artifact')[0]?.title).toBe('Artifact')
+    expect(searchContent('same named legendary permanents')[0]?.title).toBe('Legendary Permanent')
+  })
+
   it('publishes the verified zones, state-based actions, and wording foundations', () => {
     const expected = {
       zones: [
