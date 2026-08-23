@@ -230,6 +230,42 @@ a {
   font-size: 0.82rem;
 }
 
+.local-feedback {
+  margin-top: 1rem;
+  margin-bottom: 6rem;
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  background: rgb(255 253 247 / 0.78);
+  padding: 1.2rem;
+}
+
+.local-feedback h2,
+.local-feedback p {
+  margin-top: 0;
+}
+
+.feedback-actions {
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-actions button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: white;
+  padding: 0.55rem 0.85rem;
+  color: var(--forest);
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.feedback-actions button[aria-pressed="true"] {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: white;
+}
+
 .result-link {
   display: grid;
   grid-template-columns: auto 1fr auto;

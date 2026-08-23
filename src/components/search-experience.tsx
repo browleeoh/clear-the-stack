@@ -5,6 +5,8 @@ import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
 import {
   addUnansweredSearch,
+  addSelectedSearch,
+  currentLookupKey,
   localTestLogKey,
   parseLocalTestLog,
 } from '@/lib/local-test-log'
@@ -98,7 +100,7 @@ export function SearchExperience() {
     }
   }, [])
 
-  function rememberSearch() {
+  function rememberSearch(result: SearchEntry) {
     const next = updateRecentSearches(recentSearches, query)
     if (next === recentSearches) return
     setRecentSearches(next)
@@ -106,6 +108,18 @@ export function SearchExperience() {
       localStorage.setItem(recentSearchesKey, JSON.stringify(next))
     } catch {
       // Search remains fully usable when storage is unavailable.
+    }
+
+    try {
+      if (!query.trim()) return
+      const records = parseLocalTestLog(localStorage.getItem(localTestLogKey))
+      const id = globalThis.crypto?.randomUUID?.() ?? `lookup-${Date.now()}`
+      const selectedResult = { id: result.id, title: result.title, href: result.href }
+      const record = { id, query: query.trim(), resultSelected: true, selectedResult, timestamp: new Date().toISOString() }
+      localStorage.setItem(localTestLogKey, JSON.stringify(addSelectedSearch(records, record)))
+      sessionStorage.setItem(currentLookupKey, id)
+    } catch {
+      // Navigation remains fully usable when storage is unavailable.
     }
   }
 
@@ -148,7 +162,7 @@ export function SearchExperience() {
                 {group.results.map((result) => {
                   const destination = getSearchDestination(result)
                   return (
-                    <Link key={result.id} {...destination} className="result-link" onClick={rememberSearch}>
+                    <Link key={result.id} {...destination} className="result-link" onClick={() => rememberSearch(result)}>
                       <span className="result-icon" aria-hidden="true">
                         {result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}
                       </span>

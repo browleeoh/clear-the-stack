@@ -22,7 +22,12 @@ import {
   parseRecentSearches,
   updateRecentSearches,
 } from '@/components/search-experience'
-import { addUnansweredSearch, parseLocalTestLog } from '@/lib/local-test-log'
+import {
+  addSelectedSearch,
+  addUnansweredSearch,
+  parseLocalTestLog,
+  updateLookupFeedback,
+} from '@/lib/local-test-log'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -1177,6 +1182,7 @@ describe('catalog search', () => {
     expect(parseLocalTestLog('{bad')).toEqual([])
     expect(parseLocalTestLog('[{"id":"incomplete"}]')).toEqual([])
     expect(parseLocalTestLog('[{"id":"","query":"q","resultSelected":false,"timestamp":"2026-08-23T16:00:00.000Z"},{"id":"x","query":" ","resultSelected":false,"timestamp":"bad"}]')).toEqual([])
+    expect(parseLocalTestLog('[{"id":"x","query":"q","resultSelected":true,"timestamp":"2026-08-23T16:00:00.000Z"}]')).toEqual([])
   })
 
   it('strips unknown identity and game-state fields from persisted records', () => {
@@ -1192,6 +1198,31 @@ describe('catalog search', () => {
       query: 'unknown interaction',
       resultSelected: false,
       timestamp: '2026-08-23T16:00:00.000Z',
+    }])
+  })
+
+  it('links selected results and later feedback to one privacy-bounded lookup', () => {
+    const selected = {
+      id: 'lookup-2',
+      query: 'Storied',
+      resultSelected: true,
+      selectedResult: { id: 'concept:storied', title: 'Storied', href: '/mechanics/storied' },
+      timestamp: '2026-08-23T16:30:00.000Z',
+    }
+    const records = addSelectedSearch([], selected)
+    const updated = updateLookupFeedback(records, 'lookup-2', { helpful: false, report: 'unclear' })
+    expect(updated).toEqual([{ ...selected, helpful: false, report: 'unclear' }])
+    expect(parseLocalTestLog(JSON.stringify([{ ...updated[0], name: 'Alice', deck: 'Dwarves', gameState: 'hidden' }]))).toEqual(updated)
+  })
+
+  it('strips selection feedback from unanswered records', () => {
+    expect(parseLocalTestLog(JSON.stringify([{
+      id: 'lookup-3', query: 'unknown', resultSelected: false,
+      timestamp: '2026-08-23T16:30:00.000Z', helpful: true, report: 'incorrect',
+      selectedResult: { id: 'card:x', title: 'X', href: '/cards/x' },
+    }]))).toEqual([{
+      id: 'lookup-3', query: 'unknown', resultSelected: false,
+      timestamp: '2026-08-23T16:30:00.000Z',
     }])
   })
 
