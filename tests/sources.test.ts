@@ -346,6 +346,11 @@ describe('authoritative source records', () => {
     expect(sourceLocators.find((locator) => locator.id === 'cr-rule-107-1b')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 107.1b — Negative calculation results use zero unless otherwise defined' })
   })
 
+  it('keeps precise Turn Structure Learn locators', () => {
+    const ids = ['cr-rule-500-1', 'cr-rule-501-1', 'cr-rule-505-6', 'cr-rule-506-1', 'cr-rule-512-1']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
+  })
+
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
     const ids = [
       'cr-rule-701-21a',

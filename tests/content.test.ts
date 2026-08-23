@@ -12,6 +12,7 @@ import {
   resolveSourceReference,
 } from '@/content/data'
 import { searchContent, searchEntries } from '@/lib/search'
+import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -55,6 +56,16 @@ describe('HOB catalog', () => {
 })
 
 describe('verified content', () => {
+  it('keeps the verified Turn Structure Learn outline and sources complete', () => {
+    expect(turnStructurePhases.map((phase) => phase.title)).toEqual(['1. Beginning phase', '2. First main phase', '3. Combat phase', '4. Second main phase', '5. Ending phase'])
+    expect(turnStructureSourceIds).toEqual(['cr-rule-500-1', 'cr-rule-501-1', 'cr-rule-505-6', 'cr-rule-506-1', 'cr-rule-512-1'])
+    expect(turnStructureSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
+  })
+
+  it('discovers Turn Structure from beginner timing questions', () => {
+    expect(searchContent('untap upkeep draw combat cleanup order')[0]).toMatchObject({ title: 'Turn structure', href: '/learn/turn-structure' })
+  })
+
   it('merges curated Thorin guidance by stable card ID', () => {
     const curatedThorin = cards.find((card) => card.id === 'thorin-oakenshield')
     const content = getCardContentBySlug('thorin-oakenshield')
