@@ -166,6 +166,16 @@ a {
   border-bottom: 1px solid var(--line);
 }
 
+.offline-status {
+  background: #fff1ca;
+  border-bottom: 1px solid #d8b45f;
+  padding: 0.7rem 1rem;
+  color: #624711;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 .search-box svg {
   flex: 0 0 auto;
   color: var(--forest);
