@@ -1,6 +1,6 @@
 ---
 name: v0-ralph-loop
-description: Run the Clear the Stack V0 issue-to-merge loop for approved work units in docs/v0-execution-plan.md. Use when a goal-driven session should select the next ready unit, implement it on a fresh branch, obtain independent review, open and merge a guarded pull request, and repeat without routine user steering. Do not use for roadmap work outside V0 or for unlisted product decisions.
+description: Run the Clear the Stack V0 issue-to-merge loop for approved work units in docs/v0-execution-plan.md. Use when a goal-driven session should repeatedly select the next ready unit, implement it on a fresh branch, obtain independent review, open and merge a guarded pull request, and continue through the authorized V0 boundary without routine user steering. Do not use for roadmap work outside V0 or for unlisted product decisions.
 ---
 
 # V0 Ralph Loop
@@ -24,7 +24,9 @@ follow it for each work unit.
 
 Select only the first work unit whose status is `ready`. Do not infer new work from the
 roadmap, reorder units, combine units, or promote a `queued` unit whose dependencies
-are incomplete. One goal may process only the tranche named in the user's goal.
+are incomplete. A goal may continue through every implementation-ready unit inside the
+explicit boundary named by the user; thematic phase labels are organizational and do
+not require a new goal. Never cross a user-decision or house-game validation gate.
 
 ## Authority boundary
 
@@ -47,12 +49,13 @@ Stop the loop and report a blocker when:
 
 - official sources conflict, are unavailable, or do not support a proposed outcome;
 - ownership, product intent, or scope requires a user decision;
-- the next unit is not `ready` or lies outside the authorized tranche;
+- the next unit is not `ready` or lies outside the authorized goal boundary;
 - authentication, branch protection, required CI, or merging remains blocked after
   three meaningful attempts;
 - review cannot be satisfied without expanding the approved unit;
 - the working tree contains unexplained changes;
 - completing the unit would require V0.5-V2 work or speculative infrastructure.
 
-When the authorized tranche is merged, report issue links, branches, commits, pull
-requests, merge commits, validation evidence, and the next ledger state, then stop.
+When the authorized goal boundary is complete, report issue links, branches, commits,
+pull requests, merge commits, validation evidence, and the next ledger state, then
+stop.
