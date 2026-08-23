@@ -41,12 +41,13 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(12)
+    expect(cardLocators).toHaveLength(13)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
         'Balin, Loremaster',
         'Bard, King of Dale',
+        'Bard the Bowman',
         'Bifur, Melodic Rider',
         'Bolg of the North',
         'Celebrate the Mountain-king',
