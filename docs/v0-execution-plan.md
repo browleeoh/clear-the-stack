@@ -176,8 +176,8 @@ All units inherit these requirements:
 | `V0-20` | Ferocious and intervening-if foundation | complete | `V0-19` | `codex/ferocious-foundation` |
 | `V0-21` | Nasty Little Rabbit curated guidance | complete | `V0-20` | `codex/nasty-little-rabbit-guidance` |
 | `V0-22` | Landfall, land entry, and “this way” zone-change foundation | complete | `V0-21` | `codex/landfall-foundation` |
-| `V0-23` | Silvan Reveler curated guidance | ready | `V0-22` | `codex/silvan-reveler-guidance` |
-| `V0-24` | Artifact, legendary permanent, and static-ability foundation | queued | `V0-23` | `codex/artifact-legendary-foundation` |
+| `V0-23` | Silvan Reveler curated guidance | complete | `V0-22` | `codex/silvan-reveler-guidance` |
+| `V0-24` | Artifact, legendary permanent, and static-ability foundation | ready | `V0-23` | `codex/artifact-legendary-foundation` |
 | `V0-25` | Bifur, Melodic Rider curated guidance | queued | `V0-24` | `codex/bifur-guidance` |
 | `V0-26` | Replacement effects and modified draw/discard foundation | queued | `V0-25` | `codex/replacement-effects-foundation` |
 | `V0-27` | Bard, King of Dale curated guidance | queued | `V0-26` | `codex/bard-king-guidance` |
