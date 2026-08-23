@@ -16,7 +16,12 @@ import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
 import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
-import { getSearchDestination } from '@/components/search-experience'
+import {
+  getSearchDestination,
+  groupSearchResults,
+  parseRecentSearches,
+  updateRecentSearches,
+} from '@/components/search-experience'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -1109,12 +1114,51 @@ describe('verified content', () => {
 
 describe('catalog search', () => {
   const cardEntries = searchEntries.filter((entry) => entry.kind === 'card')
+  const scenarioEntries = searchEntries.filter((entry) => entry.kind === 'scenario')
 
   it('indexes exactly 193 unique card entries alongside existing content', () => {
     expect(cardEntries).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.id))).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.slug))).toHaveLength(193)
-    expect(searchEntries).toHaveLength(193 + concepts.length + 4)
+    const scenarioCount = cards.flatMap((card) => card.scenarios).length
+      + concepts.flatMap((concept) => concept.scenarios).length
+    expect(scenarioEntries).toHaveLength(scenarioCount)
+    expect(new Set(scenarioEntries.map((entry) => entry.id))).toHaveLength(scenarioCount)
+    expect(searchEntries).toHaveLength(193 + concepts.length + scenarioCount + 4)
+  })
+
+  it('groups useful result types and links scenarios to exact sections', () => {
+    const query = 'respond during recruit'
+    const results = searchContent(query)
+    const groups = groupSearchResults(results, query)
+    expect(groups[0]?.label).toBe('Examples')
+
+    const scenario = results.find((entry) => entry.kind === 'scenario')
+    expect(scenario).toBeDefined()
+    expect(getSearchDestination(scenario!)).toEqual({
+      to: '/mechanics/$mechanicSlug',
+      params: { mechanicSlug: 'recruit' },
+      hash: scenario!.slug,
+    })
+  })
+
+  it('keeps exact card and mechanic title matches visibly first', () => {
+    const cardQuery = '  THORIN OAKENSHIELD '
+    const cardGroups = groupSearchResults(searchContent(cardQuery), cardQuery)
+    expect(cardGroups[0]?.label).toBe('Cards')
+    expect(cardGroups[0]?.results[0]?.title).toBe('Thorin Oakenshield')
+
+    const mechanicQuery = 'Storied'
+    const mechanicGroups = groupSearchResults(searchContent(mechanicQuery), mechanicQuery)
+    expect(mechanicGroups[0]?.label).toBe('Rules and mechanics')
+    expect(mechanicGroups[0]?.results[0]?.title).toBe('Storied')
+  })
+
+  it('keeps at most five deduplicated recent searches and ignores bad storage', () => {
+    expect(updateRecentSearches(['two', 'one'], ' one ')).toEqual(['one', 'two'])
+    expect(updateRecentSearches(['five', 'four', 'three', 'two', 'one'], 'six')).toEqual(['six', 'five', 'four', 'three', 'two'])
+    expect(parseRecentSearches('["one",2,"three"]')).toEqual(['one', 'three'])
+    expect(parseRecentSearches('{bad')).toEqual([])
   })
 
   it('does not duplicate curated cards', () => {
