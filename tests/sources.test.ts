@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(18)
+    expect(cardLocators).toHaveLength(19)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -63,6 +63,7 @@ describe('authoritative source records', () => {
     expect(byType['no-card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Down in the Valley — no card-specific release-note entry',
+        'Goblin Plate Mail — no card-specific release-note entry',
         'Silvan Reveler — no card-specific release-note entry',
         "Sting, Bilbo's Sword — no card-specific release-note entry",
       ]),
@@ -334,6 +335,10 @@ describe('authoritative source records', () => {
   it('keeps precise cast-trigger, mana-value, and X locators', () => {
     const ids = ['cr-rule-107-3e', 'cr-rule-202-3', 'cr-rule-601-2i']
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual(ids)
+  })
+
+  it('keeps the amassed-Army identity locator precise', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'cr-rule-701-47c')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 701.47c — “The amassed Army” is the chosen Army' })
   })
 
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
