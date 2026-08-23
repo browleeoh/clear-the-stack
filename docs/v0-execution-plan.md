@@ -179,8 +179,8 @@ All units inherit these requirements:
 | `V0-23` | Silvan Reveler curated guidance | complete | `V0-22` | `codex/silvan-reveler-guidance` |
 | `V0-24` | Artifact, legendary permanent, and static-ability foundation | complete | `V0-23` | `codex/artifact-legendary-foundation` |
 | `V0-25` | Bifur, Melodic Rider curated guidance | complete | `V0-24` | `codex/bifur-guidance` |
-| `V0-26` | Replacement effects and modified draw/discard foundation | ready | `V0-25` | `codex/replacement-effects-foundation` |
-| `V0-27` | Bard, King of Dale curated guidance | queued | `V0-26` | `codex/bard-king-guidance` |
+| `V0-26` | Replacement effects and modified draw/discard foundation | complete | `V0-25` | `codex/replacement-effects-foundation` |
+| `V0-27` | Bard, King of Dale curated guidance | ready | `V0-26` | `codex/bard-king-guidance` |
 
 Phase A scope and acceptance:
 

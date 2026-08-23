@@ -547,6 +547,28 @@ describe('verified content', () => {
     expect(searchContent('same named legendary permanents')[0]?.title).toBe('Legendary Permanent')
   })
 
+  it('publishes replacement-effect, draw, and discard foundations', () => {
+    const expected = {
+      'replacement-effect': ['replacement-original-event-never-happens', 'replacement-must-exist-first', 'replacement-multiple-effects', 'replacement-no-self-loop'],
+      draw: ['draw-multiple-one-at-time', 'draw-put-into-hand', 'draw-replaced-in-sequence'],
+      discard: ['discard-affected-player-chooses', 'discard-hidden-zone-characteristics', 'discard-impossible-continue'],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(scenarioIds)
+      expect(concept?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+      expect(concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+    }
+  })
+
+  it('discovers replacement, draw, and discard questions', () => {
+    expect(searchContent('affected player chooses replacement')[0]?.title).toBe('Replacement Effect')
+    expect(searchContent('draw multiple cards one at a time')[0]?.title).toBe('Draw')
+    expect(searchContent('discard into hidden zone')[0]?.title).toBe('Discard')
+  })
+
   it('publishes the verified zones, state-based actions, and wording foundations', () => {
     const expected = {
       zones: [
