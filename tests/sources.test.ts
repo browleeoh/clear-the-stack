@@ -267,6 +267,7 @@ describe('authoritative source records', () => {
       'cr-rule-614-5',
       'cr-rule-614-6',
       'cr-rule-614-11',
+      'cr-rule-614-16',
       'cr-rule-616-1',
       'cr-rule-616-2',
     ]
