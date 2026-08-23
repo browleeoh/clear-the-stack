@@ -33,6 +33,10 @@ export default defineConfig({
         { path: '/mechanics/and-or' },
         { path: '/mechanics/recruit' },
         { path: '/mechanics/amass-goblins' },
+        { path: '/mechanics/sacrifice' },
+        { path: '/mechanics/last-known-information' },
+        { path: '/mechanics/reflexive-triggered-ability' },
+        { path: '/mechanics/excess-damage' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {

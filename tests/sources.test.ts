@@ -220,6 +220,20 @@ describe('authoritative source records', () => {
     })
   })
 
+  it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
+    const ids = [
+      'cr-rule-701-21a',
+      'cr-rule-603-12',
+      'cr-rule-120-4a',
+      'cr-rule-120-6',
+      'cr-rule-120-10',
+    ]
+
+    expect(
+      sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id),
+    ).toEqual(ids)
+  })
+
   it('keeps the Dwalin resolution-information locator precise', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-608-2h'),
