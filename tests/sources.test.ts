@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(16)
+    expect(cardLocators).toHaveLength(17)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -59,7 +59,13 @@ describe('authoritative source records', () => {
       ]),
     )
     expect(byType['mechanic-example']).toHaveLength(2)
-    expect(byType['no-card-specific-entry']).toHaveLength(2)
+    expect(byType['no-card-specific-entry']?.map((locator) => locator.label)).toEqual(
+      expect.arrayContaining([
+        'Down in the Valley — no card-specific release-note entry',
+        'Silvan Reveler — no card-specific release-note entry',
+        "Sting, Bilbo's Sword — no card-specific release-note entry",
+      ]),
+    )
   })
 
   it('preserves Sting as having no card-specific release-note entry', () => {
@@ -314,6 +320,14 @@ describe('authoritative source records', () => {
   it('keeps precise lasting-animation and power/toughness locators', () => {
     const ids = ['cr-rule-205-1b', 'cr-rule-208-3', 'cr-rule-611-2a', 'cr-rule-613-1', 'cr-rule-613-4b']
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
+  })
+
+  it('keeps the resolved-effect affected-set locator precise', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'cr-rule-611-2c')).toMatchObject({
+      sourceId: 'magic-comprehensive-rules',
+      locatorType: 'rule-number',
+      label: 'Rule 611.2c — Objects affected by resolving continuous effects',
+    })
   })
 
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {

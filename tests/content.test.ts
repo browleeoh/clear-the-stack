@@ -456,6 +456,34 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Down in the Valley guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'down-in-the-valley')
+    const content = getCardContentBySlug('down-in-the-valley')
+
+    expect(curated).toMatchObject({
+      oracleId: 'e3491542-569e-48a8-b625-fa7c4aa2792a',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['landfall', 'saga', 'triggered-ability', 'token', 'counter']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'down-chapter-one-land-to-hand',
+      'down-chapter-two-pending',
+      'down-chapter-two-gains-landfall',
+      'down-later-land-creates-elf',
+      'down-multiple-lands-multiple-elves',
+      'down-chapter-three-buffs-current-elves',
+      'down-later-elf-not-buffed',
+      'down-final-chapter-sacrifice-timing',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Down in the Valley enrichment through search', () => {
+    expect(searchContent('Down Valley gains Landfall later Elf final chapter')[0]).toMatchObject({ title: 'Down in the Valley', href: '/cards/down-in-the-valley' })
+  })
+
   it("exposes Beorn's Hospitality enrichment through search", () => {
     expect(searchContent('Beorns Hospitality lasting Bear land count')[0]).toMatchObject({ title: "Beorn's Hospitality", href: '/cards/beorn-s-hospitality' })
   })
