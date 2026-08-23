@@ -160,6 +160,12 @@ describe('authoritative source records', () => {
     })
   })
 
+  it('keeps precise land-entry and Landfall locators', () => {
+    const ids = ['cr-rule-305-4', 'cr-rule-603-6a', 'hob-release-notes-landfall']
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+  })
+
   it('keeps Azog controller, destroy, and indestructible locators precise', () => {
     const ids = ['cr-rule-109-5', 'cr-rule-701-8', 'cr-rule-702-12b']
 
@@ -198,6 +204,7 @@ describe('authoritative source records', () => {
   it('keeps precise zone, state-based action, and wording locators', () => {
     const ids = [
       'cr-rule-400-1',
+      'cr-rule-400-2',
       'cr-rule-400-7',
       'cr-rule-400-7j',
       'cr-rule-403-1',
