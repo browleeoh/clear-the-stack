@@ -176,6 +176,12 @@ describe('authoritative source records', () => {
     })
   })
 
+  it('keeps precise artifact, permanent, token, and legendary locators', () => {
+    const ids = ['cr-rule-110-1', 'cr-rule-110-4', 'cr-rule-111-1', 'cr-rule-111-10a', 'cr-rule-704-5j', 'cr-rule-301-2', 'cr-rule-205-4']
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+  })
+
   it('keeps Azog controller, destroy, and indestructible locators precise', () => {
     const ids = ['cr-rule-109-5', 'cr-rule-701-8', 'cr-rule-702-12b']
 
