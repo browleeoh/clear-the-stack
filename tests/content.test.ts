@@ -5,7 +5,12 @@ import {
   getCatalogCard,
   getCatalogCardBySlug,
 } from '@/content/catalog'
-import { cards, concepts, sources } from '@/content/data'
+import {
+  cards,
+  concepts,
+  getConcept,
+  resolveSourceReference,
+} from '@/content/data'
 import { searchContent, searchEntries } from '@/lib/search'
 
 describe('HOB catalog', () => {
@@ -62,7 +67,6 @@ describe('verified content', () => {
   })
 
   it('keeps every published source reference resolvable', () => {
-    const sourceIds = new Set(sources.map((source) => source.id))
     const referencedIds = [
       ...cards.flatMap((card) => [
         ...card.sourceIds,
@@ -74,11 +78,54 @@ describe('verified content', () => {
       ]),
     ]
 
-    expect(referencedIds.every((id) => sourceIds.has(id))).toBe(true)
+    expect(referencedIds.every((id) => resolveSourceReference(id))).toBe(true)
+  })
+
+  it('publishes the verified hone-counter foundation with bounded cases', () => {
+    const honeCounters = getConcept('hone-counters')
+
+    expect(honeCounters).toMatchObject({
+      kind: 'set-mechanic',
+      verificationStatus: 'verified',
+      sourceIds: [
+        'cr-rule-122-1j',
+        'hob-release-notes-hone-counters',
+        'hob-mechanics-hone-counters',
+      ],
+    })
+    expect(honeCounters?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'hone-one-counter-simple-example',
+      'hone-multiple-counters',
+      'hone-unattached-equipment',
+      'hone-move-equipment',
+      'hone-equipment-loses-abilities',
+      'hone-remove-or-leave',
+    ])
+    expect(
+      honeCounters?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-22' &&
+          scenario.sourceIds.length === 3,
+      ),
+    ).toBe(true)
+  })
+
+  it('resolves the hone-counter route slug and rejects an unknown slug', () => {
+    expect(getConcept('hone-counters')?.name).toBe('Hone Counters')
+    expect(getConcept('not-a-mechanic')).toBeUndefined()
   })
 
   it('finds Storied from a beginner token question', () => {
     expect(searchContent('do treasure tokens count')[0]?.title).toBe('Storied')
+  })
+
+  it('finds Hone Counters from a beginner Equipment question', () => {
+    expect(searchContent('does hone work unattached')[0]).toMatchObject({
+      title: 'Hone Counters',
+      kind: 'mechanic',
+      href: '/mechanics/hone-counters',
+    })
   })
 
   it('finds Thorin by partial name', () => {

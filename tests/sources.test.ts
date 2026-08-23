@@ -56,6 +56,34 @@ describe('authoritative source records', () => {
     expect(byType['no-card-specific-entry']).toHaveLength(2)
   })
 
+  it('keeps the normalized hone-counter mechanic locators precise', () => {
+    expect(
+      sourceLocators.filter((locator) =>
+        [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ].includes(locator.id),
+      ),
+    ).toEqual([
+      expect.objectContaining({
+        id: 'cr-rule-122-1j',
+        sourceId: 'magic-comprehensive-rules',
+        locatorType: 'rule-number',
+      }),
+      expect.objectContaining({
+        id: 'hob-release-notes-hone-counters',
+        sourceId: 'hob-release-notes',
+        locatorType: 'named-section',
+      }),
+      expect.objectContaining({
+        id: 'hob-mechanics-hone-counters',
+        sourceId: 'hob-mechanics',
+        locatorType: 'named-section',
+      }),
+    ])
+  })
+
   it('links every card locator to a catalog Oracle ID', () => {
     const catalogIds = new Set(catalogCards.map((card) => card.id))
     expect(

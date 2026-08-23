@@ -4,7 +4,7 @@ const answerLabels: Record<Scenario['answer'], string> = {
   yes: 'Yes',
   no: 'No',
   depends: 'It depends',
-  explanation: 'Timing answer',
+  explanation: 'Answer',
 }
 
 export function ScenarioCard({ scenario }: { scenario: Scenario }) {

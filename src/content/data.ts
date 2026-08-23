@@ -91,6 +91,175 @@ const rawSourceLocators = [
 
 export const concepts: Concept[] = conceptSchema.array().parse([
   {
+    id: 'hone-counters',
+    name: 'Hone Counters',
+    kind: 'set-mechanic',
+    aliases: [
+      'hone counter',
+      'honing equipment',
+      'sharpen equipment',
+      'equipment power bonus',
+      'does hone work unattached',
+      'multiple hone counters',
+      'move honed equipment',
+      'equipment loses abilities',
+    ],
+    summary:
+      'Each hone counter on an Equipment gives +1/+0 to the creature that Equipment is attached to. The counter stays on the Equipment, so the bonus follows that Equipment to whichever creature it equips.',
+    memoryAid:
+      'Count the hone counters on the Equipment; give that much power to its equipped creature.',
+    officialText:
+      '122.1j A hone counter on an Equipment gives +1/+0 to any creature that Equipment is attached to.',
+    easyToMiss: [
+      'The bonus comes from the counter itself, not from an ability printed on the Equipment.',
+      'Hone counters remain on an unattached Equipment, but they give no creature a bonus until it is attached again.',
+      'Each counter gives its own +1/+0. Two hone counters give the equipped creature +2/+0.',
+      'If the Equipment moves, the old creature loses the bonus and the newly equipped creature gets it immediately.',
+      'Removing the counters, unattaching the Equipment, or making it leave the battlefield ends the corresponding bonus immediately.',
+    ],
+    relatedConceptIds: [],
+    sourceIds: [
+      'cr-rule-122-1j',
+      'hob-release-notes-hone-counters',
+      'hob-mechanics-hone-counters',
+    ],
+    verificationStatus: 'verified',
+    scenarios: [
+      {
+        id: 'hone-one-counter-simple-example',
+        title: 'One counter on an equipped Equipment',
+        setup: [
+          'A 2/2 creature is equipped with an Equipment.',
+          'That Equipment has one hone counter on it.',
+        ],
+        question: 'What are the creature’s power and toughness?',
+        answer: 'explanation',
+        explanation:
+          'It is 3/2 before any other effects. The hone counter gives the equipped creature +1/+0.',
+        commonMistake:
+          'Adding toughness too. A hone counter changes power only.',
+        tags: ['simple example', 'one counter', 'power', 'toughness'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+      {
+        id: 'hone-multiple-counters',
+        title: 'Multiple hone counters add together',
+        setup: [
+          'A creature is equipped with one Equipment.',
+          'That Equipment has three hone counters on it.',
+        ],
+        question: 'How large is the hone-counter bonus?',
+        answer: 'explanation',
+        explanation:
+          'The creature gets +3/+0. Each of the three counters gives +1/+0.',
+        commonMistake:
+          'Giving only +1/+0 because the Equipment has hone counters at all.',
+        tags: ['multiple counters', 'counting', 'power'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+      {
+        id: 'hone-unattached-equipment',
+        title: 'The Equipment is unattached',
+        setup: [
+          'An Equipment with two hone counters is on the battlefield.',
+          'It is not attached to a creature.',
+        ],
+        question: 'Do the counters disappear or give a creature a bonus?',
+        answer: 'explanation',
+        explanation:
+          'The counters stay on the Equipment, but no creature gets a bonus while it is unattached. If it later becomes attached, its equipped creature gets +2/+0.',
+        commonMistake:
+          'Removing the counters just because the Equipment became unattached.',
+        tags: ['unattached', 'equipment', 'counters remain'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+      {
+        id: 'hone-move-equipment',
+        title: 'Move the Equipment to another creature',
+        setup: [
+          'An Equipment with two hone counters is attached to creature A.',
+          'That Equipment becomes attached to creature B instead.',
+        ],
+        question: 'Which creature gets the hone-counter bonus?',
+        answer: 'explanation',
+        explanation:
+          'Creature A immediately loses +2/+0, and creature B immediately gets +2/+0. The counters stay on the Equipment and apply to the creature it is currently attached to.',
+        commonMistake:
+          'Leaving the bonus on the creature that used to be equipped.',
+        tags: ['move equipment', 'attach', 'unattach', 'immediate'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+      {
+        id: 'hone-equipment-loses-abilities',
+        title: 'The Equipment loses its abilities',
+        setup: [
+          'An Equipment with two hone counters is attached to a creature.',
+          'An effect makes the Equipment lose its abilities without unattaching it.',
+        ],
+        question: 'Does the creature still get +2/+0?',
+        answer: 'yes',
+        explanation:
+          'The creature still gets +2/+0. The bonus comes from the rules for hone counters, not from an ability on the Equipment.',
+        commonMistake:
+          'Treating the counter’s effect as an ability that the Equipment can lose.',
+        tags: ['loses abilities', 'equipment', 'counter rules'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+      {
+        id: 'hone-remove-or-leave',
+        title: 'Remove counters or remove the Equipment',
+        setup: [
+          'An Equipment with two hone counters is attached to a creature.',
+          'Either both counters are removed or the Equipment leaves the battlefield.',
+        ],
+        question: 'Does the creature keep +2/+0?',
+        answer: 'no',
+        explanation:
+          'The bonus ends immediately. Removed counters can no longer give a bonus, and Equipment that left the battlefield is no longer attached to the creature.',
+        commonMistake:
+          'Keeping the power increase until end of turn after its source is gone.',
+        tags: ['remove counters', 'leaves battlefield', 'immediate'],
+        sourceIds: [
+          'cr-rule-122-1j',
+          'hob-release-notes-hone-counters',
+          'hob-mechanics-hone-counters',
+        ],
+        verificationStatus: 'verified',
+        reviewedAt: '2026-08-22',
+      },
+    ],
+  },
+  {
     id: 'storied',
     name: 'Storied',
     kind: 'keyword-ability',

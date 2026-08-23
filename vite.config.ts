@@ -17,6 +17,7 @@ export default defineConfig({
         { path: '/' },
         { path: '/learn/turn-structure' },
         { path: '/mechanics/storied' },
+        { path: '/mechanics/hone-counters' },
         { path: '/mechanics/permanent' },
         { path: '/mechanics/token' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),

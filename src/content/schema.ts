@@ -62,6 +62,7 @@ export const scenarioSchema = z.object({
   tags: z.array(z.string()),
   sourceIds: z.array(z.string()).min(1),
   verificationStatus: z.enum(['draft', 'reviewed', 'verified']),
+  reviewedAt: z.iso.date().optional(),
 })
 
 export const conceptSchema = z.object({
