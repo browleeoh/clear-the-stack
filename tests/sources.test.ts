@@ -65,6 +65,13 @@ describe('authoritative source records', () => {
     })
   })
 
+  it('preserves Bolg card-specific release-note coverage', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'hob-release-notes-bolg')).toMatchObject({
+      locatorType: 'card-specific-entry',
+      cardOracleId: '88522a0f-5377-4522-97f4-4148bef954af',
+    })
+  })
+
   it('keeps the normalized hone-counter mechanic locators precise', () => {
     expect(
       sourceLocators.filter((locator) =>
