@@ -192,6 +192,39 @@ describe('verified content', () => {
     )).toBe(true)
   })
 
+  it('merges curated Bolg guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'bolg-of-the-north')
+    const content = getCardContentBySlug('bolg-of-the-north')
+
+    expect(curated).toMatchObject({
+      oracleId: '88522a0f-5377-4522-97f4-4148bef954af',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['sacrifice', 'last-known-information', 'reflexive-triggered-ability', 'excess-damage', 'amass-goblins']),
+    })
+    expect(content?.catalogCard.slug).toBe('bolg-of-the-north')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'bolg-first-response-window',
+      'bolg-second-response-window',
+      'bolg-only-this-sacrifice',
+      'bolg-last-known-power',
+      'bolg-excess-calculation',
+      'bolg-marked-damage',
+      'bolg-illegal-damage-target',
+    ])
+    expect(curated?.scenarios.every((scenario) =>
+      scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+    )).toBe(true)
+  })
+
+  it('exposes Bolg enrichment through search', () => {
+    expect(searchContent('Bolg different sacrifice')[0]).toMatchObject({
+      title: 'Bolg of the North',
+      href: '/cards/bolg-of-the-north',
+    })
+  })
+
   it('exposes Azog enrichment through search', () => {
     expect(searchContent('Azog nobody amasses')[0]).toMatchObject({
       title: "Azog, Moria's Ruin",
