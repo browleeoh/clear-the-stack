@@ -27,6 +27,7 @@ import {
   addUnansweredSearch,
   parseLocalTestLog,
   updateLookupFeedback,
+  serializeLocalTestLog,
 } from '@/lib/local-test-log'
 
 describe('HOB catalog', () => {
@@ -1224,6 +1225,21 @@ describe('catalog search', () => {
       id: 'lookup-3', query: 'unknown', resultSelected: false,
       timestamp: '2026-08-23T16:30:00.000Z',
     }])
+  })
+
+  it('exports complete linked lookup records without adding private fields', () => {
+    const records = parseLocalTestLog(JSON.stringify([{
+      id: 'lookup-4', query: 'Storied', resultSelected: true,
+      selectedResult: { id: 'concept:storied', title: 'Storied', href: '/mechanics/storied' },
+      helpful: false, report: 'incorrect', timestamp: '2026-08-23T16:30:00.000Z',
+      playerName: 'Alice', deck: 'Dwarves', gameState: 'secret',
+    }]))
+    const exported = JSON.parse(serializeLocalTestLog(records, '2026-08-23T17:00:00.000Z'))
+    expect(exported).toEqual({ schemaVersion: 1, exportedAt: '2026-08-23T17:00:00.000Z', records })
+    expect(exported.records[0]).toMatchObject({ query: 'Storied', resultSelected: true, helpful: false, report: 'incorrect' })
+    expect(exported.records[0]).not.toHaveProperty('playerName')
+    expect(exported.records[0]).not.toHaveProperty('deck')
+    expect(exported.records[0]).not.toHaveProperty('gameState')
   })
 
   it('does not duplicate curated cards', () => {

@@ -10,6 +10,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { BookIcon, SearchIcon } from '@/components/icons'
 import { PwaRegister } from '@/components/pwa-register'
 import { LocalFeedback } from '@/components/local-feedback'
+import { TestLogControls } from '@/components/test-log-controls'
 import '@/styles.css'
 
 export const Route = createRootRoute({
@@ -69,6 +70,7 @@ function RootComponent() {
 
       <Outlet />
       <LocalFeedback />
+      <TestLogControls />
       <PwaRegister />
 
       <nav className="bottom-nav" aria-label="Mobile navigation">

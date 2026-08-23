@@ -245,8 +245,8 @@ Phase B scope and acceptance:
 | `V0-43` | Search journey completion: grouping, scenario links, recent searches, and beginner-query behavior | complete | `V0-42` | `codex/search-journey-completion` |
 | `V0-44` | Unanswered-search capture and no-result save flow | complete | `V0-43` | `codex/unanswered-searches` |
 | `V0-45` | Helpfulness and unclear/incorrect feedback capture | complete | `V0-44` | `codex/local-feedback` |
-| `V0-46` | Local house-game test-log export and reset | ready | `V0-45` | `codex/test-log-export` |
-| `V0-47` | Offline application shell, curated content, and external-image/source fallback | queued | `V0-46` | `codex/offline-hardening` |
+| `V0-46` | Local house-game test-log export and reset | complete | `V0-45` | `codex/test-log-export` |
+| `V0-47` | Offline application shell, curated content, and external-image/source fallback | ready | `V0-46` | `codex/offline-hardening` |
 | `V0-48` | Accessibility, performance, and mobile-installation readiness audit | queued | `V0-47` | `codex/release-readiness-audit` |
 
 Phase C scope and acceptance:

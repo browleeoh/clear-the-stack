@@ -1,5 +1,6 @@
 export const localTestLogKey = 'mtg-helper-test-log'
 export const currentLookupKey = 'mtg-helper-current-lookup'
+export const localTestLogUpdatedEvent = 'mtg-helper-test-log-updated'
 
 export type SelectedResult = {
   id: string
@@ -75,6 +76,14 @@ export function updateLookupFeedback(
   feedback: Pick<LocalTestLogRecord, 'helpful' | 'report'>,
 ) {
   return records.map((record) => record.id === id ? { ...record, ...feedback } : record)
+}
+
+export function serializeLocalTestLog(records: LocalTestLogRecord[], exportedAt: string) {
+  return JSON.stringify({
+    schemaVersion: 1,
+    exportedAt,
+    records,
+  }, null, 2)
 }
 
 export function addUnansweredSearch(
