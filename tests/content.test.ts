@@ -500,6 +500,24 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Rhovanion Rampager guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'rhovanion-rampager')
+    const content = getCardContentBySlug('rhovanion-rampager')
+    expect(curated).toMatchObject({ oracleId: '008a11c1-d283-49fe-abd7-ff4fe8b1fe79', verificationStatus: 'verified', conceptIds: expect.arrayContaining(['sacrifice', 'last-known-information', 'amass-goblins', 'counter']) })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual(['rampager-attack-sacrifice-choice', 'rampager-sacrificed-power-lki', 'rampager-sacrificed-counters-count', 'rampager-sacrificed-nonpositive-power', 'rampager-decline-sacrifice', 'rampager-dies-base-power', 'rampager-dies-with-counters', 'rampager-death-trigger-response'])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('keeps at least twenty curated verified card records after Phase B', () => {
+    expect(cards.filter((card) => card.verificationStatus === 'verified').length).toBeGreaterThanOrEqual(20)
+  })
+
+  it('exposes Rhovanion Rampager enrichment through search', () => {
+    expect(searchContent('Rampager sacrificed power counters death amass X')[0]).toMatchObject({ title: 'Rhovanion Rampager', href: '/cards/rhovanion-rampager' })
+  })
+
   it('exposes Goblin Plate Mail enrichment through search', () => {
     expect(searchContent('Goblin Plate Mail same amassed Army no equip cost')[0]).toMatchObject({ title: 'Goblin Plate Mail', href: '/cards/goblin-plate-mail' })
   })
