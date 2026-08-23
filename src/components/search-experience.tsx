@@ -2,12 +2,26 @@ import { Link } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { ArrowIcon, SearchIcon } from './icons'
 import { searchContent } from '@/lib/search'
+import type { SearchEntry } from '@/lib/search'
 
 const suggestions = [
   'Storied',
   'Thorin Oakenshield',
   'Do Treasure tokens count?',
 ]
+
+export function getSearchDestination(result: SearchEntry) {
+  if (result.kind === 'card') return { to: '/cards/$cardSlug' as const, params: { cardSlug: result.slug } }
+  if (result.kind !== 'learn') return { to: '/mechanics/$mechanicSlug' as const, params: { mechanicSlug: result.slug } }
+
+  switch (result.slug) {
+    case 'turn-structure': return { to: '/learn/turn-structure' as const, params: {} }
+    case 'casting-resolution': return { to: '/learn/casting-resolution' as const, params: {} }
+    case 'combat': return { to: '/learn/combat' as const, params: {} }
+    case 'core-concepts': return { to: '/learn/core-concepts' as const, params: {} }
+    default: throw new Error(`Unknown Learn destination: ${result.slug}`)
+  }
+}
 
 export function SearchExperience() {
   const [query, setQuery] = useState('')
@@ -30,18 +44,7 @@ export function SearchExperience() {
         <div className="search-results" aria-live="polite">
           {results.length ? (
             results.map((result) => {
-              const destination =
-                result.kind === 'card'
-                  ? {
-                      to: '/cards/$cardSlug' as const,
-                      params: { cardSlug: result.slug },
-                    }
-                  : result.kind === 'learn'
-                    ? { to: '/learn/turn-structure' as const, params: {} }
-                    : {
-                        to: '/mechanics/$mechanicSlug' as const,
-                        params: { mechanicSlug: result.slug },
-                      }
+              const destination = getSearchDestination(result)
 
               return (
                 <Link key={result.id} {...destination} className="result-link">

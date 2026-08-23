@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CardsCardSlugRouteImport } from './routes/cards/$cardSlug'
 import { Route as LearnCastingResolutionRouteImport } from './routes/learn/casting-resolution'
 import { Route as LearnCombatRouteImport } from './routes/learn/combat'
+import { Route as LearnCoreConceptsRouteImport } from './routes/learn/core-concepts'
 import { Route as LearnTurnStructureRouteImport } from './routes/learn/turn-structure'
 import { Route as MechanicsMechanicSlugRouteImport } from './routes/mechanics/$mechanicSlug'
 
@@ -36,6 +37,11 @@ const LearnCombatRoute = LearnCombatRouteImport.update({
   path: '/learn/combat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnCoreConceptsRoute = LearnCoreConceptsRouteImport.update({
+  id: '/learn/core-concepts',
+  path: '/learn/core-concepts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnTurnStructureRoute = LearnTurnStructureRouteImport.update({
   id: '/learn/turn-structure',
   path: '/learn/turn-structure',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/cards/$cardSlug': typeof CardsCardSlugRoute
   '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/combat': typeof LearnCombatRoute
+  '/learn/core-concepts': typeof LearnCoreConceptsRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/cards/$cardSlug': typeof CardsCardSlugRoute
   '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/combat': typeof LearnCombatRoute
+  '/learn/core-concepts': typeof LearnCoreConceptsRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/cards/$cardSlug': typeof CardsCardSlugRoute
   '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/combat': typeof LearnCombatRoute
+  '/learn/core-concepts': typeof LearnCoreConceptsRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/cards/$cardSlug'
     | '/learn/casting-resolution'
     | '/learn/combat'
+    | '/learn/core-concepts'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/cards/$cardSlug'
     | '/learn/casting-resolution'
     | '/learn/combat'
+    | '/learn/core-concepts'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/cards/$cardSlug'
     | '/learn/casting-resolution'
     | '/learn/combat'
+    | '/learn/core-concepts'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   CardsCardSlugRoute: typeof CardsCardSlugRoute
   LearnCastingResolutionRoute: typeof LearnCastingResolutionRoute
   LearnCombatRoute: typeof LearnCombatRoute
+  LearnCoreConceptsRoute: typeof LearnCoreConceptsRoute
   LearnTurnStructureRoute: typeof LearnTurnStructureRoute
   MechanicsMechanicSlugRoute: typeof MechanicsMechanicSlugRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnCombatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn/core-concepts': {
+      id: '/learn/core-concepts'
+      path: '/learn/core-concepts'
+      fullPath: '/learn/core-concepts'
+      preLoaderRoute: typeof LearnCoreConceptsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn/turn-structure': {
       id: '/learn/turn-structure'
       path: '/learn/turn-structure'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   CardsCardSlugRoute: CardsCardSlugRoute,
   LearnCastingResolutionRoute: LearnCastingResolutionRoute,
   LearnCombatRoute: LearnCombatRoute,
+  LearnCoreConceptsRoute: LearnCoreConceptsRoute,
   LearnTurnStructureRoute: LearnTurnStructureRoute,
   MechanicsMechanicSlugRoute: MechanicsMechanicSlugRoute,
 }
