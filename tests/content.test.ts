@@ -128,6 +128,41 @@ describe('verified content', () => {
     })
   })
 
+  it('publishes the verified Counter, Equipment, and Attachment foundations', () => {
+    const expected = {
+      counter: ['counter-not-a-token', 'counter-zone-change'],
+      equipment: [
+        'equipment-enters-unattached',
+        'equipment-attach-without-equip',
+      ],
+      attachment: ['attachment-moves-equipment', 'attachment-illegal-object'],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(
+        scenarioIds,
+      )
+      expect(
+        concept?.scenarios.every(
+          (scenario) =>
+            scenario.verificationStatus === 'verified' &&
+            scenario.reviewedAt === '2026-08-23',
+        ),
+      ).toBe(true)
+      expect(
+        concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+      ).toBe(true)
+    }
+  })
+
+  it('discovers the supporting concepts with beginner language', () => {
+    expect(searchContent('counter vs token')[0]?.title).toBe('Counter')
+    expect(searchContent('equipment vs equip')[0]?.title).toBe('Equipment')
+    expect(searchContent('illegal attachment')[0]?.title).toBe('Attachment')
+  })
+
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })

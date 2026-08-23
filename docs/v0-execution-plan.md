@@ -38,8 +38,8 @@ are merged, even if later work is ready.
 
 | ID | Unit | Status | Suggested branch |
 | --- | --- | --- | --- |
-| `V0-08` | Counter, Equipment, and attachment concept foundation | ready | `codex/equipment-concept-foundation` |
-| `V0-09` | Triggered ability, Target, and Resolution concept foundation | queued | `codex/interaction-concept-foundation` |
+| `V0-08` | Counter, Equipment, and attachment concept foundation | complete | `codex/equipment-concept-foundation` |
+| `V0-09` | Triggered ability, Target, and Resolution concept foundation | ready | `codex/interaction-concept-foundation` |
 | `V0-10` | Dwalin, Weaponmaster curated guidance | queued | `codex/dwalin-guidance` |
 | `V0-11` | Sting, Bilbo's Sword curated guidance | queued | `codex/sting-guidance` |
 
