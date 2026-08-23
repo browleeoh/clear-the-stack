@@ -171,8 +171,8 @@ All units inherit these requirements:
 | `V0-15` | Celebrate the Mountain-king curated guidance | complete | `V0-14` | `codex/celebrate-guidance` |
 | `V0-16` | Amass Goblins and Army token foundation | complete | `V0-15` | `codex/amass-foundation` |
 | `V0-17` | Sacrifice, last known information, reflexive triggers, and excess damage foundation | complete | `V0-16` | `codex/amass-interaction-foundation` |
-| `V0-18` | Azog, Moria's Ruin curated guidance | ready | `V0-17` | `codex/azog-guidance` |
-| `V0-19` | Bolg of the North curated guidance | queued | `V0-18` | `codex/bolg-guidance` |
+| `V0-18` | Azog, Moria's Ruin curated guidance | complete | `V0-17` | `codex/azog-guidance` |
+| `V0-19` | Bolg of the North curated guidance | ready | `V0-18` | `codex/bolg-guidance` |
 | `V0-20` | Ferocious and intervening-if foundation | queued | `V0-19` | `codex/ferocious-foundation` |
 | `V0-21` | Nasty Little Rabbit curated guidance | queued | `V0-20` | `codex/nasty-little-rabbit-guidance` |
 | `V0-22` | Landfall, land entry, and “this way” zone-change foundation | queued | `V0-21` | `codex/landfall-foundation` |
