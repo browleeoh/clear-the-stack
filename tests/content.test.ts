@@ -167,6 +167,38 @@ describe('verified content', () => {
     ).toBe(true)
   })
 
+  it('merges curated Azog guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'azog-moria-s-ruin')
+    const content = getCardContentBySlug('azog-moria-s-ruin')
+
+    expect(curated).toMatchObject({
+      oracleId: 'a8b018a7-0350-4ee0-9582-8d391018bdee',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['amass-goblins', 'target', 'resolution', 'last-known-information']),
+    })
+    expect(content?.catalogCard.slug).toBe('azog-moria-s-ruin')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'azog-opponent-creature',
+      'azog-own-creature',
+      'azog-no-target',
+      'azog-illegal-target',
+      'azog-indestructible-target',
+      'azog-power-includes-counters',
+    ])
+    expect(curated?.scenarios.every((scenario) =>
+      scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+    )).toBe(true)
+  })
+
+  it('exposes Azog enrichment through search', () => {
+    expect(searchContent('Azog nobody amasses')[0]).toMatchObject({
+      title: "Azog, Moria's Ruin",
+      href: '/cards/azog-moria-s-ruin',
+    })
+  })
+
   it('exposes Celebrate enrichment through search', () => {
     expect(searchContent('Celebrate attached Equipment')[0]).toMatchObject({
       title: 'Celebrate the Mountain-king',

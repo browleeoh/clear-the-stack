@@ -142,6 +142,16 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps Azog controller, destroy, and indestructible locators precise', () => {
+    const ids = ['cr-rule-109-5', 'cr-rule-701-8', 'cr-rule-702-12b']
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+    expect(sourceLocators.find((locator) => locator.id === 'hob-release-notes-azog')).toMatchObject({
+      locatorType: 'card-specific-entry',
+      cardOracleId: 'a8b018a7-0350-4ee0-9582-8d391018bdee',
+    })
+  })
+
   it('keeps precise stack, priority, activated, and static ability locators', () => {
     const ids = [
       'cr-rule-113-3b',
