@@ -109,8 +109,9 @@ After approval:
 After a verified merge, discard the completed task branch as a work surface and inspect
 the ledger on fresh `origin/main`.
 
-- If the next `ready` unit belongs to the authorized tranche, repeat this contract.
-- If the tranche is complete, report results and stop.
+- If the next `ready` unit belongs to the authorized goal boundary, repeat this
+  contract, including across thematic phase labels.
+- If the authorized goal boundary is complete, report results and stop.
 - If no eligible unit is ready, report the ledger state and stop.
 
 Keep a concise progress log throughout the goal. Do not claim a unit is complete until

@@ -1,4 +1,4 @@
 interface:
   display_name: "V0 Ralph Loop"
-  short_description: "Run guarded V0 issue-to-merge milestones"
-  default_prompt: "Use $v0-ralph-loop to execute the next approved V0 milestone loop."
+  short_description: "Run the guarded V0 issue-to-merge backlog"
+  default_prompt: "Use $v0-ralph-loop to execute the authorized implementation-ready V0 ledger."
