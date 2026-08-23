@@ -163,6 +163,43 @@ describe('verified content', () => {
     expect(searchContent('illegal attachment')[0]?.title).toBe('Attachment')
   })
 
+  it('publishes the verified Triggered Ability, Target, and Resolution foundations', () => {
+    const expected = {
+      'triggered-ability': ['trigger-effect-waits', 'trigger-source-leaves'],
+      target: ['target-triggered-ability-choice', 'target-up-to-one-none'],
+      resolution: [
+        'resolution-all-targets-illegal',
+        'resolution-one-target-illegal',
+      ],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(
+        scenarioIds,
+      )
+      expect(
+        concept?.scenarios.every(
+          (scenario) =>
+            scenario.verificationStatus === 'verified' &&
+            scenario.reviewedAt === '2026-08-23',
+        ),
+      ).toBe(true)
+      expect(
+        concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId)),
+      ).toBe(true)
+    }
+  })
+
+  it('discovers interaction concepts with beginner language', () => {
+    expect(searchContent('trigger vs effect')[0]?.title).toBe(
+      'Triggered Ability',
+    )
+    expect(searchContent('choose no creature')[0]?.title).toBe('Target')
+    expect(searchContent('partial resolution')[0]?.title).toBe('Resolution')
+  })
+
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })

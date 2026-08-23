@@ -20,6 +20,9 @@ export default defineConfig({
         { path: '/mechanics/hone-counters' },
         { path: '/mechanics/permanent' },
         { path: '/mechanics/token' },
+        { path: '/mechanics/triggered-ability' },
+        { path: '/mechanics/target' },
+        { path: '/mechanics/resolution' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {
