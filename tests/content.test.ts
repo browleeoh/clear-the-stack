@@ -475,6 +475,42 @@ describe('verified content', () => {
     expect(searchContent('zero toughness Army')[0]?.title).toBe('Amass Goblins')
   })
 
+  it('publishes the verified Amass interaction foundations', () => {
+    const expected = {
+      sacrifice: ['sacrifice-not-destroy', 'sacrifice-during-resolution'],
+      'last-known-information': [
+        'lki-sacrificed-creature-power',
+        'lki-includes-counters-and-effects',
+      ],
+      'reflexive-triggered-ability': [
+        'reflexive-target-after-action',
+        'reflexive-two-response-windows',
+      ],
+      'excess-damage': [
+        'excess-basic-calculation',
+        'excess-counts-marked-damage',
+      ],
+    }
+
+    for (const [id, scenarioIds] of Object.entries(expected)) {
+      const concept = getConcept(id)
+      expect(concept?.verificationStatus).toBe('verified')
+      expect(concept?.scenarios.map((scenario) => scenario.id)).toEqual(scenarioIds)
+      expect(concept?.scenarios.every((scenario) =>
+        scenario.verificationStatus === 'verified' &&
+        scenario.reviewedAt === '2026-08-23',
+      )).toBe(true)
+      expect(concept?.relatedConceptIds.every((relatedId) => getConcept(relatedId))).toBe(true)
+    }
+  })
+
+  it('discovers Amass interaction concepts with beginner language', () => {
+    expect(searchContent('sacrifice vs destroy')[0]?.title).toBe('Sacrifice')
+    expect(searchContent('creature left battlefield')[0]?.title).toBe('Last Known Information')
+    expect(searchContent('two response windows')[0]?.title).toBe('Reflexive Triggered Ability')
+    expect(searchContent('damage over lethal')[0]?.title).toBe('Excess Damage')
+  })
+
   it('discovers Recruit from beginner questions', () => {
     expect(searchContent('draw discard token')[0]?.title).toBe('Recruit')
     expect(searchContent('respond during recruit')[0]?.title).toBe('Recruit')
