@@ -180,7 +180,7 @@ All units inherit these requirements:
 | `V0-24` | Artifact, legendary permanent, and static-ability foundation | complete | `V0-23` | `codex/artifact-legendary-foundation` |
 | `V0-25` | Bifur, Melodic Rider curated guidance | complete | `V0-24` | `codex/bifur-guidance` |
 | `V0-26` | Replacement effects and modified draw/discard foundation | complete | `V0-25` | `codex/replacement-effects-foundation` |
-| `V0-27` | Bard, King of Dale curated guidance | ready | `V0-26` | `codex/bard-king-guidance` |
+| `V0-27` | Bard, King of Dale curated guidance | complete | `V0-26` | `codex/bard-king-guidance` |
 
 Phase A scope and acceptance:
 
@@ -206,7 +206,7 @@ Phase A scope and acceptance:
 
 | ID | Unit | Status | Depends on | Suggested branch |
 | --- | --- | --- | --- | --- |
-| `V0-28` | Saga and lore-counter foundation | queued | `V0-27` | `codex/saga-foundation` |
+| `V0-28` | Saga and lore-counter foundation | ready | `V0-27` | `codex/saga-foundation` |
 | `V0-29` | Balin, Loremaster curated guidance | queued | `V0-28` | `codex/balin-guidance` |
 | `V0-30` | Bard the Bowman curated guidance | queued | `V0-29` | `codex/bard-bowman-guidance` |
 | `V0-31` | Bard's Company curated guidance | queued | `V0-30` | `codex/bards-company-guidance` |

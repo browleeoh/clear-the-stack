@@ -291,6 +291,33 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it('merges curated Bard, King of Dale guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'bard-king-of-dale')
+    const content = getCardContentBySlug('bard-king-of-dale')
+
+    expect(curated).toMatchObject({
+      oracleId: 'd05db2c1-a19a-4803-8e8a-fa2f9b798181',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['replacement-effect', 'draw', 'recruit', 'amass-goblins', 'state-based-actions']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'bard-first-draw-step-draw',
+      'bard-recruit-draw-and-token',
+      'bard-multiple-draw-replacements',
+      'bard-two-bards-cumulative',
+      'bard-multiple-token-kinds',
+      'bard-amass-two-armies',
+      'bard-amass-existing-army',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Bard, King of Dale enrichment through search', () => {
+    expect(searchContent('Bard two Armies 0/0')[0]).toMatchObject({ title: 'Bard, King of Dale', href: '/cards/bard-king-of-dale' })
+  })
+
   it('exposes Bifur enrichment through search', () => {
     expect(searchContent('Bifur separate targets')[0]).toMatchObject({
       title: 'Bifur, Melodic Rider',
