@@ -207,8 +207,8 @@ Phase A scope and acceptance:
 | ID | Unit | Status | Depends on | Suggested branch |
 | --- | --- | --- | --- | --- |
 | `V0-28` | Saga and lore-counter foundation | complete | `V0-27` | `codex/saga-foundation` |
-| `V0-29` | Balin, Loremaster curated guidance | ready | `V0-28` | `codex/balin-guidance` |
-| `V0-30` | Bard the Bowman curated guidance | queued | `V0-29` | `codex/bard-bowman-guidance` |
+| `V0-29` | Balin, Loremaster curated guidance | complete | `V0-28` | `codex/balin-guidance` |
+| `V0-30` | Bard the Bowman curated guidance | ready | `V0-29` | `codex/bard-bowman-guidance` |
 | `V0-31` | Bard's Company curated guidance | queued | `V0-30` | `codex/bards-company-guidance` |
 | `V0-32` | The Queen of Dale curated guidance | queued | `V0-31` | `codex/queen-of-dale-guidance` |
 | `V0-33` | The Chief Warg curated guidance | queued | `V0-32` | `codex/chief-warg-guidance` |
