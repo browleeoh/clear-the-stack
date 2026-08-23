@@ -13,6 +13,7 @@ import {
 } from '@/content/data'
 import { searchContent, searchEntries } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
+import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -64,6 +65,15 @@ describe('verified content', () => {
 
   it('discovers Turn Structure from beginner timing questions', () => {
     expect(searchContent('untap upkeep draw combat cleanup order')[0]).toMatchObject({ title: 'Turn structure', href: '/learn/turn-structure' })
+  })
+
+  it('keeps the verified casting and resolution Learn outline and sources complete', () => {
+    expect(castingSteps.map(([title]) => title)).toEqual(['1. Put the spell on the stack', '2. Make its choices', '3. Work out and pay the cost', '4. Give players a chance to respond', '5. Resolve the top object', '6. Put it in the right place'])
+    expect(castingSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
+  })
+
+  it('discovers casting and resolution from beginner questions', () => {
+    expect(searchContent('pay mana choose targets respond resolve spell')[0]).toMatchObject({ title: 'Casting and resolving a spell', href: '/learn/casting-resolution' })
   })
 
   it('merges curated Thorin guidance by stable card ID', () => {
@@ -1080,7 +1090,7 @@ describe('catalog search', () => {
     expect(cardEntries).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.id))).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.slug))).toHaveLength(193)
-    expect(searchEntries).toHaveLength(193 + concepts.length + 1)
+    expect(searchEntries).toHaveLength(193 + concepts.length + 2)
   })
 
   it('does not duplicate curated cards', () => {
