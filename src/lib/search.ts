@@ -59,6 +59,16 @@ export const searchEntries: SearchEntry[] = [
     aliases: 'how to take a turn what can I do now phases steps when can I play a land cast a sorcery',
     body: 'Untap upkeep draw precombat main combat attackers blockers postcombat main end cleanup example turn priority stack',
   },
+  {
+    id: 'learn:casting-resolution',
+    title: 'Casting and resolving a spell',
+    description: 'From announcing a spell to its final destination',
+    kind: 'learn',
+    href: '/learn/casting-resolution',
+    slug: 'casting-resolution',
+    aliases: 'how to cast a spell pay mana choose targets respond resolution what happens next',
+    body: 'Put spell on stack make choices choose targets determine costs activate mana abilities pay costs pass priority resolve top object permanent battlefield instant sorcery graveyard',
+  },
 ]
 
 const miniSearch = new MiniSearch<SearchEntry>({

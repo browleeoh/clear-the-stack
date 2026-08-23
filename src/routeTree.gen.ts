@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CardsCardSlugRouteImport } from './routes/cards/$cardSlug'
+import { Route as LearnCastingResolutionRouteImport } from './routes/learn/casting-resolution'
 import { Route as LearnTurnStructureRouteImport } from './routes/learn/turn-structure'
 import { Route as MechanicsMechanicSlugRouteImport } from './routes/mechanics/$mechanicSlug'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const CardsCardSlugRoute = CardsCardSlugRouteImport.update({
   id: '/cards/$cardSlug',
   path: '/cards/$cardSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnCastingResolutionRoute = LearnCastingResolutionRouteImport.update({
+  id: '/learn/casting-resolution',
+  path: '/learn/casting-resolution',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnTurnStructureRoute = LearnTurnStructureRouteImport.update({
@@ -38,12 +44,14 @@ const MechanicsMechanicSlugRoute = MechanicsMechanicSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cards/$cardSlug': typeof CardsCardSlugRoute
+  '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cards/$cardSlug': typeof CardsCardSlugRoute
+  '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
@@ -51,6 +59,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cards/$cardSlug': typeof CardsCardSlugRoute
+  '/learn/casting-resolution': typeof LearnCastingResolutionRoute
   '/learn/turn-structure': typeof LearnTurnStructureRoute
   '/mechanics/$mechanicSlug': typeof MechanicsMechanicSlugRoute
 }
@@ -59,18 +68,21 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cards/$cardSlug'
+    | '/learn/casting-resolution'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cards/$cardSlug'
+    | '/learn/casting-resolution'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   id:
     | '__root__'
     | '/'
     | '/cards/$cardSlug'
+    | '/learn/casting-resolution'
     | '/learn/turn-structure'
     | '/mechanics/$mechanicSlug'
   fileRoutesById: FileRoutesById
@@ -78,6 +90,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CardsCardSlugRoute: typeof CardsCardSlugRoute
+  LearnCastingResolutionRoute: typeof LearnCastingResolutionRoute
   LearnTurnStructureRoute: typeof LearnTurnStructureRoute
   MechanicsMechanicSlugRoute: typeof MechanicsMechanicSlugRoute
 }
@@ -96,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/cards/$cardSlug'
       fullPath: '/cards/$cardSlug'
       preLoaderRoute: typeof CardsCardSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/casting-resolution': {
+      id: '/learn/casting-resolution'
+      path: '/learn/casting-resolution'
+      fullPath: '/learn/casting-resolution'
+      preLoaderRoute: typeof LearnCastingResolutionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn/turn-structure': {
@@ -118,6 +138,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CardsCardSlugRoute: CardsCardSlugRoute,
+  LearnCastingResolutionRoute: LearnCastingResolutionRoute,
   LearnTurnStructureRoute: LearnTurnStructureRoute,
   MechanicsMechanicSlugRoute: MechanicsMechanicSlugRoute,
 }

@@ -146,6 +146,8 @@ const rawSourceLocators = [
   { id: 'cr-rule-603-4', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 603.4 — Intervening “if” clauses' },
   { id: 'cr-rule-603-6a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 603.6a — Enters-the-battlefield trigger events' },
   { id: 'cr-rule-608-2b', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2b — Rechecking targets and partial resolution' },
+  { id: 'cr-rule-608-1', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.1 — Top stack object resolves after all players pass' },
+  { id: 'cr-rule-608-2n', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2n — Instant and sorcery spells go to the graveyard after resolving' },
   { id: 'cr-rule-608-2c', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2c — Following instructions in order' },
   { id: 'cr-rule-608-2h', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2h — Determining game-state information on resolution' },
   { id: 'cr-rule-608-2g', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2g — Mana payments during resolution' },
