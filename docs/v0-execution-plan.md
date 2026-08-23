@@ -41,7 +41,7 @@ are merged, even if later work is ready.
 | `V0-08` | Counter, Equipment, and attachment concept foundation | complete | `codex/equipment-concept-foundation` |
 | `V0-09` | Triggered ability, Target, and Resolution concept foundation | complete | `codex/interaction-concept-foundation` |
 | `V0-10` | Dwalin, Weaponmaster curated guidance | complete | `codex/dwalin-guidance` |
-| `V0-11` | Sting, Bilbo's Sword curated guidance | ready | `codex/sting-guidance` |
+| `V0-11` | Sting, Bilbo's Sword curated guidance | complete | `codex/sting-guidance` |
 
 ### V0-08 — Counter, Equipment, and attachment concept foundation
 

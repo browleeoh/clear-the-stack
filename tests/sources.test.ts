@@ -56,6 +56,15 @@ describe('authoritative source records', () => {
     expect(byType['no-card-specific-entry']).toHaveLength(2)
   })
 
+  it('preserves Sting as having no card-specific release-note entry', () => {
+    expect(
+      sourceLocators.find((locator) => locator.id === 'hob-release-notes-sting'),
+    ).toMatchObject({
+      locatorType: 'no-card-specific-entry',
+      cardOracleId: '9779f32c-b1a2-42a3-8e78-14c28c3ad254',
+    })
+  })
+
   it('keeps the normalized hone-counter mechanic locators precise', () => {
     expect(
       sourceLocators.filter((locator) =>

@@ -100,6 +100,50 @@ describe('verified content', () => {
     ).toBe(true)
   })
 
+  it('merges curated Sting guidance by stable Oracle UUID and route slug', () => {
+    const curatedSting = cards.find((card) => card.id === 'sting-bilbo-s-sword')
+    const content = getCardContentBySlug('sting-bilbo-s-sword')
+
+    expect(curatedSting).toMatchObject({
+      oracleId: '9779f32c-b1a2-42a3-8e78-14c28c3ad254',
+      verificationStatus: 'verified',
+      conceptIds: [
+        'hone-counters',
+        'counter',
+        'equipment',
+        'attachment',
+        'triggered-ability',
+        'target',
+        'resolution',
+      ],
+    })
+    expect(content?.catalogCard.slug).toBe('sting-bilbo-s-sword')
+    expect(content?.catalogCard.id).toBe(curatedSting?.oracleId)
+    expect(content?.enrichment).toBe(curatedSting)
+    expect(curatedSting?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'sting-normal-enter-resolution',
+      'sting-choose-no-creature',
+      'sting-creature-target-illegal',
+      'sting-opponent-target-illegal',
+      'sting-all-targets-illegal',
+      'sting-move-later',
+    ])
+    expect(
+      curatedSting?.scenarios.every(
+        (scenario) =>
+          scenario.verificationStatus === 'verified' &&
+          scenario.reviewedAt === '2026-08-23',
+      ),
+    ).toBe(true)
+  })
+
+  it('exposes Sting enrichment through search', () => {
+    expect(searchContent('Sting choose no creature')[0]).toMatchObject({
+      title: "Sting, Bilbo's Sword",
+      href: '/cards/sting-bilbo-s-sword',
+    })
+  })
+
   it('exposes Dwalin enrichment through search', () => {
     expect(searchContent('Dwalin each Equipment')[0]).toMatchObject({
       title: 'Dwalin, Weaponmaster',
