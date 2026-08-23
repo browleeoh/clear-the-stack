@@ -80,6 +80,7 @@ export function TurnStructure() {
           <ul>
             <li><Link to="/learn/casting-resolution">Casting and resolving a spell</Link></li>
             <li><Link to="/learn/combat">Attacking and blocking</Link></li>
+            <li><Link to="/learn/core-concepts">Tokens, counters, targets, stack, and priority</Link></li>
             <li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'priority' }}>Priority and responding</Link></li>
             <li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'stack' }}>The stack</Link></li>
             <li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'triggered-ability' }}>Triggered abilities</Link></li>

@@ -15,6 +15,8 @@ import { searchContent, searchEntries } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
 import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
+import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
+import { getSearchDestination } from '@/components/search-experience'
 
 describe('HOB catalog', () => {
   it('contains exactly the 193 mechanically distinct main-set cards', () => {
@@ -84,6 +86,18 @@ describe('verified content', () => {
 
   it('discovers attacking and blocking from beginner questions', () => {
     expect(searchContent('when can I respond after blockers combat damage')[0]).toMatchObject({ title: 'Attacking and blocking', href: '/learn/combat' })
+  })
+
+  it('keeps the verified core-concepts Learn outline and sources complete', () => {
+    expect(coreConceptSections.map(([title]) => title)).toEqual(['1. Token', '2. Counter', '3. Target', '4. Stack', '5. Priority'])
+    expect(coreConceptSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
+    expect(['token', 'counter', 'target', 'stack', 'priority'].every((id) => getConcept(id)?.verificationStatus === 'verified')).toBe(true)
+  })
+
+  it('discovers core concepts from beginner questions', () => {
+    const result = searchContent('is a counter a permanent who responds last in first out')[0]
+    expect(result).toMatchObject({ title: 'Tokens, counters, targets, stack, and priority', href: '/learn/core-concepts' })
+    expect(getSearchDestination(result)).toEqual({ to: '/learn/core-concepts', params: {} })
   })
 
   it('merges curated Thorin guidance by stable card ID', () => {
@@ -1100,7 +1114,7 @@ describe('catalog search', () => {
     expect(cardEntries).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.id))).toHaveLength(193)
     expect(new Set(cardEntries.map((entry) => entry.slug))).toHaveLength(193)
-    expect(searchEntries).toHaveLength(193 + concepts.length + 3)
+    expect(searchEntries).toHaveLength(193 + concepts.length + 4)
   })
 
   it('does not duplicate curated cards', () => {

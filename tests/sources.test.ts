@@ -361,6 +361,14 @@ describe('authoritative source records', () => {
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
   })
 
+  it('keeps the token zone-change locator precise', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'cr-rule-111-7')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rules 111.7–111.8 — Tokens outside the battlefield cease and cannot return' })
+  })
+
+  it('keeps the post-resolution priority locator precise', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'cr-rule-117-3b')).toMatchObject({ sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 117.3b — Active player receives priority after resolution' })
+  })
+
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
     const ids = [
       'cr-rule-701-21a',

@@ -79,6 +79,16 @@ export const searchEntries: SearchEntry[] = [
     aliases: 'how do I attack block when can I respond combat order summoning sickness vigilance',
     body: 'beginning of combat declare attackers tap attackers attack triggers priority declare blockers block triggers combat damage end of combat unblocked creature defending player',
   },
+  {
+    id: 'learn:core-concepts',
+    title: 'Tokens, counters, targets, stack, and priority',
+    description: 'Five core ideas that explain common game interactions',
+    kind: 'learn',
+    href: '/learn/core-concepts',
+    slug: 'core-concepts',
+    aliases: 'token versus counter is a counter a permanent choose target respond last in first out who acts now',
+    body: 'token permanent not card counter marker not object target chosen spell ability stack newest resolves first priority one player act pass all players target illegal resolution',
+  },
 ]
 
 const miniSearch = new MiniSearch<SearchEntry>({
