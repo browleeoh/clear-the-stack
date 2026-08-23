@@ -268,6 +268,36 @@ describe('verified content', () => {
     )).toBe(true)
   })
 
+  it('merges curated Bifur guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'bifur-melodic-rider')
+    const content = getCardContentBySlug('bifur-melodic-rider')
+
+    expect(curated).toMatchObject({
+      oracleId: 'b8d563e4-e2bc-4e8b-8841-6655beff9138',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['storied', 'triggered-ability', 'static-ability', 'target', 'artifact', 'legendary-permanent']),
+    })
+    expect(content?.catalogCard.slug).toBe('bifur-melodic-rider')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'bifur-enters-earns-story',
+      'bifur-enters-without-story',
+      'bifur-independent-targets',
+      'bifur-one-target-illegal',
+      'bifur-attacks-with-story',
+      'bifur-leaves-after-triggers',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it('exposes Bifur enrichment through search', () => {
+    expect(searchContent('Bifur separate targets')[0]).toMatchObject({
+      title: 'Bifur, Melodic Rider',
+      href: '/cards/bifur-melodic-rider',
+    })
+  })
+
   it('exposes Silvan Reveler enrichment through search', () => {
     expect(searchContent('Silvan graveyard only')[0]).toMatchObject({
       title: 'Silvan Reveler',
