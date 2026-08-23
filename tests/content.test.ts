@@ -363,6 +363,33 @@ describe('verified content', () => {
     expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
   })
 
+  it("merges curated Bard's Company guidance by stable Oracle UUID and route slug", () => {
+    const curated = cards.find((card) => card.id === 'bard-s-company')
+    const content = getCardContentBySlug('bard-s-company')
+
+    expect(curated).toMatchObject({
+      oracleId: '5c5bfbb2-0e63-4e43-b441-c4878983288f',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['recruit', 'static-ability', 'triggered-ability', 'stack', 'token']),
+    })
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'bards-company-cast-with-human',
+      'bards-company-no-human',
+      'bards-company-sacrifice-human-for-mana',
+      'bards-company-human-lost-in-response',
+      'bards-company-enter-recruit',
+      'bards-company-attack-recruit',
+      'bards-company-soldier-bonus',
+    ])
+    expect(curated?.scenarios.every((scenario) => scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23')).toBe(true)
+  })
+
+  it("exposes Bard's Company enrichment through search", () => {
+    expect(searchContent('Bards Company sacrifice Human mana')[0]).toMatchObject({ title: "Bard's Company", href: '/cards/bard-s-company' })
+  })
+
   it('exposes Bard the Bowman enrichment through search', () => {
     expect(searchContent('Bard second draw Soldier target')[0]).toMatchObject({ title: 'Bard the Bowman', href: '/cards/bard-the-bowman' })
   })
