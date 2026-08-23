@@ -32,9 +32,11 @@ export const searchEntries: SearchEntry[] = [
     id: `concept:${concept.id}`,
     title: concept.name,
     description:
-      concept.kind === 'keyword-ability' ? 'Set mechanic' : 'Rules concept',
+      concept.kind === 'keyword-ability' || concept.kind === 'set-mechanic'
+        ? 'Set mechanic'
+        : 'Rules concept',
     kind:
-      concept.kind === 'keyword-ability'
+      concept.kind === 'keyword-ability' || concept.kind === 'set-mechanic'
         ? ('mechanic' as const)
         : ('concept' as const),
     href:
