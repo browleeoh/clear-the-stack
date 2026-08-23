@@ -356,6 +356,11 @@ describe('authoritative source records', () => {
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual(ids)
   })
 
+  it('keeps precise combat-step Learn locators', () => {
+    const ids = ['cr-rule-506-1', 'cr-rule-507-2', 'cr-rule-508-1', 'cr-rule-508-2', 'cr-rule-509-1', 'cr-rule-509-2', 'cr-rule-510-1', 'cr-rule-511-1']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
+  })
+
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
     const ids = [
       'cr-rule-701-21a',
