@@ -211,8 +211,8 @@ Phase A scope and acceptance:
 | `V0-30` | Bard the Bowman curated guidance | complete | `V0-29` | `codex/bard-bowman-guidance` |
 | `V0-31` | Bard's Company curated guidance | complete | `V0-30` | `codex/bards-company-guidance` |
 | `V0-32` | The Queen of Dale curated guidance | complete | `V0-31` | `codex/queen-of-dale-guidance` |
-| `V0-33` | The Chief Warg curated guidance | ready | `V0-32` | `codex/chief-warg-guidance` |
-| `V0-34` | Beorn's Hospitality curated guidance | queued | `V0-33` | `codex/beorns-hospitality-guidance` |
+| `V0-33` | The Chief Warg curated guidance | complete | `V0-32` | `codex/chief-warg-guidance` |
+| `V0-34` | Beorn's Hospitality curated guidance | ready | `V0-33` | `codex/beorns-hospitality-guidance` |
 | `V0-35` | Down in the Valley curated guidance | queued | `V0-34` | `codex/down-in-the-valley-guidance` |
 | `V0-36` | Dancing from Dark to Dawn curated guidance | queued | `V0-35` | `codex/dancing-guidance` |
 | `V0-37` | Goblin Plate Mail curated guidance | queued | `V0-36` | `codex/goblin-plate-mail-guidance` |
