@@ -51,4 +51,13 @@ Oracle text and gameplay outcomes should be verified against current official so
 
 ## Deployment
 
-TanStack Start supports multiple hosting targets. V0 contains no required backend or runtime secrets, so it can initially be deployed as a statically prerendered application. Provider-specific configuration will be added only when a hosting provider is selected.
+This application is configured for Vercel through TanStack Start's Nitro adapter.
+Vercel can use the repository defaults:
+
+- Framework preset: Other
+- Build command: `npm run build`
+- Output directory: leave blank
+
+Do not override the output directory with `dist`, `dist/client`, or `.output`.
+Nitro generates the Vercel deployment output during the build, including the
+prerendered pages and the server fallback used for application routes.

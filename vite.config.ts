@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { nitro } from 'nitro/vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import catalogData from './src/content/generated/hob-catalog.json' with { type: 'json' }
@@ -49,6 +50,7 @@ export default defineConfig({
         crawlLinks: true,
       },
     }),
+    nitro(),
     viteReact(),
     tailwindcss(),
   ],
