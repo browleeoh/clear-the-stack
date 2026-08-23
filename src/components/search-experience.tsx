@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowIcon, SearchIcon } from './icons'
 import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
@@ -10,8 +10,63 @@ const suggestions = [
   'Do Treasure tokens count?',
 ]
 
+const recentSearchesKey = 'mtg-helper-recent-searches'
+const resultGroupOrder = ['learn', 'scenario', 'card', 'mechanic'] as const
+
+const resultGroupLabels = {
+  learn: 'Beginner guides',
+  scenario: 'Examples',
+  card: 'Cards',
+  mechanic: 'Rules and mechanics',
+} as const
+
+export function parseRecentSearches(value: string | null) {
+  if (!value) return []
+  try {
+    const stored: unknown = JSON.parse(value)
+    return Array.isArray(stored)
+      ? stored.filter((item): item is string => typeof item === 'string').slice(0, 5)
+      : []
+  } catch {
+    return []
+  }
+}
+
+export function updateRecentSearches(current: string[], query: string) {
+  const normalized = query.trim()
+  if (!normalized) return current
+  return [normalized, ...current.filter((item) => item !== normalized)].slice(0, 5)
+}
+
+export function groupSearchResults(results: SearchEntry[], query = '') {
+  const normalizedQuery = query.trim().toLocaleLowerCase()
+  const exactMatch = results.find((result) => result.title.toLocaleLowerCase() === normalizedQuery)
+  const exactKind: (typeof resultGroupOrder)[number] | undefined = exactMatch?.kind === 'concept' || exactMatch?.kind === 'mechanic'
+    ? 'mechanic'
+    : exactMatch?.kind
+  const groupOrder: readonly (typeof resultGroupOrder)[number][] = exactKind
+    ? [exactKind, ...resultGroupOrder.filter((kind) => kind !== exactKind)]
+    : resultGroupOrder
+
+  return groupOrder.map((kind) => ({
+    kind,
+    label: resultGroupLabels[kind],
+    results: results.filter((result) =>
+      kind === 'mechanic'
+        ? result.kind === 'mechanic' || result.kind === 'concept'
+        : result.kind === kind,
+    ),
+  })).filter((group) => group.results.length)
+}
+
 export function getSearchDestination(result: SearchEntry) {
   if (result.kind === 'card') return { to: '/cards/$cardSlug' as const, params: { cardSlug: result.slug } }
+  if (result.kind === 'scenario') {
+    if (result.parentKind === 'card') {
+      return { to: '/cards/$cardSlug' as const, params: { cardSlug: result.parentSlug ?? '' }, hash: result.slug }
+    }
+    return { to: '/mechanics/$mechanicSlug' as const, params: { mechanicSlug: result.parentSlug ?? '' }, hash: result.slug }
+  }
   if (result.kind !== 'learn') return { to: '/mechanics/$mechanicSlug' as const, params: { mechanicSlug: result.slug } }
 
   switch (result.slug) {
@@ -25,7 +80,28 @@ export function getSearchDestination(result: SearchEntry) {
 
 export function SearchExperience() {
   const [query, setQuery] = useState('')
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
   const results = useMemo(() => searchContent(query), [query])
+  const groupedResults = useMemo(() => groupSearchResults(results, query), [query, results])
+
+  useEffect(() => {
+    try {
+      setRecentSearches(parseRecentSearches(localStorage.getItem(recentSearchesKey)))
+    } catch {
+      setRecentSearches([])
+    }
+  }, [])
+
+  function rememberSearch() {
+    const next = updateRecentSearches(recentSearches, query)
+    if (next === recentSearches) return
+    setRecentSearches(next)
+    try {
+      localStorage.setItem(recentSearchesKey, JSON.stringify(next))
+    } catch {
+      // Search remains fully usable when storage is unavailable.
+    }
+  }
 
   return (
     <>
@@ -43,28 +119,26 @@ export function SearchExperience() {
         </label>
         <div className="search-results" aria-live="polite">
           {results.length ? (
-            results.map((result) => {
-              const destination = getSearchDestination(result)
-
-              return (
-                <Link key={result.id} {...destination} className="result-link">
-                  <span className="result-icon" aria-hidden="true">
-                    {result.kind === 'card'
-                      ? 'C'
-                      : result.kind === 'learn'
-                        ? 'L'
-                        : 'M'}
-                  </span>
-                  <span>
-                    <span className="result-title">{result.title}</span>
-                    <span className="result-description">
-                      {result.description}
-                    </span>
-                  </span>
-                  <span className="result-type">{result.kind}</span>
-                </Link>
-              )
-            })
+            groupedResults.map((group) => (
+              <section className="result-group" key={group.kind} aria-labelledby={`result-group-${group.kind}`}>
+                <h2 id={`result-group-${group.kind}`}>{group.label}</h2>
+                {group.results.map((result) => {
+                  const destination = getSearchDestination(result)
+                  return (
+                    <Link key={result.id} {...destination} className="result-link" onClick={rememberSearch}>
+                      <span className="result-icon" aria-hidden="true">
+                        {result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}
+                      </span>
+                      <span>
+                        <span className="result-title">{result.title}</span>
+                        <span className="result-description">{result.description}</span>
+                      </span>
+                      <span className="result-type">{result.kind === 'scenario' ? 'example' : result.kind}</span>
+                    </Link>
+                  )
+                })}
+              </section>
+            ))
           ) : (
             <div className="empty-state">
               We don’t have an explanation for that yet. Try a card or mechanic
@@ -86,6 +160,17 @@ export function SearchExperience() {
           </button>
         ))}
       </div>
+
+      {recentSearches.length ? (
+        <div className="recent-searches">
+          <p className="eyebrow">Recent searches</p>
+          <div className="suggestion-row" aria-label="Recent searches">
+            {recentSearches.map((recent) => (
+              <button className="suggestion" key={recent} type="button" onClick={() => setQuery(recent)}>{recent}</button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="section-grid">
         <Link

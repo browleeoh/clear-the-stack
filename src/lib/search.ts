@@ -6,11 +6,13 @@ export type SearchEntry = {
   id: string
   title: string
   description: string
-  kind: 'card' | 'mechanic' | 'concept' | 'learn'
+  kind: 'card' | 'mechanic' | 'concept' | 'learn' | 'scenario'
   href: string
   slug: string
   aliases: string
   body: string
+  parentKind?: 'card' | 'mechanic'
+  parentSlug?: string
 }
 
 export const searchEntries: SearchEntry[] = [
@@ -49,6 +51,33 @@ export const searchEntries: SearchEntry[] = [
       .map((scenario) => `${scenario.title} ${scenario.question}`)
       .join(' ')}`,
   })),
+  ...catalogCards.flatMap((card) => {
+    const enrichment = getCardByOracleId(card.id)
+    return enrichment?.scenarios.map((scenario) => ({
+      id: `scenario:${scenario.id}`,
+      title: scenario.title,
+      description: `Example from ${card.name}`,
+      kind: 'scenario' as const,
+      href: `/cards/${card.slug}#${scenario.id}`,
+      slug: scenario.id,
+      aliases: `${card.name} ${scenario.tags.join(' ')}`,
+      body: `${scenario.setup.join(' ')} ${scenario.question} ${scenario.explanation} ${scenario.commonMistake ?? ''}`,
+      parentKind: 'card' as const,
+      parentSlug: card.slug,
+    })) ?? []
+  }),
+  ...concepts.flatMap((concept) => concept.scenarios.map((scenario) => ({
+    id: `scenario:${scenario.id}`,
+    title: scenario.title,
+    description: `Example from ${concept.name}`,
+    kind: 'scenario' as const,
+    href: `/mechanics/${concept.id}#${scenario.id}`,
+    slug: scenario.id,
+    aliases: `${concept.name} ${concept.aliases.join(' ')} ${scenario.tags.join(' ')}`,
+    body: `${scenario.setup.join(' ')} ${scenario.question} ${scenario.explanation} ${scenario.commonMistake ?? ''}`,
+    parentKind: 'mechanic' as const,
+    parentSlug: concept.id,
+  }))),
   {
     id: 'learn:turn-structure',
     title: 'Turn structure',
@@ -91,17 +120,21 @@ export const searchEntries: SearchEntry[] = [
   },
 ]
 
-const miniSearch = new MiniSearch<SearchEntry>({
+const searchConfiguration = {
   fields: ['title', 'aliases', 'body', 'description'],
-  storeFields: ['title', 'description', 'kind', 'href', 'slug'],
+  storeFields: ['title', 'description', 'kind', 'href', 'slug', 'parentKind', 'parentSlug'],
   searchOptions: {
     boost: { title: 4, aliases: 2.5 },
     prefix: true,
     fuzzy: 0.22,
   },
-})
+}
 
-miniSearch.addAll(searchEntries)
+const primarySearch = new MiniSearch<SearchEntry>(searchConfiguration)
+const scenarioSearch = new MiniSearch<SearchEntry>(searchConfiguration)
+
+primarySearch.addAll(searchEntries.filter((entry) => entry.kind !== 'scenario'))
+scenarioSearch.addAll(searchEntries.filter((entry) => entry.kind === 'scenario'))
 
 export function searchContent(query: string): SearchEntry[] {
   const normalized = query.trim()
@@ -114,5 +147,7 @@ export function searchContent(query: string): SearchEntry[] {
       .slice(0, 5)
   }
 
-  return miniSearch.search(normalized).slice(0, 8) as unknown as SearchEntry[]
+  const primaryMatches = primarySearch.search(normalized).slice(0, 8) as unknown as SearchEntry[]
+  const scenarioMatches = scenarioSearch.search(normalized).slice(0, 4) as unknown as SearchEntry[]
+  return [...primaryMatches, ...scenarioMatches]
 }

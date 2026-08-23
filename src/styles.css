@@ -188,6 +188,21 @@ a {
   padding: 0.55rem;
 }
 
+.result-group + .result-group {
+  border-top: 1px solid var(--line);
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+}
+
+.result-group h2 {
+  margin: 0;
+  padding: 0.55rem 0.8rem 0.25rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .result-link {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -255,6 +270,23 @@ a {
   cursor: pointer;
   font-size: 0.83rem;
   font-weight: 700;
+}
+
+.recent-searches {
+  margin-top: 1rem;
+}
+
+.recent-searches > p {
+  margin-bottom: -0.3rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.content-card:target {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }
 
 .section-grid {
