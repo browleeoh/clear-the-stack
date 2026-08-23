@@ -31,6 +31,7 @@ export default defineConfig({
         { path: '/mechanics/state-based-actions' },
         { path: '/mechanics/this-way' },
         { path: '/mechanics/and-or' },
+        { path: '/mechanics/recruit' },
         ...catalogData.map((card) => ({ path: `/cards/${card.slug}` })),
       ],
       prerender: {
