@@ -150,6 +150,9 @@ const rawSourceLocators = [
   { id: 'cr-rule-608-2h', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2h — Determining game-state information on resolution' },
   { id: 'cr-rule-608-2g', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 608.2g — Mana payments during resolution' },
   { id: 'cr-rule-508-1m', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 508.1m — Attack triggers after attackers are declared' },
+  { id: 'cr-rule-107-3e', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 107.3e — Referring to X in another object’s cost' },
+  { id: 'cr-rule-202-3', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rules 202.3 and 202.3e — Mana value, including X on the stack' },
+  { id: 'cr-rule-601-2i', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 601.2i — A spell becomes cast and cast abilities trigger' },
   { id: 'cr-rule-205-1b', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 205.1b — Retaining types with “in addition to” effects' },
   { id: 'cr-rule-208-3', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rules 208.3–208.3a — Power and toughness effects on noncreatures' },
   { id: 'cr-rule-611-2a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 611.2a — Continuous effects with no stated duration' },
@@ -196,6 +199,7 @@ const rawSourceLocators = [
   { id: 'hob-release-notes-chief-warg', sourceId: 'hob-release-notes', locatorType: 'card-specific-entry', label: 'The Chief Warg', cardOracleId: '5ebe8de1-aa3d-410d-b43d-1685259c7a97' },
   { id: 'hob-release-notes-beorns-hospitality', sourceId: 'hob-release-notes', locatorType: 'card-specific-entry', label: "Beorn's Hospitality", cardOracleId: 'd9ed7252-11d1-432b-9101-ac08cd28826d' },
   { id: 'hob-release-notes-down-in-the-valley', sourceId: 'hob-release-notes', locatorType: 'no-card-specific-entry', label: 'Down in the Valley — no card-specific release-note entry', cardOracleId: 'e3491542-569e-48a8-b625-fa7c4aa2792a' },
+  { id: 'hob-release-notes-dancing', sourceId: 'hob-release-notes', locatorType: 'card-specific-entry', label: 'Dancing from Dark to Dawn', cardOracleId: '5ba482e9-fbb0-4d9f-a3a9-414892bcdfed' },
   { id: 'hob-release-notes-silvan-reveler', sourceId: 'hob-release-notes', locatorType: 'no-card-specific-entry', label: 'Silvan Reveler — no card-specific release-note entry', cardOracleId: '11932191-4b19-49b1-bfe4-abb7b83b2e59' },
 ] satisfies SourceLocator[]
 
@@ -2452,6 +2456,31 @@ export const concepts: Concept[] = conceptSchema.array().parse([
 ])
 
 export const cards: Card[] = cardSchema.array().parse([
+  {
+    id: 'dancing-from-dark-to-dawn', oracleId: '5ba482e9-fbb0-4d9f-a3a9-414892bcdfed', setCode: 'HOB', collectorNumber: '123',
+    name: 'Dancing from Dark to Dawn', manaCost: '{3}{G}{G}', typeLine: 'Enchantment',
+    oracleText: "Whenever you cast a creature spell, put X +1/+1 counters on target creature you control, where X is that spell's mana value.\nLandfall — Whenever a land you control enters, create a 2/2 green Bear creature token.",
+    summary: 'Casting a creature spell triggers the first ability and targets a creature you already control; on resolution it puts counters equal to that spell’s mana value. Separately, each land entering under your control triggers Landfall to create a 2/2 Bear token.',
+    conceptIds: ['landfall', 'triggered-ability', 'target', 'counter', 'stack', 'priority', 'resolution', 'token'],
+    easyToMiss: [
+      'The first ability triggers when you cast a creature spell, not when a creature enters without being cast.',
+      'Choose its target when the trigger goes on the stack. The creature spell itself is still on the stack then and cannot be the target because the ability requires a creature you control on the battlefield.',
+      'The cast trigger is placed above the creature spell and normally resolves first. If its only target becomes illegal, the trigger does not resolve, but that does not counter the creature spell.',
+      'X is the creature spell’s mana value. For a spell with {X} in its mana cost, use the value chosen for X while that spell is on the stack.',
+      'A creature entering without being cast does not trigger the first ability, and a creature spell being cast does not trigger Landfall.',
+      'The two abilities trigger independently. A land entry creates a Bear only when its Landfall trigger resolves.',
+    ],
+    sourceIds: ['scryfall-hob-catalog', 'hob-release-notes-dancing', 'cr-rule-107-3e', 'cr-rule-115-1d', 'cr-rule-122-1', 'cr-rule-202-3', 'cr-rule-601-2i', 'cr-rule-603-2', 'cr-rule-603-3', 'cr-rule-603-6a', 'cr-rule-608-2b'],
+    scenarios: [
+      { id: 'dancing-cast-trigger-before-spell', title: 'Cast a creature spell', setup: ['Dancing from Dark to Dawn is on the battlefield.', 'You cast a creature spell and choose a legal creature you already control for the trigger.'], question: 'What resolves first?', answer: 'explanation', explanation: 'The triggered ability goes on the stack above the creature spell, so the trigger normally resolves first and puts counters on its target.', commonMistake: 'Waiting for the creature spell to resolve before putting the cast trigger on the stack.', tags: ['cast trigger', 'stack order', 'resolves first'], sourceIds: ['cr-rule-601-2i', 'cr-rule-603-3'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-spell-cannot-target-itself', title: 'Choose the cast trigger’s target', setup: ['You cast a creature spell.', 'That spell is still on the stack when its cast trigger is stacked.'], question: 'Can the trigger target the creature spell?', answer: 'no', explanation: 'No. It must target a creature you control, meaning a creature permanent on the battlefield; the spell on the stack is not a creature permanent.', commonMistake: 'Using the creature spell as the target before it resolves.', tags: ['target existing creature', 'spell on stack', 'not permanent'], sourceIds: ['cr-rule-109-2', 'cr-rule-115-1d'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-invalid-target-spell-continues', title: 'The targeted creature leaves', setup: ['The cast trigger targets your creature.', 'That creature leaves before the trigger resolves.'], question: 'Is the creature spell countered too?', answer: 'no', explanation: 'No. The trigger does not resolve because its target is illegal, but the separate creature spell remains on the stack and can resolve normally.', commonMistake: 'Treating the trigger and the spell as one object.', tags: ['illegal target', 'spell still resolves', 'separate objects'], sourceIds: ['cr-rule-608-2b'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-mana-value-fixed-cost', title: 'Cast a creature with mana value four', setup: ['You cast a creature spell whose mana cost has mana value 4.'], question: 'How many counters does the trigger put on its target?', answer: 'explanation', explanation: 'It puts four +1/+1 counters on the legal target when the trigger resolves.', commonMistake: 'Counting the amount of mana actually paid after cost increases or reductions.', tags: ['mana value four', 'four counters', 'cost reduction'], sourceIds: ['cr-rule-202-3', 'cr-rule-122-1'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-x-spell-mana-value', title: 'Cast a creature spell with X in its mana cost', setup: ['You cast a creature spell with mana cost {X}{G}.', 'You choose X as 5.'], question: 'What mana value does Dancing use?', answer: 'explanation', explanation: 'The spell’s mana value is 6 on the stack, so the trigger puts six +1/+1 counters on its legal target.', commonMistake: 'Treating X as 0 while the spell is still on the stack.', tags: ['X equals five', 'mana value six', 'X spell'], sourceIds: ['hob-release-notes-dancing', 'cr-rule-107-3e', 'cr-rule-202-3'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-creature-enters-not-cast', title: 'A creature enters without being cast', setup: ['An effect puts a creature card directly onto the battlefield.'], question: 'Does the first ability trigger?', answer: 'no', explanation: 'No. A creature entered, but no creature spell was cast.', commonMistake: 'Treating every creature entry as a cast event.', tags: ['put onto battlefield', 'not cast', 'no trigger'], sourceIds: ['cr-rule-601-2i'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+      { id: 'dancing-landfall-bear-independent', title: 'A land enters under your control', setup: ['A land enters under your control.', 'No creature spell was cast.'], question: 'What triggers?', answer: 'explanation', explanation: 'Only the Landfall ability triggers. When it resolves, create one 2/2 green Bear creature token; creating that token does not trigger the cast ability.', commonMistake: 'Triggering the creature-cast ability for the Bear token.', tags: ['landfall Bear', 'token not cast', 'independent abilities'], sourceIds: ['cr-rule-603-6a', 'hob-release-notes-landfall'], verificationStatus: 'verified', reviewedAt: '2026-08-23' },
+    ], verificationStatus: 'verified',
+  },
   {
     id: 'down-in-the-valley',
     oracleId: 'e3491542-569e-48a8-b625-fa7c4aa2792a',

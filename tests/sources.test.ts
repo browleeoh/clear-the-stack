@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(17)
+    expect(cardLocators).toHaveLength(18)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -53,6 +53,7 @@ describe('authoritative source records', () => {
         'Bifur, Melodic Rider',
         'Bolg of the North',
         'Celebrate the Mountain-king',
+        'Dancing from Dark to Dawn',
         'Nasty Little Rabbit',
         'The Chief Warg',
         'The Queen of Dale',
@@ -328,6 +329,11 @@ describe('authoritative source records', () => {
       locatorType: 'rule-number',
       label: 'Rule 611.2c — Objects affected by resolving continuous effects',
     })
+  })
+
+  it('keeps precise cast-trigger, mana-value, and X locators', () => {
+    const ids = ['cr-rule-107-3e', 'cr-rule-202-3', 'cr-rule-601-2i']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual(ids)
   })
 
   it('keeps precise sacrifice, LKI, reflexive-trigger, and excess-damage locators', () => {
