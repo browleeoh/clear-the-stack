@@ -41,13 +41,14 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(13)
+    expect(cardLocators).toHaveLength(14)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
         'Balin, Loremaster',
         'Bard, King of Dale',
         'Bard the Bowman',
+        "Bard's Company",
         'Bifur, Melodic Rider',
         'Bolg of the North',
         'Celebrate the Mountain-king',
@@ -295,6 +296,11 @@ describe('authoritative source records', () => {
 
   it('keeps precise Saga chapter, lore-counter, and sacrifice locators', () => {
     const ids = ['cr-rule-714-2', 'cr-rule-714-3', 'cr-rule-714-4']
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+  })
+
+  it("keeps precise Bard's Company casting and mana-ability locators", () => {
+    const ids = ['cr-rule-601-2', 'cr-rule-601-3d', 'cr-rule-601-6a', 'cr-rule-605-3a', 'cr-rule-702-8a']
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
   })
 
