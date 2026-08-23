@@ -218,6 +218,38 @@ describe('verified content', () => {
     )).toBe(true)
   })
 
+  it('merges curated Nasty Little Rabbit guidance by stable Oracle UUID and route slug', () => {
+    const curated = cards.find((card) => card.id === 'nasty-little-rabbit')
+    const content = getCardContentBySlug('nasty-little-rabbit')
+
+    expect(curated).toMatchObject({
+      oracleId: 'ee86cce6-c7c1-40a6-896b-cde9b86bb532',
+      verificationStatus: 'verified',
+      conceptIds: expect.arrayContaining(['ferocious', 'intervening-if', 'priority', 'resolution', 'counter']),
+    })
+    expect(content?.catalogCard.slug).toBe('nasty-little-rabbit')
+    expect(content?.catalogCard.id).toBe(curated?.oracleId)
+    expect(content?.enrichment).toBe(curated)
+    expect(curated?.scenarios.map((scenario) => scenario.id)).toEqual([
+      'nasty-condition-true-twice',
+      'nasty-false-at-combat-start',
+      'nasty-creature-appears-late',
+      'nasty-condition-lost-before-resolution',
+      'nasty-different-creature-qualifies',
+      'nasty-counts-itself-at-power-four',
+    ])
+    expect(curated?.scenarios.every((scenario) =>
+      scenario.verificationStatus === 'verified' && scenario.reviewedAt === '2026-08-23',
+    )).toBe(true)
+  })
+
+  it('exposes Nasty Little Rabbit enrichment through search', () => {
+    expect(searchContent('Rabbit creature appears late')[0]).toMatchObject({
+      title: 'Nasty Little Rabbit',
+      href: '/cards/nasty-little-rabbit',
+    })
+  })
+
   it('exposes Bolg enrichment through search', () => {
     expect(searchContent('Bolg different sacrifice')[0]).toMatchObject({
       title: 'Bolg of the North',
