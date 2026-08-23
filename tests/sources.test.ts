@@ -255,6 +255,25 @@ describe('authoritative source records', () => {
     ).toEqual(ids)
   })
 
+  it('keeps precise replacement-effect and modified draw/discard locators', () => {
+    const ids = [
+      'cr-rule-121-2',
+      'cr-rule-121-5',
+      'cr-rule-121-7',
+      'cr-rule-701-9b',
+      'cr-rule-701-9c',
+      'cr-rule-614-1',
+      'cr-rule-614-4',
+      'cr-rule-614-5',
+      'cr-rule-614-6',
+      'cr-rule-614-11',
+      'cr-rule-616-1',
+      'cr-rule-616-2',
+    ]
+
+    expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id)).toEqual(ids)
+  })
+
   it('keeps the precise operative Amass locator', () => {
     expect(
       sourceLocators.find((locator) => locator.id === 'cr-rule-701-47a'),
