@@ -1,5 +1,5 @@
-import { Combobox } from '@base-ui/react/combobox'
-import { useEffect, useMemo, useState } from 'react'
+import { Autocomplete } from '@base-ui/react/autocomplete'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { SearchIcon } from './icons'
 import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
@@ -8,6 +8,17 @@ const examples = ['Thorin Oakenshield', 'How does fight work?']
 const recentSearchesKey = 'mtg-helper-recent-searches'
 const groupOrder = ['card', 'scenario', 'learn', 'mechanic'] as const
 const labels = { card: 'Cards', scenario: 'Examples', learn: 'Beginner guides', mechanic: 'Rules and mechanics' } as const
+
+export const searchPopupOptions = {
+  align: 'start' as const,
+  sideOffset: 4,
+  collisionAvoidance: { side: 'flip' as const, align: 'none' as const, fallbackAxisSide: 'none' as const },
+}
+
+export function getSearchStatus(query: string, resultCount: number) {
+  if (!query.trim()) return null
+  return resultCount ? `${resultCount} result${resultCount === 1 ? '' : 's'} available.` : 'No matches available.'
+}
 
 export function parseRecentSearches(value: string | null) {
   if (!value) return []
@@ -46,8 +57,10 @@ export function getSearchDestination(result: SearchEntry) {
 export function SearchExperience() {
   const [query, setQuery] = useState('')
   const [recent, setRecent] = useState<string[]>([])
+  const searchPanelRef = useRef<HTMLDivElement>(null)
   const results = useMemo(() => query.trim() ? searchContent(query).slice(0, 10) : [], [query])
   const groups = useMemo(() => groupSearchResults(results, query), [results, query])
+  const status = getSearchStatus(query, results.length)
 
   useEffect(() => {
     try { setRecent(parseRecentSearches(localStorage.getItem(recentSearchesKey))) } catch { setRecent([]) }
@@ -65,30 +78,39 @@ export function SearchExperience() {
   }
 
   return (
-    <Combobox.Root items={results} inputValue={query} onInputValueChange={setQuery} autoHighlight>
-      <div className="search-panel">
+    <Autocomplete.Root
+      items={results}
+      value={query}
+      onValueChange={(value) => setQuery(value)}
+      itemToStringValue={(result) => result.title}
+      mode="none"
+      autoHighlight
+      openOnInputClick
+    >
+      <div ref={searchPanelRef} className="search-panel">
         <label className="search-box">
           <SearchIcon />
           <span className="sr-only">Search cards, mechanics, or questions</span>
-          <Combobox.Input placeholder={'Try “Troll Negotiations” or “How does fight work?”'} autoComplete="off" />
+          <Autocomplete.Input placeholder={'Try “Troll Negotiations” or “How does fight work?”'} autoComplete="off" />
         </label>
       </div>
-      <Combobox.Portal>
-        <Combobox.Positioner className="search-positioner" sideOffset={8}>
-          <Combobox.Popup className="search-overlay" initialFocus={false}>
+      <Autocomplete.Portal>
+        <Autocomplete.Positioner anchor={searchPanelRef} className="search-positioner" {...searchPopupOptions}>
+          <Autocomplete.Popup className="search-overlay" initialFocus={false}>
+            <Autocomplete.Status className="sr-only">{status}</Autocomplete.Status>
             {!query.trim() ? (
               <section className="search-discovery" aria-label={recent.length ? 'Recent searches' : 'Example searches'}>
                 <div className="overlay-heading"><h2>{recent.length ? 'Recent' : 'Try an example'}</h2>{recent.length ? <button type="button" onClick={() => { setRecent([]); localStorage.removeItem(recentSearchesKey) }}>Clear</button> : null}</div>
                 <div className="search-choice-list">{(recent.length ? recent : examples).map((value) => <button key={value} type="button" className="search-choice" onClick={() => setQuery(value)}>{value}</button>)}</div>
               </section>
             ) : results.length ? (
-              <Combobox.List className="search-results">
-                {groups.map((group) => <Combobox.Group key={group.kind} className="result-group"><Combobox.GroupLabel className="result-group-label">{labels[group.kind]}</Combobox.GroupLabel>{group.results.map((result) => <Combobox.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span><span className="result-description">{result.description}</span></span></Combobox.Item>)}</Combobox.Group>)}
-              </Combobox.List>
+              <Autocomplete.List className="search-results">
+                {groups.map((group) => <Autocomplete.Group key={group.kind} className="result-group"><Autocomplete.GroupLabel className="result-group-label">{labels[group.kind]}</Autocomplete.GroupLabel>{group.results.map((result) => <Autocomplete.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span><span className="result-description">{result.description}</span></span></Autocomplete.Item>)}</Autocomplete.Group>)}
+              </Autocomplete.List>
             ) : <p className="empty-state">No matches yet. Try a card name, mechanic, or rules question.</p>}
-          </Combobox.Popup>
-        </Combobox.Positioner>
-      </Combobox.Portal>
-    </Combobox.Root>
+          </Autocomplete.Popup>
+        </Autocomplete.Positioner>
+      </Autocomplete.Portal>
+    </Autocomplete.Root>
   )
 }

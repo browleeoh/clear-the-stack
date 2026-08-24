@@ -19,8 +19,10 @@ import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
 import {
   getSearchDestination,
+  getSearchStatus,
   groupSearchResults,
   parseRecentSearches,
+  searchPopupOptions,
   updateRecentSearches,
 } from '@/components/search-experience'
 import {
@@ -1189,6 +1191,21 @@ describe('catalog search', () => {
     expect(updateRecentSearches(['five', 'four', 'three', 'two', 'one'], 'six')).toEqual(['six', 'five', 'four', 'three', 'two'])
     expect(parseRecentSearches('["one",2,"three"]')).toEqual(['one', 'three'])
     expect(parseRecentSearches('{bad')).toEqual([])
+  })
+
+  it('keeps free-form lookup text and announces the available result state', () => {
+    expect(getSearchStatus('', 0)).toBeNull()
+    expect(getSearchStatus('how does fight work?', 0)).toBe('No matches available.')
+    expect(getSearchStatus('thorin', 1)).toBe('1 result available.')
+    expect(getSearchStatus('thorin', 2)).toBe('2 results available.')
+  })
+
+  it('uses a small start-aligned popup offset without horizontal collision shifts', () => {
+    expect(searchPopupOptions).toEqual({
+      align: 'start',
+      sideOffset: 4,
+      collisionAvoidance: { side: 'flip', align: 'none', fallbackAxisSide: 'none' },
+    })
   })
 
   it('records normalized unanswered searches once without identity or game state', () => {

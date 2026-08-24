@@ -77,14 +77,16 @@ function RootComponent() {
 
       <nav className="bottom-nav" aria-label="Mobile navigation">
         <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
-          <SearchIcon size={16} /> Look Up
+          <SearchIcon size={18} />
+          <span>Look Up</span>
         </Link>
         <Link
           to="/learn/turn-structure"
           className="nav-link"
           activeProps={{ 'aria-current': 'page' }}
         >
-          <BookIcon size={16} /> Learn
+          <BookIcon size={18} />
+          <span>Learn</span>
         </Link>
       </nav>
       {import.meta.env.DEV ? <TanStackRouterDevtools position="bottom-right" /> : null}
