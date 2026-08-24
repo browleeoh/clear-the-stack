@@ -1,6 +1,6 @@
 import { Autocomplete } from '@base-ui/react/autocomplete'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import { SearchIcon } from './icons'
+import { BackIcon, SearchIcon } from './icons'
 import { useMobileSearchMode } from './mobile-search-mode'
 import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
@@ -10,6 +10,11 @@ const recentSearchesKey = 'mtg-helper-recent-searches'
 const groupOrder = ['card', 'scenario', 'learn', 'mechanic'] as const
 const labels = { card: 'Cards', scenario: 'Examples', learn: 'Beginner guides', mechanic: 'Rules and mechanics' } as const
 export const initialSearchResultLimit = 6
+export const searchInputAttributes = {
+  type: 'search' as const,
+  inputMode: 'search' as const,
+  enterKeyHint: 'search' as const,
+}
 
 export const searchPopupOptions = {
   align: 'start' as const,
@@ -121,7 +126,7 @@ export function SearchExperience() {
   const [open, setOpen] = useState(false)
   const searchPanelRef = useRef<HTMLDivElement>(null)
   const mobileSearchAnchorRef = useRef<HTMLDivElement>(null)
-  const mobileInputRef = useRef<HTMLInputElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const isMobile = useMobileViewport()
   const setMobileSearchActive = useMobileSearchMode()
   const visibleViewport = useVisibleViewport(isMobile && open)
@@ -143,10 +148,6 @@ export function SearchExperience() {
     return () => setMobileSearchActive(false)
   }, [isMobile, open, setMobileSearchActive])
 
-  useEffect(() => {
-    if (isMobile && open) mobileInputRef.current?.focus()
-  }, [isMobile, open])
-
   function remember(value: string) {
     const next = updateRecentSearches(recent, value)
     setRecent(next)
@@ -161,7 +162,15 @@ export function SearchExperience() {
 
   function setSearchOpen(nextOpen: boolean) {
     setOpen(nextOpen)
-    if (!nextOpen) setQuery('')
+    if (!nextOpen) {
+      setQuery('')
+      searchInputRef.current?.blur()
+    }
+  }
+
+  function clearSearch() {
+    setQuery('')
+    searchInputRef.current?.focus()
   }
 
   const resultsContent = display.mode === 'discovery' ? (
@@ -185,21 +194,38 @@ export function SearchExperience() {
       autoHighlight
       openOnInputClick
       open={open}
-      onOpenChange={setSearchOpen}
+      onOpenChange={(nextOpen, details) => {
+        if (!nextOpen && details.reason === 'outside-press' && searchPanelRef.current?.contains(details.event.target as Node)) {
+          details.cancel()
+          return
+        }
+        setSearchOpen(nextOpen)
+      }}
     >
-      {isMobile && open ? (
+      <div ref={searchPanelRef} className={`search-panel${isMobile && open ? ' search-panel--mobile-open' : ''}`}>
+        <div className="search-box">
+          <SearchIcon />
+          <span className="sr-only">Search cards, mechanics, or questions</span>
+          <Autocomplete.Input
+            ref={searchInputRef}
+            aria-label="Search cards, mechanics, or questions"
+            placeholder="Search cards, mechanics, or questions"
+            autoComplete="off"
+            {...searchInputAttributes}
+          />
+          <span className="search-actions">
+            {query ? <button type="button" className="search-clear" aria-label="Clear search" onPointerDown={(event) => event.preventDefault()} onClick={clearSearch}>×</button> : null}
+          </span>
+        </div>
+      </div>
+      {isMobile ? (
         <>
           <div ref={mobileSearchAnchorRef} className="mobile-search-anchor" style={visibleViewportStyle} />
           <Autocomplete.Portal>
             <Autocomplete.Positioner anchor={mobileSearchAnchorRef} className="mobile-search-positioner" style={visibleViewportStyle} {...mobileSearchPopupOptions}>
               <Autocomplete.Popup className="mobile-search-surface" initialFocus={false} aria-label="Search">
                 <header className="mobile-search-header">
-                  <button type="button" className="mobile-search-close" onClick={() => setSearchOpen(false)}>Back</button>
-                  <label className="search-box mobile-search-box">
-                    <SearchIcon />
-                    <span className="sr-only">Search cards, mechanics, or questions</span>
-                    <Autocomplete.Input ref={mobileInputRef} aria-label="Search cards, mechanics, or questions" placeholder="Search cards, mechanics, or questions" autoComplete="off" />
-                  </label>
+                  <button type="button" className="mobile-search-close" aria-label="Close search" onClick={() => setSearchOpen(false)}><BackIcon /></button>
                 </header>
                 <div className="mobile-search-results">
                   <Autocomplete.Status className="sr-only">{status}</Autocomplete.Status>
@@ -211,13 +237,6 @@ export function SearchExperience() {
         </>
       ) : (
         <>
-          <div ref={searchPanelRef} className="search-panel">
-            <label className="search-box">
-              <SearchIcon />
-              <span className="sr-only">Search cards, mechanics, or questions</span>
-              <Autocomplete.Input aria-label="Search cards, mechanics, or questions" placeholder="Search cards, mechanics, or questions" autoComplete="off" />
-            </label>
-          </div>
           <Autocomplete.Portal>
             <Autocomplete.Positioner anchor={searchPanelRef} className="search-positioner" {...searchPopupOptions}>
               <Autocomplete.Popup className="search-overlay" initialFocus={false}>

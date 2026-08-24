@@ -26,6 +26,7 @@ import {
   initialSearchResultLimit,
   parseRecentSearches,
   searchPopupOptions,
+  searchInputAttributes,
   shouldShowResultDescription,
   updateRecentSearches,
 } from '@/components/search-experience'
@@ -1238,6 +1239,10 @@ describe('catalog search', () => {
     expect(shouldShowResultDescription({ kind: 'learn' } as SearchEntry)).toBe(true)
     expect(shouldShowResultDescription({ kind: 'mechanic' } as SearchEntry)).toBe(false)
     expect(shouldShowResultDescription({ kind: 'concept' } as SearchEntry)).toBe(false)
+  })
+
+  it('uses native search input semantics for the mobile keyboard', () => {
+    expect(searchInputAttributes).toEqual({ type: 'search', inputMode: 'search', enterKeyHint: 'search' })
   })
 
   it('renders process numbering only in the ordered-list marker', () => {
