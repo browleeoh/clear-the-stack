@@ -73,7 +73,7 @@ export function TurnStructure() {
         </section>
         <section className="content-card">
           <h2>Related concepts</h2>
-          <ul>
+          <ul className="related-links">
             <li><Link to="/learn/casting-resolution">Casting and resolving a spell</Link></li>
             <li><Link to="/learn/combat">Attacking and blocking</Link></li>
             <li><Link to="/learn/core-concepts">Tokens, counters, targets, stack, and priority</Link></li>
