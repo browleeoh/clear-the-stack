@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "npm@10.9.4",
   "scripts": {
     "import:hob": "node scripts/import-hob-catalog.mjs",
     "dev": "vite dev",
