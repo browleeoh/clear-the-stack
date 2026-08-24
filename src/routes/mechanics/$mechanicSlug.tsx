@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { DetailAccordion } from '@/components/ui/accordion'
 import { ScenarioCard } from '@/components/scenario-card'
 import { SourceList } from '@/components/source-list'
+import { getRelatedCatalogCards } from '@/content/catalog'
 import { getConcept } from '@/content/data'
 
 const conceptKindLabels = {
@@ -29,6 +30,11 @@ export const Route = createFileRoute('/mechanics/$mechanicSlug')({
 
 function MechanicPage() {
   const concept = Route.useLoaderData()
+  const relatedConcepts = concept.relatedConceptIds.flatMap((id) => {
+    const relatedConcept = getConcept(id)
+    return relatedConcept ? [relatedConcept] : []
+  })
+  const relatedCards = getRelatedCatalogCards(concept.id)
 
   return (
     <main className="shell page">
@@ -63,6 +69,22 @@ function MechanicPage() {
         {concept.scenarios.map((scenario) => (
           <ScenarioCard key={scenario.id} scenario={scenario} />
         ))}
+
+        <section className="content-card">
+          <h2>Related cards and concepts</h2>
+          <div className="suggestion-row">
+            {relatedConcepts.map((relatedConcept) => (
+              <Link className="suggestion" key={relatedConcept.id} to="/mechanics/$mechanicSlug" params={{ mechanicSlug: relatedConcept.id }}>
+                {relatedConcept.name}
+              </Link>
+            ))}
+            {relatedCards.map((relatedCard) => (
+              <Link className="suggestion" key={relatedCard.id} to="/cards/$cardSlug" params={{ cardSlug: relatedCard.slug }}>
+                {relatedCard.name}
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <section className="content-card">
           <DetailAccordion title="Official wording and sources">

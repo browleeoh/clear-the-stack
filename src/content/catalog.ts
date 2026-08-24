@@ -1,5 +1,5 @@
 import catalogData from './generated/hob-catalog.json'
-import { getCardByOracleId } from './data'
+import { cards, getCardByOracleId } from './data'
 import { catalogCardSchema, type CatalogCard } from './schema'
 
 export const catalogCards: CatalogCard[] = catalogCardSchema
@@ -28,4 +28,14 @@ export function getCardContentBySlug(slug: string) {
     catalogCard,
     enrichment: getCardByOracleId(catalogCard.id),
   }
+}
+
+export function getRelatedCatalogCards(conceptId: string) {
+  return cards.flatMap((card) =>
+    card.conceptIds.includes(conceptId)
+      ? [catalogCardsById.get(card.oracleId)].filter(
+          (catalogCard): catalogCard is CatalogCard => Boolean(catalogCard),
+        )
+      : [],
+  )
 }
