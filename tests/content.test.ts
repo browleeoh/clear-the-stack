@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
 import {
   catalogCards,
   getCardContentBySlug,
@@ -1146,6 +1147,13 @@ describe('verified content', () => {
 })
 
 describe('catalog search', () => {
+  it('keeps the homepage focused on the lookup task without a generic set eyebrow', () => {
+    const homeRoute = readFileSync(new URL('../src/routes/index.tsx', import.meta.url), 'utf8')
+
+    expect(homeRoute).toContain('Understand your card.')
+    expect(homeRoute).not.toContain('Playing The Hobbit')
+  })
+
   const cardEntries = searchEntries.filter((entry) => entry.kind === 'card')
   const scenarioEntries = searchEntries.filter((entry) => entry.kind === 'scenario')
 
