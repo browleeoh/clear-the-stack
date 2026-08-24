@@ -72,8 +72,7 @@ function RootComponent() {
       <OfflineStatus />
 
       <Outlet />
-      <LocalFeedback />
-      <TestLogControls />
+      {import.meta.env.DEV ? <><LocalFeedback /><TestLogControls /></> : null}
       <PwaRegister />
 
       <nav className="bottom-nav" aria-label="Mobile navigation">

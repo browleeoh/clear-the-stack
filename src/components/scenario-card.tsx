@@ -9,7 +9,7 @@ const answerLabels: Record<Scenario['answer'], string> = {
 
 export function ScenarioCard({ scenario }: { scenario: Scenario }) {
   return (
-    <article className="content-card" id={scenario.id}>
+    <article className="content-card scenario-card" id={scenario.id}>
       <span className="scenario-answer">{answerLabels[scenario.answer]}</span>
       <h2>{scenario.title}</h2>
       <ul>

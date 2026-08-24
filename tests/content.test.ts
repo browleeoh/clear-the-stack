@@ -1167,6 +1167,16 @@ describe('catalog search', () => {
     expect(mechanicGroups[0]?.results[0]?.title).toBe('Storied')
   })
 
+  it('keeps requested Thorin and Bard partial-name lookups card-first', () => {
+    for (const query of ['thorin oak', 'Thorin Oakenshield', 'Bard King']) {
+      const groups = groupSearchResults(searchContent(query), query)
+      expect(groups[0]?.label).toBe('Cards')
+    }
+    expect(groupSearchResults(searchContent('thorin oak'), 'thorin oak')[0]?.results[0]?.title).toBe('Thorin Oakenshield')
+    expect(groupSearchResults(searchContent('Thorin Oakenshield'), 'Thorin Oakenshield')[0]?.results[0]?.title).toBe('Thorin Oakenshield')
+    expect(groupSearchResults(searchContent('Bard King'), 'Bard King')[0]?.results[0]?.title).toBe('Bard, King of Dale')
+  })
+
   it('shows partial card-name matches before scenarios', () => {
     const groups = groupSearchResults(searchContent('Bard King'), 'Bard King')
     expect(groups[0]?.label).toBe('Cards')
