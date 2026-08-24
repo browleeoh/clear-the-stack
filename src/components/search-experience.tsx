@@ -22,10 +22,6 @@ export function updateRecentSearches(current: string[], query: string) {
   return normalized ? [normalized, ...current.filter((item) => item !== normalized)].slice(0, 5) : current
 }
 
-function grouped(results: SearchEntry[]) {
-  return groupOrder.map((kind) => ({ kind, results: results.filter((result) => kind === 'mechanic' ? result.kind === 'mechanic' || result.kind === 'concept' : result.kind === kind) })).filter((group) => group.results.length)
-}
-
 export function groupSearchResults(results: SearchEntry[], _query = '') {
   const query = _query.trim().toLocaleLowerCase()
   const terms = query.split(/\s+/).filter(Boolean)
@@ -51,7 +47,7 @@ export function SearchExperience() {
   const [query, setQuery] = useState('')
   const [recent, setRecent] = useState<string[]>([])
   const results = useMemo(() => query.trim() ? searchContent(query).slice(0, 10) : [], [query])
-  const groups = useMemo(() => grouped(results), [results])
+  const groups = useMemo(() => groupSearchResults(results, query), [results, query])
 
   useEffect(() => {
     try { setRecent(parseRecentSearches(localStorage.getItem(recentSearchesKey))) } catch { setRecent([]) }
