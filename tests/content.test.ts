@@ -4,6 +4,7 @@ import {
   getCardContentBySlug,
   getCatalogCard,
   getCatalogCardBySlug,
+  getRelatedCatalogCards,
 } from '@/content/catalog'
 import {
   cards,
@@ -68,6 +69,11 @@ describe('HOB catalog', () => {
       'Bofur, Reliable Guardian',
       'Concerted Care',
     ])
+  })
+
+  it('derives related curated cards from their existing stable concept IDs', () => {
+    expect(getRelatedCatalogCards('storied').map((card) => card.slug)).toContain('thorin-oakenshield')
+    expect(getConcept('storied')?.relatedConceptIds).toContain('legendary-permanent')
   })
 })
 

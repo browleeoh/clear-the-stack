@@ -2358,7 +2358,7 @@ export const concepts: Concept[] = conceptSchema.array().parse([
       'Once earned, your enduring story cannot be removed—even if every qualifying permanent leaves.',
       'Storied is not a triggered ability and does not use the stack.',
     ],
-    relatedConceptIds: ['permanent', 'token', 'artifact', 'legendary', 'saga'],
+    relatedConceptIds: ['permanent', 'token', 'artifact', 'legendary-permanent', 'saga'],
     sourceIds: ['hob-release-notes', 'hob-mechanics'],
     verificationStatus: 'verified',
     scenarios: [
