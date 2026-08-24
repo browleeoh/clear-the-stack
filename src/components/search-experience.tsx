@@ -8,6 +8,7 @@ const examples = ['Thorin Oakenshield', 'How does fight work?']
 const recentSearchesKey = 'mtg-helper-recent-searches'
 const groupOrder = ['card', 'scenario', 'learn', 'mechanic'] as const
 const labels = { card: 'Cards', scenario: 'Examples', learn: 'Beginner guides', mechanic: 'Rules and mechanics' } as const
+export const initialSearchResultLimit = 6
 
 export const searchPopupOptions = {
   align: 'start' as const,
@@ -18,6 +19,10 @@ export const searchPopupOptions = {
 export function getSearchStatus(query: string, resultCount: number) {
   if (!query.trim()) return null
   return resultCount ? `${resultCount} result${resultCount === 1 ? '' : 's'} available.` : 'No matches available.'
+}
+
+export function shouldShowResultDescription(result: SearchEntry) {
+  return result.kind === 'card' || result.kind === 'scenario' || result.kind === 'learn'
 }
 
 export function parseRecentSearches(value: string | null) {
@@ -58,7 +63,7 @@ export function SearchExperience() {
   const [query, setQuery] = useState('')
   const [recent, setRecent] = useState<string[]>([])
   const searchPanelRef = useRef<HTMLDivElement>(null)
-  const results = useMemo(() => query.trim() ? searchContent(query).slice(0, 10) : [], [query])
+  const results = useMemo(() => query.trim() ? searchContent(query).slice(0, initialSearchResultLimit) : [], [query])
   const groups = useMemo(() => groupSearchResults(results, query), [results, query])
   const status = getSearchStatus(query, results.length)
 
@@ -105,7 +110,7 @@ export function SearchExperience() {
               </section>
             ) : results.length ? (
               <Autocomplete.List className="search-results">
-                {groups.map((group) => <Autocomplete.Group key={group.kind} className="result-group"><Autocomplete.GroupLabel className="result-group-label">{labels[group.kind]}</Autocomplete.GroupLabel>{group.results.map((result) => <Autocomplete.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span><span className="result-description">{result.description}</span></span></Autocomplete.Item>)}</Autocomplete.Group>)}
+                {groups.map((group) => <Autocomplete.Group key={group.kind} className="result-group"><Autocomplete.GroupLabel className="result-group-label">{labels[group.kind]}</Autocomplete.GroupLabel>{group.results.map((result) => <Autocomplete.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span>{shouldShowResultDescription(result) ? <span className="result-description">{result.description}</span> : null}</span></Autocomplete.Item>)}</Autocomplete.Group>)}
               </Autocomplete.List>
             ) : <p className="empty-state">No matches yet. Try a card name, mechanic, or rules question.</p>}
           </Autocomplete.Popup>

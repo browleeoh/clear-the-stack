@@ -13,6 +13,7 @@ import {
   resolveSourceReference,
 } from '@/content/data'
 import { searchContent, searchEntries } from '@/lib/search'
+import type { SearchEntry } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
 import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
@@ -21,10 +22,13 @@ import {
   getSearchDestination,
   getSearchStatus,
   groupSearchResults,
+  initialSearchResultLimit,
   parseRecentSearches,
   searchPopupOptions,
+  shouldShowResultDescription,
   updateRecentSearches,
 } from '@/components/search-experience'
+import { getProcessStepTitle } from '@/components/process-list'
 import {
   addSelectedSearch,
   addUnansweredSearch,
@@ -727,6 +731,7 @@ describe('verified content', () => {
 
   it('finds Storied from a beginner token question', () => {
     expect(searchContent('do treasure tokens count')[0]?.title).toBe('Storied')
+    expect(searchContent('do treasure tokens count?')[0]?.title).toBe('Storied')
   })
 
   it('finds Hone Counters from a beginner Equipment question', () => {
@@ -1125,6 +1130,17 @@ describe('verified content', () => {
   it('finds Thorin by partial name', () => {
     expect(searchContent('thorin')[0]?.title).toBe('Thorin Oakenshield')
   })
+
+  it('keeps short card-name prefixes title-focused and Thorin-first', () => {
+    for (const query of ['t', 'th', 'tho']) {
+      const results = searchContent(query)
+      expect(results.length).toBeGreaterThan(0)
+      expect(results.every((result) => result.kind === 'card')).toBe(true)
+      expect(results.every((result) => result.title.toLocaleLowerCase().startsWith(query))).toBe(true)
+    }
+    expect(searchContent('tho')[0]?.title).toBe('Thorin Oakenshield')
+    expect(searchContent('thorin oak')[0]?.title).toBe('Thorin Oakenshield')
+  })
 })
 
 describe('catalog search', () => {
@@ -1198,6 +1214,19 @@ describe('catalog search', () => {
     expect(getSearchStatus('how does fight work?', 0)).toBe('No matches available.')
     expect(getSearchStatus('thorin', 1)).toBe('1 result available.')
     expect(getSearchStatus('thorin', 2)).toBe('2 results available.')
+  })
+
+  it('limits rendered suggestions and keeps secondary text only when it distinguishes a result', () => {
+    expect(initialSearchResultLimit).toBe(6)
+    expect(shouldShowResultDescription({ kind: 'card' } as SearchEntry)).toBe(true)
+    expect(shouldShowResultDescription({ kind: 'learn' } as SearchEntry)).toBe(true)
+    expect(shouldShowResultDescription({ kind: 'mechanic' } as SearchEntry)).toBe(false)
+    expect(shouldShowResultDescription({ kind: 'concept' } as SearchEntry)).toBe(false)
+  })
+
+  it('renders process numbering only in the ordered-list marker', () => {
+    expect(getProcessStepTitle('1. Beginning phase')).toBe('Beginning phase')
+    expect(getProcessStepTitle('12. Resolve')).toBe('Resolve')
   })
 
   it('uses a small start-aligned popup offset without horizontal collision shifts', () => {

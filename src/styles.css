@@ -428,9 +428,10 @@ a {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 0.8rem;
-  border-radius: 1rem;
-  padding: 0.8rem;
+  min-height: 44px;
+  gap: 0.6rem;
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.55rem;
   text-decoration: none;
 }
 
@@ -440,12 +441,13 @@ a {
 
 .result-icon {
   display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   place-items: center;
-  border-radius: 0.8rem;
+  border-radius: 0.55rem;
   background: var(--forest-soft);
   color: var(--forest);
+  font-size: 0.72rem;
   font-weight: 850;
 }
 
@@ -455,14 +457,16 @@ a {
 }
 
 .result-title {
+  font-size: 0.9375rem;
   font-weight: 760;
+  line-height: 1.25;
 }
 
 .result-description {
-  margin-top: 0.15rem;
+  margin-top: 0.1rem;
   color: var(--muted);
-  font-size: 0.84rem;
-  line-height: 1.35;
+  font-size: 0.78rem;
+  line-height: 1.25;
 }
 
 .result-type {
@@ -538,7 +542,9 @@ html {
 .content-card h2 {
   margin: 0;
   color: var(--forest);
-  font-size: 1.1rem;
+  font-size: 1.22rem;
+  font-weight: 720;
+  line-height: 1.25;
 }
 
 .feature-card p,
@@ -555,13 +561,37 @@ html {
 
 .content-stack {
   display: grid;
-  gap: 1rem;
+  gap: 1.6rem;
   margin-top: 1.5rem;
 }
 
 .content-card {
   border-top: 1px solid var(--line);
-  padding: 1.5rem 0 0;
+  padding: 1.35rem 0 0;
+}
+
+.content-card > h2 + p,
+.content-card > h2 + ul {
+  margin-top: 0.55rem;
+}
+
+.content-card .related-links {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--forest);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em;
 }
 
 .content-card--memory,

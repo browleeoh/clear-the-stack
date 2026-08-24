@@ -120,6 +120,10 @@ export const searchEntries: SearchEntry[] = [
   },
 ]
 
+// MiniSearch searches card names, aliases, descriptions, and explanatory text. For
+// 1–3 character lookups we deliberately search card titles only: broad prefix or
+// fuzzy matching against rules text is noisy at that length. Longer queries retain
+// the broader index so beginner-language questions still resolve naturally.
 const searchConfiguration = {
   fields: ['title', 'aliases', 'body', 'description'],
   storeFields: ['title', 'description', 'kind', 'href', 'slug', 'parentKind', 'parentSlug'],
@@ -137,7 +141,7 @@ primarySearch.addAll(searchEntries.filter((entry) => entry.kind !== 'scenario'))
 scenarioSearch.addAll(searchEntries.filter((entry) => entry.kind === 'scenario'))
 
 export function searchContent(query: string): SearchEntry[] {
-  const normalized = query.trim()
+  const normalized = query.trim().replace(/[^\p{L}\p{N}\s]/gu, '')
   if (!normalized) {
     return searchEntries
       .filter(
@@ -145,6 +149,20 @@ export function searchContent(query: string): SearchEntry[] {
           entry.slug === 'thorin-oakenshield' || entry.kind !== 'card',
       )
       .slice(0, 5)
+  }
+
+  if (normalized.length <= 3) {
+    const titleMatches = primarySearch.search(normalized, {
+      fields: ['title'],
+      prefix: true,
+      fuzzy: false,
+    })
+      .filter((entry) => entry.kind === 'card') as unknown as SearchEntry[]
+    const fullTitlePrefixMatches = titleMatches.filter((entry) =>
+      entry.title.toLocaleLowerCase().startsWith(normalized.toLocaleLowerCase()),
+    )
+
+    return (fullTitlePrefixMatches.length ? fullTitlePrefixMatches : titleMatches).slice(0, 8)
   }
 
   const primaryMatches = primarySearch.search(normalized).slice(0, 8) as unknown as SearchEntry[]
