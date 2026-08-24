@@ -76,6 +76,41 @@ function CardImage({ card }: Readonly<{ card: CatalogCard }>) {
   )
 }
 
+function CardDetails({ card }: Readonly<{ card: CatalogCard }>) {
+  if (card.faces?.length) {
+    return (
+      <section className="content-card" aria-labelledby="card-details-heading">
+        <h2 id="card-details-heading">Card details</h2>
+        <div className="card-faces">
+          {card.faces.map((face) => (
+            <article className="card-face" key={face.name}>
+              <h3>{face.name}</h3>
+              <p>
+                {face.manaCost ? <strong>{face.manaCost}</strong> : null}
+                {face.manaCost ? ' · ' : null}
+                {face.typeLine}
+              </p>
+              <p style={{ whiteSpace: 'pre-line' }}>{face.oracleText}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="content-card" aria-labelledby="card-details-heading">
+      <h2 id="card-details-heading">Card details</h2>
+      <p className="card-type-line">
+        {card.manaCost ? <strong>{card.manaCost}</strong> : null}
+        {card.manaCost ? ' · ' : null}
+        {card.typeLine}
+      </p>
+      <p style={{ whiteSpace: 'pre-line' }}>{card.oracleText}</p>
+    </section>
+  )
+}
+
 function CardPage() {
   const { catalogCard: card, enrichment } = Route.useLoaderData()
 
@@ -93,6 +128,7 @@ function CardPage() {
       <h1 className="page-title display-font">{card.name}</h1>
 
       <div className="card-layout">
+        <CardDetails card={card} />
         <CardImage key={card.id} card={card} />
 
         <div className="content-stack" style={{ marginTop: 0 }}>
@@ -100,35 +136,6 @@ function CardPage() {
             <section className="content-card">
               <h2>What this card does</h2>
               <p>{enrichment.summary}</p>
-            </section>
-          ) : (
-            <section className="content-card">
-              <h2>Card details</h2>
-              <p className="card-type-line">
-                {card.manaCost ? <strong>{card.manaCost}</strong> : null}
-                {card.manaCost ? ' · ' : null}
-                {card.typeLine}
-              </p>
-              <p style={{ whiteSpace: 'pre-line' }}>{card.oracleText}</p>
-            </section>
-          )}
-
-          {card.faces?.length ? (
-            <section className="content-card">
-              <h2>Card faces</h2>
-              <div className="card-faces">
-                {card.faces.map((face) => (
-                  <article className="card-face" key={face.name}>
-                    <h3>{face.name}</h3>
-                    <p>
-                      {face.manaCost ? <strong>{face.manaCost}</strong> : null}
-                      {face.manaCost ? ' · ' : null}
-                      {face.typeLine}
-                    </p>
-                    <p style={{ whiteSpace: 'pre-line' }}>{face.oracleText}</p>
-                  </article>
-                ))}
-              </div>
             </section>
           ) : null}
 
