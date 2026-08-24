@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { SourceList } from '@/components/source-list'
 import { DetailAccordion } from '@/components/ui/accordion'
+import { ProcessList } from '@/components/process-list'
 
 export const combatSteps = [
   ['1. Begin combat', 'The combat phase starts with a beginning of combat step. Players can act before attackers are declared.'],
@@ -28,7 +29,7 @@ export function CombatGuide() {
       <p className="lede">Attackers are chosen first, blockers second, and combat damage comes after both sides have chances to respond.</p>
       <div className="content-stack">
         <section className="content-card content-card--memory" aria-labelledby="combat-summary"><h2 id="combat-summary">One-screen summary</h2><p><strong>Begin → Attack → Respond → Block → Respond → Damage → End</strong></p><p>Choices are declared together. Nobody responds in the middle of declaring attackers or blockers, but players can act afterward before the next combat step.</p></section>
-        {combatSteps.map(([title, body]) => <section className="content-card" key={title}><h2>{title}</h2><p>{body}</p></section>)}
+        <ProcessList steps={combatSteps} />
         <section className="content-card"><h2>Example</h2><p>You attack with a 3/3 and a 2/2. Your opponent blocks the 3/3 with a 2/2 and leaves the other attacker unblocked. After both players finish responding, the blocked creatures deal damage to each other and the unblocked 2/2 deals 2 damage to the defending player.</p></section>
         <section className="content-card content-card--warning"><h2>Common mistake</h2><p>Trying to add another attacker after seeing blockers. Attackers are declared together and that choice is finished before blockers are chosen. You may use spells or abilities after blockers, but they do not let you redeclare attackers unless they explicitly say so.</p></section>
         <section className="content-card"><h2>Related concepts and guides</h2><ul><li><Link to="/learn/turn-structure">Turn structure</Link></li><li><Link to="/learn/casting-resolution">Casting and resolving a spell</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'priority' }}>Priority and responding</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'triggered-ability' }}>Triggered abilities</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'stack' }}>The stack</Link></li></ul></section>

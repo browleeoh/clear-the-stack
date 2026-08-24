@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { DetailAccordion } from '@/components/ui/accordion'
 import { SourceList } from '@/components/source-list'
+import { ProcessList } from '@/components/process-list'
 
 export const Route = createFileRoute('/learn/turn-structure')({
   head: () => ({
@@ -61,12 +62,7 @@ export function TurnStructure() {
           <p><strong>Beginning → Main → Combat → Main → Ending</strong></p>
           <p>Untap, handle upkeep, draw, make your first main-phase choices, attack and block, make your second main-phase choices, then finish the turn.</p>
         </section>
-        {turnStructurePhases.map((phase) => (
-          <section className="content-card" key={phase.title}>
-            <h2>{phase.title}</h2>
-            <p>{phase.body}</p>
-          </section>
-        ))}
+        <ProcessList steps={turnStructurePhases} />
         <section className="content-card">
           <h2>Example turn</h2>
           <p>You untap, resolve an upkeep trigger, and draw. In your first main phase you play a land and cast a creature. You attack with a different creature, then use your second main phase to cast a sorcery. At the end step, an “at the beginning of your end step” ability triggers; cleanup follows.</p>

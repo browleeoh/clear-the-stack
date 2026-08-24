@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { SourceList } from '@/components/source-list'
 import { DetailAccordion } from '@/components/ui/accordion'
+import { ProcessList } from '@/components/process-list'
 
 export const castingSteps = [
   ['1. Put the spell on the stack', 'Move the card from the zone you are casting it from to the stack and announce that you are casting it.'],
@@ -27,7 +28,7 @@ export function CastingResolution() {
       <p className="lede">Casting puts a spell on the stack. It resolves only after every player gets a chance to respond and all players pass.</p>
       <div className="content-stack">
         <section className="content-card content-card--memory" aria-labelledby="casting-summary"><h2 id="casting-summary">One-screen summary</h2><p><strong>Announce → Choose → Pay → Respond → Resolve → Move</strong></p><p>Finish casting first. Then players respond. The top object resolves first, one object at a time.</p></section>
-        {castingSteps.map(([title, body]) => <section className="content-card" key={title}><h2>{title}</h2><p>{body}</p></section>)}
+        <ProcessList steps={castingSteps} />
         <section className="content-card"><h2>Example</h2><p>You cast a spell that says “Destroy target creature.” Put it on the stack, choose the creature, and pay the cost. Your opponent may respond with an instant. That instant goes on top and resolves first. If your target is still legal when your spell reaches the top, destroy it; then put your instant or sorcery card into its owner’s graveyard.</p></section>
         <section className="content-card content-card--warning"><h2>Common mistake</h2><p>Applying a spell’s effect as soon as its mana is paid. Paying finishes casting; it does not resolve the spell. Players still receive priority before the top object resolves.</p></section>
         <section className="content-card"><h2>Related concepts</h2><ul><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'stack' }}>The stack</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'priority' }}>Priority and responding</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'target' }}>Targets</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'resolution' }}>Resolution</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'zones' }}>Zones</Link></li></ul></section>
