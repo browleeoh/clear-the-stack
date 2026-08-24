@@ -48,12 +48,18 @@ export function updateRecentSearches(current: string[], query: string) {
 
 export function groupSearchResults(results: SearchEntry[], query = '') {
   const normalizedQuery = query.trim().toLocaleLowerCase()
+  const queryTerms = normalizedQuery.split(/\s+/).filter(Boolean)
   const exactMatch = results.find((result) => result.title.toLocaleLowerCase() === normalizedQuery)
   const exactKind: (typeof resultGroupOrder)[number] | undefined = exactMatch?.kind === 'concept' || exactMatch?.kind === 'mechanic'
     ? 'mechanic'
     : exactMatch?.kind
+  const matchingCard = queryTerms.length
+    ? results.find((result) => result.kind === 'card' && queryTerms.every((term) => result.title.toLocaleLowerCase().includes(term)))
+    : undefined
   const groupOrder: readonly (typeof resultGroupOrder)[number][] = exactKind
     ? [exactKind, ...resultGroupOrder.filter((kind) => kind !== exactKind)]
+    : matchingCard
+      ? ['learn', 'card', 'scenario', 'mechanic']
     : resultGroupOrder
 
   return groupOrder.map((kind) => ({
