@@ -17,7 +17,8 @@ The next content milestone imports all 193 mechanically distinct HOB main-set ca
 
 ## Run locally
 
-Requirements: Node.js 22 or newer and npm.
+Requirements: Node.js 22 or newer and npm 10.9.4. Use this npm version when
+changing dependencies or regenerating the lockfile so clean installs match CI.
 
 ```bash
 npm install
