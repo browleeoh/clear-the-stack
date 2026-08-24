@@ -1167,6 +1167,13 @@ describe('catalog search', () => {
     expect(mechanicGroups[0]?.results[0]?.title).toBe('Storied')
   })
 
+  it('shows partial card-name matches before scenarios', () => {
+    const groups = groupSearchResults(searchContent('Bard King'), 'Bard King')
+    expect(groups[0]?.label).toBe('Cards')
+    expect(groups[0]?.results.map((result) => result.title)).toContain('Bard, King of Dale')
+    expect(groups.findIndex((group) => group.label === 'Cards')).toBeLessThan(groups.findIndex((group) => group.label === 'Examples'))
+  })
+
   it('keeps at most five deduplicated recent searches and ignores bad storage', () => {
     expect(updateRecentSearches(['two', 'one'], ' one ')).toEqual(['one', 'two'])
     expect(updateRecentSearches(['five', 'four', 'three', 'two', 'one'], 'six')).toEqual(['six', 'five', 'four', 'three', 'two'])
