@@ -20,6 +20,7 @@ import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
 import {
   getSearchDestination,
+  getSearchDisplay,
   getSearchStatus,
   groupSearchResults,
   initialSearchResultLimit,
@@ -1214,6 +1215,21 @@ describe('catalog search', () => {
     expect(getSearchStatus('how does fight work?', 0)).toBe('No matches available.')
     expect(getSearchStatus('thorin', 1)).toBe('1 result available.')
     expect(getSearchStatus('thorin', 2)).toBe('2 results available.')
+  })
+
+  it('keeps the mobile open state visibly populated with examples, recents, results, or no-results copy', () => {
+    expect(getSearchDisplay('', [], [])).toEqual({
+      mode: 'discovery',
+      heading: 'Try an example',
+      values: ['Thorin Oakenshield', 'How does fight work?'],
+    })
+    expect(getSearchDisplay('', ['Thorin Oakenshield'], [])).toEqual({
+      mode: 'discovery',
+      heading: 'Recent',
+      values: ['Thorin Oakenshield'],
+    })
+    expect(getSearchDisplay('thorin', [], searchContent('thorin')).mode).toBe('results')
+    expect(getSearchDisplay('not a real card', [], []).mode).toBe('empty')
   })
 
   it('limits rendered suggestions and keeps secondary text only when it distinguishes a result', () => {

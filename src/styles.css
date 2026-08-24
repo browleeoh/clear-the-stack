@@ -928,36 +928,65 @@ html {
     padding-bottom: calc(6rem + env(safe-area-inset-bottom));
   }
 
-  .search-panel--mobile-open {
-    position: fixed;
-    z-index: 40;
-    top: calc(var(--search-viewport-top, 0px) + max(0.75rem, env(safe-area-inset-top)));
-    right: 0.75rem;
-    left: 0.75rem;
-    margin-top: 0;
-  }
-
-  .search-positioner--mobile-open {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    width: 1px !important;
-    min-width: 1px !important;
-    max-width: 1px !important;
-  }
-
-  .search-overlay {
-    position: fixed;
-    z-index: 39;
-    top: calc(var(--search-viewport-top, 0px) + max(0.75rem, env(safe-area-inset-top)) + 3.25rem + 0.5rem);
-    right: 0.75rem;
+  .bottom-nav {
     bottom: auto;
-    left: 0.75rem;
-    height: calc(var(--search-viewport-height, 100dvh) - max(0.75rem, env(safe-area-inset-top)) - 3.25rem - 1.25rem - max(0.75rem, env(safe-area-inset-bottom)));
-    max-height: none;
+    top: calc(var(--mobile-viewport-top, 0px) + var(--mobile-viewport-height, 100dvh) - 4rem - env(safe-area-inset-bottom));
+    min-height: calc(4rem + env(safe-area-inset-bottom));
+  }
+
+  .mobile-search-anchor {
+    position: fixed;
+    top: var(--search-viewport-top, 0px);
+    right: 0;
+    left: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .mobile-search-positioner {
+    z-index: 40;
+  }
+
+  .mobile-search-surface {
+    width: 100vw;
+    height: var(--search-viewport-height, 100dvh);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    background: var(--surface);
+    overscroll-behavior: contain;
+  }
+
+  .mobile-search-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.65rem;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mobile-search-close {
+    min-height: 44px;
+    border: 0;
+    border-radius: 0.7rem;
+    background: transparent;
+    color: var(--forest);
+    cursor: pointer;
+    font-weight: 750;
+  }
+
+  .mobile-search-box {
+    margin: 0;
+    border-radius: 0.75rem;
+    box-shadow: none;
+  }
+
+  .mobile-search-results {
+    min-height: 0;
+    overflow-y: auto;
     border-radius: 0.9rem;
     overscroll-behavior: contain;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
   }
 }
 
