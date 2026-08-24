@@ -516,8 +516,7 @@ html {
   margin-top: 2rem;
 }
 
-.feature-card,
-.content-card {
+.feature-card {
   border: 1px solid var(--line);
   border-radius: 1.4rem;
   background: rgb(255 253 247 / 0.78);
@@ -560,6 +559,16 @@ html {
 }
 
 .content-card {
+  border-top: 1px solid var(--line);
+  padding: 1.5rem 0 0;
+}
+
+.content-card--memory,
+.content-card--warning,
+.scenario-card,
+.card-details {
+  border: 1px solid var(--line);
+  border-radius: 1.15rem;
   padding: 1.2rem;
 }
 
@@ -571,6 +580,16 @@ html {
 .content-card--warning {
   border-color: #ddb29f;
   background: var(--ember-soft);
+}
+
+.scenario-card {
+  background: rgb(255 253 247 / 0.78);
+  box-shadow: 0 10px 25px rgb(39 43 35 / 0.05);
+}
+
+.card-details {
+  background: var(--surface);
+  box-shadow: 0 10px 25px rgb(39 43 35 / 0.05);
 }
 
 .content-card p:last-child,

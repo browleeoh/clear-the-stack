@@ -79,7 +79,7 @@ function CardImage({ card }: Readonly<{ card: CatalogCard }>) {
 function CardDetails({ card }: Readonly<{ card: CatalogCard }>) {
   if (card.faces?.length) {
     return (
-      <section className="content-card" aria-labelledby="card-details-heading">
+      <section className="content-card card-details" aria-labelledby="card-details-heading">
         <h2 id="card-details-heading">Card details</h2>
         <div className="card-faces">
           {card.faces.map((face) => (
@@ -99,7 +99,7 @@ function CardDetails({ card }: Readonly<{ card: CatalogCard }>) {
   }
 
   return (
-    <section className="content-card" aria-labelledby="card-details-heading">
+    <section className="content-card card-details" aria-labelledby="card-details-heading">
       <h2 id="card-details-heading">Card details</h2>
       <p className="card-type-line">
         {card.manaCost ? <strong>{card.manaCost}</strong> : null}
