@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   HeadContent,
   Link,
@@ -12,6 +12,7 @@ import { PwaRegister } from '@/components/pwa-register'
 import { LocalFeedback } from '@/components/local-feedback'
 import { TestLogControls } from '@/components/test-log-controls'
 import { OfflineStatus } from '@/components/offline-status'
+import { MobileSearchModeContext } from '@/components/mobile-search-mode'
 import '@/styles.css'
 
 export const Route = createRootRoute({
@@ -44,53 +45,57 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  const [mobileSearchActive, setMobileSearchActive] = useState(false)
+
   return (
-    <RootDocument>
-      <header className="app-header">
-        <div className="shell app-header__inner">
-          <Link to="/" className="brand">
-            <span className="brand__mark" aria-hidden="true">
-              <BookIcon size={19} />
-            </span>
-            <span className="brand__name">MTG Helper</span>
+    <MobileSearchModeContext value={setMobileSearchActive}>
+      <RootDocument>
+        <header className="app-header">
+          <div className="shell app-header__inner">
+            <Link to="/" className="brand">
+              <span className="brand__mark" aria-hidden="true">
+                <BookIcon size={19} />
+              </span>
+              <span className="brand__name">MTG Helper</span>
+            </Link>
+            <nav className="desktop-nav" aria-label="Primary navigation">
+              <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
+                Look Up
+              </Link>
+              <Link
+                to="/learn/turn-structure"
+                className="nav-link"
+                activeProps={{ 'aria-current': 'page' }}
+              >
+                Learn
+              </Link>
+            </nav>
+          </div>
+        </header>
+
+        <OfflineStatus />
+
+        <Outlet />
+        {import.meta.env.DEV ? <><LocalFeedback /><TestLogControls /></> : null}
+        <PwaRegister />
+
+        <nav className="bottom-nav" aria-label="Mobile navigation" hidden={mobileSearchActive}>
+          <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
+            <SearchIcon size={18} />
+            <span>Look Up</span>
           </Link>
-          <nav className="desktop-nav" aria-label="Primary navigation">
-            <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
-              Look Up
-            </Link>
-            <Link
-              to="/learn/turn-structure"
-              className="nav-link"
-              activeProps={{ 'aria-current': 'page' }}
-            >
-              Learn
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <OfflineStatus />
-
-      <Outlet />
-      {import.meta.env.DEV ? <><LocalFeedback /><TestLogControls /></> : null}
-      <PwaRegister />
-
-      <nav className="bottom-nav" aria-label="Mobile navigation">
-        <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
-          <SearchIcon size={18} />
-          <span>Look Up</span>
-        </Link>
-        <Link
-          to="/learn/turn-structure"
-          className="nav-link"
-          activeProps={{ 'aria-current': 'page' }}
-        >
-          <BookIcon size={18} />
-          <span>Learn</span>
-        </Link>
-      </nav>
-      {import.meta.env.DEV ? <TanStackRouterDevtools position="bottom-right" /> : null}
-    </RootDocument>
+          <Link
+            to="/learn/turn-structure"
+            className="nav-link"
+            activeProps={{ 'aria-current': 'page' }}
+          >
+            <BookIcon size={18} />
+            <span>Learn</span>
+          </Link>
+        </nav>
+        {import.meta.env.DEV ? <TanStackRouterDevtools position="bottom-right" /> : null}
+      </RootDocument>
+    </MobileSearchModeContext>
   )
 }
 
