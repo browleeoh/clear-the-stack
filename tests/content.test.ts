@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
 import {
   catalogCards,
   getCardContentBySlug,
@@ -20,11 +21,13 @@ import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
 import {
   getSearchDestination,
+  getSearchDisplay,
   getSearchStatus,
   groupSearchResults,
   initialSearchResultLimit,
   parseRecentSearches,
   searchPopupOptions,
+  searchInputAttributes,
   shouldShowResultDescription,
   updateRecentSearches,
 } from '@/components/search-experience'
@@ -1144,6 +1147,13 @@ describe('verified content', () => {
 })
 
 describe('catalog search', () => {
+  it('keeps the homepage focused on the lookup task without a generic set eyebrow', () => {
+    const homeRoute = readFileSync(new URL('../src/routes/index.tsx', import.meta.url), 'utf8')
+
+    expect(homeRoute).toContain('Understand your card.')
+    expect(homeRoute).not.toContain('Playing The Hobbit')
+  })
+
   const cardEntries = searchEntries.filter((entry) => entry.kind === 'card')
   const scenarioEntries = searchEntries.filter((entry) => entry.kind === 'scenario')
 
@@ -1216,12 +1226,31 @@ describe('catalog search', () => {
     expect(getSearchStatus('thorin', 2)).toBe('2 results available.')
   })
 
+  it('keeps the mobile open state visibly populated with examples, recents, results, or no-results copy', () => {
+    expect(getSearchDisplay('', [], [])).toEqual({
+      mode: 'discovery',
+      heading: 'Try an example',
+      values: ['Thorin Oakenshield', 'How does fight work?'],
+    })
+    expect(getSearchDisplay('', ['Thorin Oakenshield'], [])).toEqual({
+      mode: 'discovery',
+      heading: 'Recent',
+      values: ['Thorin Oakenshield'],
+    })
+    expect(getSearchDisplay('thorin', [], searchContent('thorin')).mode).toBe('results')
+    expect(getSearchDisplay('not a real card', [], []).mode).toBe('empty')
+  })
+
   it('limits rendered suggestions and keeps secondary text only when it distinguishes a result', () => {
     expect(initialSearchResultLimit).toBe(6)
     expect(shouldShowResultDescription({ kind: 'card' } as SearchEntry)).toBe(true)
     expect(shouldShowResultDescription({ kind: 'learn' } as SearchEntry)).toBe(true)
     expect(shouldShowResultDescription({ kind: 'mechanic' } as SearchEntry)).toBe(false)
     expect(shouldShowResultDescription({ kind: 'concept' } as SearchEntry)).toBe(false)
+  })
+
+  it('uses native search input semantics for the mobile keyboard', () => {
+    expect(searchInputAttributes).toEqual({ type: 'search', inputMode: 'search', enterKeyHint: 'search' })
   })
 
   it('renders process numbering only in the ordered-list marker', () => {

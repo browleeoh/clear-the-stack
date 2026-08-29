@@ -1,6 +1,6 @@
 import { Autocomplete } from '@base-ui/react/autocomplete'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import { SearchIcon } from './icons'
+import { BackIcon, SearchIcon } from './icons'
 import { useMobileSearchMode } from './mobile-search-mode'
 import { searchContent } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
@@ -10,6 +10,11 @@ const recentSearchesKey = 'mtg-helper-recent-searches'
 const groupOrder = ['card', 'scenario', 'learn', 'mechanic'] as const
 const labels = { card: 'Cards', scenario: 'Examples', learn: 'Beginner guides', mechanic: 'Rules and mechanics' } as const
 export const initialSearchResultLimit = 6
+export const searchInputAttributes = {
+  type: 'search' as const,
+  inputMode: 'search' as const,
+  enterKeyHint: 'search' as const,
+}
 
 export const searchPopupOptions = {
   align: 'start' as const,
@@ -20,8 +25,8 @@ export const searchPopupOptions = {
 const mobileSearchPopupOptions = {
   align: 'start' as const,
   side: 'bottom' as const,
-  sideOffset: 4,
-  collisionAvoidance: { side: 'shift' as const, align: 'shift' as const, fallbackAxisSide: 'none' as const },
+  sideOffset: 0,
+  collisionAvoidance: { side: 'none' as const, align: 'none' as const, fallbackAxisSide: 'none' as const },
   positionMethod: 'fixed' as const,
 }
 
@@ -86,6 +91,14 @@ export function updateRecentSearches(current: string[], query: string) {
   return normalized ? [normalized, ...current.filter((item) => item !== normalized)].slice(0, 5) : current
 }
 
+export function getSearchDisplay(query: string, recent: string[], results: SearchEntry[]) {
+  if (!query.trim()) {
+    const values = recent.length ? recent : examples
+    return { mode: 'discovery' as const, heading: recent.length ? 'Recent' : 'Try an example', values }
+  }
+  return results.length ? { mode: 'results' as const } : { mode: 'empty' as const }
+}
+
 export function groupSearchResults(results: SearchEntry[], _query = '') {
   const query = _query.trim().toLocaleLowerCase()
   const terms = query.split(/\s+/).filter(Boolean)
@@ -112,11 +125,14 @@ export function SearchExperience() {
   const [recent, setRecent] = useState<string[]>([])
   const [open, setOpen] = useState(false)
   const searchPanelRef = useRef<HTMLDivElement>(null)
+  const mobileSearchAnchorRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const isMobile = useMobileViewport()
   const setMobileSearchActive = useMobileSearchMode()
   const visibleViewport = useVisibleViewport(isMobile && open)
   const results = useMemo(() => query.trim() ? searchContent(query).slice(0, initialSearchResultLimit) : [], [query])
   const groups = useMemo(() => groupSearchResults(results, query), [results, query])
+  const display = getSearchDisplay(query, recent, results)
   const status = getSearchStatus(query, results.length)
   const visibleViewportStyle = visibleViewport ? {
     '--search-viewport-height': `${visibleViewport.height}px`,
@@ -144,21 +160,29 @@ export function SearchExperience() {
     globalThis.location.assign(result.href)
   }
 
-  const popup = (
-    <Autocomplete.Popup className="search-overlay" initialFocus={false}>
-      <Autocomplete.Status className="sr-only">{status}</Autocomplete.Status>
-      {!query.trim() ? (
-        <section className="search-discovery" aria-label={recent.length ? 'Recent searches' : 'Example searches'}>
-          <div className="overlay-heading"><h2>{recent.length ? 'Recent' : 'Try an example'}</h2>{recent.length ? <button type="button" onClick={() => { setRecent([]); localStorage.removeItem(recentSearchesKey) }}>Clear</button> : null}</div>
-          <div className="search-choice-list">{(recent.length ? recent : examples).map((value) => <button key={value} type="button" className="search-choice" onClick={() => setQuery(value)}>{value}</button>)}</div>
-        </section>
-      ) : results.length ? (
-        <Autocomplete.List className="search-results">
-          {groups.map((group) => <Autocomplete.Group key={group.kind} className="result-group"><Autocomplete.GroupLabel className="result-group-label">{labels[group.kind]}</Autocomplete.GroupLabel>{group.results.map((result) => <Autocomplete.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span>{shouldShowResultDescription(result) ? <span className="result-description">{result.description}</span> : null}</span></Autocomplete.Item>)}</Autocomplete.Group>)}
-        </Autocomplete.List>
-      ) : <p className="empty-state">No matches yet. Try a card name, mechanic, or rules question.</p>}
-    </Autocomplete.Popup>
-  )
+  function setSearchOpen(nextOpen: boolean) {
+    setOpen(nextOpen)
+    if (!nextOpen) {
+      setQuery('')
+      searchInputRef.current?.blur()
+    }
+  }
+
+  function clearSearch() {
+    setQuery('')
+    searchInputRef.current?.focus()
+  }
+
+  const resultsContent = display.mode === 'discovery' ? (
+    <section className="search-discovery" aria-label={recent.length ? 'Recent searches' : 'Example searches'}>
+      <div className="overlay-heading"><h2>{display.heading}</h2>{recent.length ? <button type="button" onClick={() => { setRecent([]); localStorage.removeItem(recentSearchesKey) }}>Clear</button> : null}</div>
+      <div className="search-choice-list">{display.values.map((value) => <button key={value} type="button" className="search-choice" onClick={() => setQuery(value)}>{value}</button>)}</div>
+    </section>
+  ) : display.mode === 'results' ? (
+    <Autocomplete.List className="search-results">
+      {groups.map((group) => <Autocomplete.Group key={group.kind} className="result-group"><Autocomplete.GroupLabel className="result-group-label">{labels[group.kind]}</Autocomplete.GroupLabel>{group.results.map((result) => <Autocomplete.Item key={result.id} value={result} className="result-link" onClick={() => select(result)}><span className="result-icon" aria-hidden="true">{result.kind === 'card' ? 'C' : result.kind === 'learn' ? 'L' : result.kind === 'scenario' ? 'E' : 'M'}</span><span><span className="result-title">{result.title}</span>{shouldShowResultDescription(result) ? <span className="result-description">{result.description}</span> : null}</span></Autocomplete.Item>)}</Autocomplete.Group>)}
+    </Autocomplete.List>
+  ) : <p className="empty-state">No matches yet. Try a card name, mechanic, or rules question.</p>
 
   return (
     <Autocomplete.Root
@@ -170,25 +194,59 @@ export function SearchExperience() {
       autoHighlight
       openOnInputClick
       open={open}
-      onOpenChange={(nextOpen) => setOpen(nextOpen)}
+      onOpenChange={(nextOpen, details) => {
+        if (!nextOpen && details.reason === 'outside-press' && searchPanelRef.current?.contains(details.event.target as Node)) {
+          details.cancel()
+          return
+        }
+        setSearchOpen(nextOpen)
+      }}
     >
-      <div ref={searchPanelRef} className={`search-panel${isMobile && open ? ' search-panel--mobile-open' : ''}`} style={visibleViewportStyle}>
-        <label className="search-box">
+      <div ref={searchPanelRef} className={`search-panel${isMobile && open ? ' search-panel--mobile-open' : ''}`}>
+        <div className="search-box">
           <SearchIcon />
           <span className="sr-only">Search cards, mechanics, or questions</span>
-          <Autocomplete.Input aria-label="Search cards, mechanics, or questions" placeholder="Search cards, mechanics, or questions" autoComplete="off" />
-        </label>
+          <Autocomplete.Input
+            ref={searchInputRef}
+            aria-label="Search cards, mechanics, or questions"
+            placeholder="Search cards, mechanics, or questions"
+            autoComplete="off"
+            {...searchInputAttributes}
+          />
+          <span className="search-actions">
+            {query ? <button type="button" className="search-clear" aria-label="Clear search" onPointerDown={(event) => event.preventDefault()} onClick={clearSearch}>×</button> : null}
+          </span>
+        </div>
       </div>
-      <Autocomplete.Portal>
-        <Autocomplete.Positioner
-          anchor={searchPanelRef}
-          className={`search-positioner${isMobile && open ? ' search-positioner--mobile-open' : ''}`}
-          style={visibleViewportStyle}
-          {...(isMobile ? mobileSearchPopupOptions : searchPopupOptions)}
-        >
-          {popup}
-        </Autocomplete.Positioner>
-      </Autocomplete.Portal>
+      {isMobile ? (
+        <>
+          <div ref={mobileSearchAnchorRef} className="mobile-search-anchor" style={visibleViewportStyle} />
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner anchor={mobileSearchAnchorRef} className="mobile-search-positioner" style={visibleViewportStyle} {...mobileSearchPopupOptions}>
+              <Autocomplete.Popup className="mobile-search-surface" initialFocus={false} aria-label="Search">
+                <header className="mobile-search-header">
+                  <button type="button" className="mobile-search-close" aria-label="Close search" onClick={() => setSearchOpen(false)}><BackIcon /></button>
+                </header>
+                <div className="mobile-search-results">
+                  <Autocomplete.Status className="sr-only">{status}</Autocomplete.Status>
+                  {resultsContent}
+                </div>
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </>
+      ) : (
+        <>
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner anchor={searchPanelRef} className="search-positioner" {...searchPopupOptions}>
+              <Autocomplete.Popup className="search-overlay" initialFocus={false}>
+                <Autocomplete.Status className="sr-only">{status}</Autocomplete.Status>
+                {resultsContent}
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </>
+      )}
     </Autocomplete.Root>
   )
 }

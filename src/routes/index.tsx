@@ -8,7 +8,6 @@ export const Route = createFileRoute('/')({
 function Home() {
   return (
     <main className="shell page">
-      <p className="eyebrow">Playing The Hobbit</p>
       <h1 className="page-title display-font">Understand your card.</h1>
       <SearchExperience />
     </main>

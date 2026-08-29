@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import {
   HeadContent,
   Link,
@@ -46,6 +46,25 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const [mobileSearchActive, setMobileSearchActive] = useState(false)
+  const [visibleViewport, setVisibleViewport] = useState<{ height: number; top: number } | null>(null)
+
+  useEffect(() => {
+    const viewport = window.visualViewport
+    const update = () => setVisibleViewport({ height: viewport?.height ?? window.innerHeight, top: viewport?.offsetTop ?? 0 })
+    update()
+    viewport?.addEventListener('resize', update)
+    viewport?.addEventListener('scroll', update)
+    window.addEventListener('resize', update)
+    return () => {
+      viewport?.removeEventListener('resize', update)
+      viewport?.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+  const viewportStyle = visibleViewport ? {
+    '--mobile-viewport-height': `${visibleViewport.height}px`,
+    '--mobile-viewport-top': `${visibleViewport.top}px`,
+  } as CSSProperties : undefined
 
   return (
     <MobileSearchModeContext value={setMobileSearchActive}>
@@ -79,7 +98,7 @@ function RootComponent() {
         {import.meta.env.DEV ? <><LocalFeedback /><TestLogControls /></> : null}
         <PwaRegister />
 
-        <nav className="bottom-nav" aria-label="Mobile navigation" hidden={mobileSearchActive}>
+        <nav className="bottom-nav" aria-label="Mobile navigation" hidden={mobileSearchActive} style={viewportStyle}>
           <Link to="/" className="nav-link" activeProps={{ 'aria-current': 'page' }}>
             <SearchIcon size={18} />
             <span>Look Up</span>
