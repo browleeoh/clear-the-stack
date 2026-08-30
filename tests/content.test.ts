@@ -118,6 +118,14 @@ describe('verified content', () => {
     expect(searchContent('can I use an instant after blockers')[0]).toMatchObject({ title: 'Attacking and blocking', href: '/learn/combat' })
   })
 
+  it('publishes verified Fight and Troll Negotiations guidance', () => {
+    expect(getConcept('fight')).toMatchObject({ verificationStatus: 'verified', summary: expect.stringContaining('at the same time') })
+    const troll = cards.find((card) => card.id === 'troll-negotiations')
+    expect(troll).toMatchObject({ oracleId: '6e275711-eb76-4924-ba38-c38a36d9d82a', conceptIds: expect.arrayContaining(['fight']) })
+    expect(troll?.scenarios.map((scenario) => scenario.id)).toEqual(['troll-counters-before-fight', 'troll-fight-can-attack-later', 'troll-one-target-illegal'])
+    expect(searchContent('how does fight work')[0]).toMatchObject({ title: 'Fight', href: '/mechanics/fight' })
+  })
+
   it('keeps the verified core-concepts Learn outline and sources complete', () => {
     expect(coreConceptSections.map(([title]) => title)).toEqual(['1. Token', '2. Counter', '3. Target', '4. Stack', '5. Priority'])
     expect(coreConceptSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
