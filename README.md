@@ -15,6 +15,15 @@ This repository contains the first vertical slice:
 
 The next content milestone imports all 193 mechanically distinct HOB main-set cards for basic search and card pages, then adds curated scenarios to 20–25 high-confusion cards.
 
+## V0.1 field-guidance correction loop
+
+The completed V0 ledger remains in `docs/v0-execution-plan.md`. The bounded post-V0
+field-guidance correction ledger is `docs/v0.1-execution-plan.md`, and its guarded
+issue-to-merge workflow is available as `$v01-ralph-loop`. It begins only with FG-01;
+after FG-03 it must stop for deployed real-device and house-game validation, and may
+continue only after explicit user approval. The existing `$v0-ralph-loop` remains the
+separate workflow for the original V0 ledger.
+
 ## Run locally
 
 Requirements: Node.js 22 or newer and npm 10.9.4. Use this npm version when
