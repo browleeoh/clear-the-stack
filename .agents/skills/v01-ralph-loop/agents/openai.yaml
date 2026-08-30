@@ -1,0 +1,4 @@
+interface:
+  display_name: "V0.1 Ralph Loop"
+  short_description: "Run the guarded V0.1 field-guidance ledger"
+  default_prompt: "Use $v01-ralph-loop to execute the authorized ready V0.1 field-guidance unit."
