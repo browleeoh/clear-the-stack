@@ -192,6 +192,10 @@ const rawSourceLocators = [
   { id: 'cr-rule-702-12b', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 702.12b — Indestructible permanents can’t be destroyed' },
   { id: 'cr-rule-603-12', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rules 603.12–603.12a — Reflexive triggered abilities' },
   { id: 'cr-rule-120-4a', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.4a — Calculating excess damage' },
+  { id: 'cr-rule-120-1', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.1 — Damage and its source' },
+  { id: 'cr-rule-120-2', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.2 — Any object can deal damage' },
+  { id: 'cr-rule-120-3', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.3 — Results of damage' },
+  { id: 'cr-rule-701-14', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rules 701.14–701.14d — Fight' },
   { id: 'cr-rule-120-6', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.6 — Lethal damage and marked damage' },
   { id: 'cr-rule-120-10', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 120.10 — Triggered abilities checking excess damage' },
   { id: 'cr-rule-702-195', sourceId: 'magic-comprehensive-rules', locatorType: 'rule-number', label: 'Rule 702.195 — Storied' },
@@ -229,6 +233,7 @@ const rawSourceLocators = [
   { id: 'hob-release-notes-goblin-plate-mail', sourceId: 'hob-release-notes', locatorType: 'no-card-specific-entry', label: 'Goblin Plate Mail — no card-specific release-note entry', cardOracleId: 'eda99a16-6a7c-4f39-8a6b-a284e6afd3fc' },
   { id: 'hob-release-notes-rhovanion-rampager', sourceId: 'hob-release-notes', locatorType: 'card-specific-entry', label: 'Rhovanion Rampager', cardOracleId: '008a11c1-d283-49fe-abd7-ff4fe8b1fe79' },
   { id: 'hob-release-notes-silvan-reveler', sourceId: 'hob-release-notes', locatorType: 'no-card-specific-entry', label: 'Silvan Reveler — no card-specific release-note entry', cardOracleId: '11932191-4b19-49b1-bfe4-abb7b83b2e59' },
+  { id: 'hob-release-notes-troll-negotiations', sourceId: 'hob-release-notes', locatorType: 'no-card-specific-entry', label: 'Troll Negotiations — no card-specific release-note entry', cardOracleId: '6e275711-eb76-4924-ba38-c38a36d9d82a' },
 ] satisfies SourceLocator[]
 
 export const concepts: Concept[] = conceptSchema.array().parse([
@@ -2481,9 +2486,35 @@ export const concepts: Concept[] = conceptSchema.array().parse([
     ],
     verificationStatus: 'verified',
   },
+  {
+    id: 'fight', name: 'Fight', kind: 'keyword-action',
+    aliases: ['fight', 'creatures fight', 'does fight tap', 'is fight combat damage', 'fight before attack'],
+    summary: 'When two creatures fight, each deals damage equal to its power to the other at the same time. This is not combat damage, and neither creature is attacking or blocking because of the fight.',
+    memoryAid: 'Fight deals creature-to-creature damage; it does not start combat.',
+    officialText: '701.14a–d: each creature deals damage equal to its power to the other; if either cannot fight, neither deals damage; fight damage is not combat damage.',
+    easyToMiss: ['Fighting does not tap either creature.', 'A creature that fights may still attack later if it is otherwise eligible.', 'If either creature is no longer a creature on the battlefield or is an illegal target, neither fights or deals fight damage.'],
+    relatedConceptIds: ['counter', 'priority', 'resolution'], sourceIds: ['cr-rule-701-14', 'cr-rule-120-1', 'cr-rule-120-2', 'cr-rule-120-3', 'cr-rule-120-6'], verificationStatus: 'verified',
+    scenarios: [
+      { id: 'fight-is-not-combat', title: 'Fight is not an attack or block', setup: ['Two creatures fight as a spell resolves.'], question: 'Do they become attacking or blocking?', answer: 'no', explanation: 'No. Fight makes them deal noncombat damage to each other; it does not make either creature attack, block, or tap.', commonMistake: 'Treating fight as a miniature combat step.', tags: ['fight', 'noncombat damage', 'does not tap'], sourceIds: ['cr-rule-701-14', 'cr-rule-120-2'], verificationStatus: 'verified', reviewedAt: '2026-08-30' },
+      { id: 'fight-needs-two-creatures', title: 'One creature cannot fight alone', setup: ['A resolving spell tells two targeted creatures to fight.', 'One target is no longer a creature on the battlefield.'], question: 'Does the other creature still deal damage?', answer: 'no', explanation: 'No. If either creature cannot fight, neither creature fights or deals fight damage.', commonMistake: 'Having the remaining creature deal damage by itself.', tags: ['fight target gone', 'neither deals damage'], sourceIds: ['cr-rule-701-14'], verificationStatus: 'verified', reviewedAt: '2026-08-30' },
+    ],
+  },
 ])
 
 export const cards: Card[] = cardSchema.array().parse([
+  {
+    id: 'troll-negotiations', oracleId: '6e275711-eb76-4924-ba38-c38a36d9d82a', setCode: 'HOB', collectorNumber: '138', name: 'Troll Negotiations', manaCost: '{2}{G}{G}', typeLine: 'Sorcery',
+    oracleText: 'Put two +1/+1 counters on target creature you control. Then it fights target creature an opponent controls. (Each deals damage equal to its power to the other.)',
+    summary: 'Troll Negotiations puts two +1/+1 counters on your chosen creature, then that creature fights the opponent’s chosen creature as the spell resolves.',
+    conceptIds: ['fight', 'counter', 'target', 'resolution'],
+    easyToMiss: ['The counters are placed before the fight, so they increase that creature’s fight damage.', 'Fight does not tap either creature and is not combat damage.', 'If one target is illegal when the spell resolves, follow the remaining legal instructions, but neither creature fights.'],
+    sourceIds: ['scryfall-hob-catalog', 'hob-release-notes-troll-negotiations', 'cr-rule-608-2b', 'cr-rule-701-14', 'cr-rule-120-1', 'cr-rule-120-2', 'cr-rule-120-3', 'cr-rule-120-6'],
+    scenarios: [
+      { id: 'troll-counters-before-fight', title: 'Counters come before the fight', setup: ['You cast Troll Negotiations targeting your 3/3 and an opponent’s 4/4.'], question: 'How much damage does your creature deal if the spell resolves?', answer: 'explanation', explanation: 'It gets two +1/+1 counters first, becomes 5/5, then deals 5 damage in the fight while the other creature deals 4 damage to it simultaneously.', commonMistake: 'Using the creature’s power before the counters were placed.', tags: ['Troll Negotiations', 'counters before fight', 'simultaneous damage'], sourceIds: ['scryfall-hob-catalog', 'cr-rule-701-14', 'cr-rule-120-3'], verificationStatus: 'verified', reviewedAt: '2026-08-30' },
+      { id: 'troll-fight-can-attack-later', title: 'Fight does not use up an attack', setup: ['Your untapped creature fights during your first main phase and survives.'], question: 'Can it attack later this turn?', answer: 'yes', explanation: 'Yes, if it is otherwise eligible to attack. Fighting did not tap it or make it attack.', commonMistake: 'Treating fight damage as combat damage.', tags: ['fight before combat', 'can attack later', 'does not tap'], sourceIds: ['cr-rule-701-14'], verificationStatus: 'verified', reviewedAt: '2026-08-30' },
+      { id: 'troll-one-target-illegal', title: 'One target is gone before resolution', setup: ['Troll Negotiations targets your 3/3 and an opponent’s creature.', 'The opponent’s creature is gone when the spell resolves.'], question: 'Do you still put counters on your 3/3?', answer: 'yes', explanation: 'Yes. The legal target gets two +1/+1 counters, but no fight happens because both creatures must be able to fight.', commonMistake: 'Countering the whole spell when only one target became illegal.', tags: ['one target illegal', 'counters remain', 'no fight'], sourceIds: ['cr-rule-608-2b', 'cr-rule-701-14'], verificationStatus: 'verified', reviewedAt: '2026-08-30' },
+    ], verificationStatus: 'verified',
+  },
   {
     id: 'rhovanion-rampager', oracleId: '008a11c1-d283-49fe-abd7-ff4fe8b1fe79', setCode: 'HOB', collectorNumber: '82', name: 'Rhovanion Rampager', manaCost: '{2}{B}', typeLine: 'Creature — Wolf', power: '3', toughness: '2',
     oracleText: "Whenever this creature attacks, you may sacrifice another creature. If you do, put a number of +1/+1 counters on this creature equal to the sacrificed creature's power.\nWhen this creature dies, amass Goblins X, where X is this creature's power. (Put X +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)",

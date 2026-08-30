@@ -41,7 +41,7 @@ describe('authoritative source records', () => {
       return groups
     }, {})
 
-    expect(cardLocators).toHaveLength(20)
+    expect(cardLocators).toHaveLength(21)
     expect(byType['card-specific-entry']?.map((locator) => locator.label)).toEqual(
       expect.arrayContaining([
         'Azog, Moria\'s Ruin',
@@ -67,6 +67,7 @@ describe('authoritative source records', () => {
         'Goblin Plate Mail — no card-specific release-note entry',
         'Silvan Reveler — no card-specific release-note entry',
         "Sting, Bilbo's Sword — no card-specific release-note entry",
+        'Troll Negotiations — no card-specific release-note entry',
       ]),
     )
   })
@@ -78,6 +79,10 @@ describe('authoritative source records', () => {
       locatorType: 'no-card-specific-entry',
       cardOracleId: '9779f32c-b1a2-42a3-8e78-14c28c3ad254',
     })
+  })
+
+  it('records Troll Negotiations as having no card-specific release-note entry', () => {
+    expect(sourceLocators.find((locator) => locator.id === 'hob-release-notes-troll-negotiations')).toMatchObject({ locatorType: 'no-card-specific-entry', cardOracleId: '6e275711-eb76-4924-ba38-c38a36d9d82a' })
   })
 
   it('preserves Bolg card-specific release-note coverage', () => {
