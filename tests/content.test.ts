@@ -17,7 +17,7 @@ import { searchContent, searchEntries } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
-import { combatActionExamples, combatSourceIds, combatSteps } from '@/routes/learn/combat'
+import { combatActionExamples, combatSourceIds, combatSteps, multipleBlockScenario } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
 import {
   getSearchDestination,
@@ -109,6 +109,7 @@ describe('verified content', () => {
   it('keeps the verified attacking and blocking Learn outline and sources complete', () => {
     expect(combatSteps.map(([title]) => title)).toEqual(['1. Beginning of combat — act before attacking', '2. Declare attackers — choose all at once', '3. After attackers — respond before blocks', '4. Declare blockers — choose all at once', '5. After blockers — respond before damage', '6. Combat damage — deal the assigned damage', '7. End of combat — one final window'])
     expect(combatActionExamples).toEqual(['After blockers: cast an instant that gives your blocked 3/3 +2/+2 before combat damage.', 'After attackers or blockers: activate a legal ability such as “{1}: This creature gets +1/+1 until end of turn” before combat damage.'])
+    expect(multipleBlockScenario).toEqual(expect.arrayContaining(['Your 4/4 attacker is blocked by a 2/2 and a 1/1. Multiple creatures may block that one attacker.', 'When combat damage is assigned, you choose how to divide your attacker’s 4 damage between those two blockers: 4 and 0, 3 and 1, 2 and 2, 1 and 3, or 0 and 4 are all current-rule choices.', 'Each blocker assigns its own damage to the attacker. If both blockers leave combat before damage, the attacker remains blocked and assigns no combat damage to the defending player.']))
     expect(combatSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
   })
 

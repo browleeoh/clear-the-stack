@@ -18,6 +18,12 @@ export const combatActionExamples = [
   'After attackers or blockers: activate a legal ability such as “{1}: This creature gets +1/+1 until end of turn” before combat damage.',
 ] as const
 
+export const multipleBlockScenario = [
+  'Your 4/4 attacker is blocked by a 2/2 and a 1/1. Multiple creatures may block that one attacker.',
+  'When combat damage is assigned, you choose how to divide your attacker’s 4 damage between those two blockers: 4 and 0, 3 and 1, 2 and 2, 1 and 3, or 0 and 4 are all current-rule choices.',
+  'Each blocker assigns its own damage to the attacker. If both blockers leave combat before damage, the attacker remains blocked and assigns no combat damage to the defending player.',
+] as const
+
 export const combatSourceIds = ['cr-rule-506-1', 'cr-rule-506-3', 'cr-rule-506-4', 'cr-rule-506-4b', 'cr-rule-507-2', 'cr-rule-508-1', 'cr-rule-508-1a', 'cr-rule-508-1f', 'cr-rule-508-1m', 'cr-rule-508-2', 'cr-rule-509-1', 'cr-rule-509-1a', 'cr-rule-509-1h', 'cr-rule-509-2', 'cr-rule-510-1', 'cr-rule-510-1a-e', 'cr-rule-511-1', 'cr-rule-117-4']
 
 export const Route = createFileRoute('/learn/combat')({
@@ -37,9 +43,10 @@ export function CombatGuide() {
         <ProcessList steps={combatSteps} />
         <section className="content-card"><h2>Example</h2><p>You attack with a 3/3 and a 2/2. After both players pass, your opponent declares a 2/2 blocker for the 3/3. Now both players get priority: you may cast an instant or activate an ability that can be used now before damage. Neither player can go back and add an attacker or change that block just because the other player acted.</p></section>
         <section className="content-card"><h2>What can I do in a combat window?</h2><ul><li>{combatActionExamples[0]}</li><li>{combatActionExamples[1]}</li></ul><p>These actions use the stack, so each player gets a chance to respond before one resolves.</p></section>
+        <section className="content-card"><h2>One attacker, two blockers</h2><ol><li>{multipleBlockScenario[0]}</li><li>{multipleBlockScenario[1]}</li><li>{multipleBlockScenario[2]}</li></ol><p>Normally, each blocker chooses one attacker to block. The attacking creature’s controller chooses its damage split; that choice does not use damage-order terminology.</p></section>
         <section className="content-card content-card--warning"><h2>Common mistake</h2><p>Trying to respond while attackers or blockers are being declared. Each declaration is one turn-based action: wait until it finishes, then use the following priority window. Tapping or untapping a creature already in combat does not by itself remove it from combat or stop its combat damage.</p></section>
         <section className="content-card"><h2>Related concepts and guides</h2><ul className="related-links"><li><Link to="/learn/turn-structure">Turn structure</Link></li><li><Link to="/learn/casting-resolution">Casting and resolving a spell</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'priority' }}>Priority and responding</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'triggered-ability' }}>Triggered abilities</Link></li><li><Link to="/mechanics/$mechanicSlug" params={{ mechanicSlug: 'stack' }}>The stack</Link></li></ul></section>
-        <section className="content-card"><DetailAccordion title="Technical detail and official sources"><p>The combat phase has five steps. Declaring attackers and blockers are turn-based actions that do not use the stack. Triggered abilities are stacked afterward, then the active player receives priority. First strike or double strike can create a second combat damage step. This guide intentionally leaves multiple-block damage choices and trample for later guidance.</p><SourceList sourceIds={combatSourceIds} /></DetailAccordion></section>
+        <section className="content-card"><DetailAccordion title="Technical detail and official sources"><p>The combat phase has five steps. Declaring attackers and blockers are turn-based actions that do not use the stack. Triggered abilities are stacked afterward, then the active player receives priority. First strike or double strike can create a second combat damage step. Combat damage assignments follow current rule 510.1; trample is covered separately.</p><SourceList sourceIds={combatSourceIds} /></DetailAccordion></section>
       </div>
     </main>
   )
