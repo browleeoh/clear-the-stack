@@ -17,7 +17,7 @@ import { searchContent, searchEntries } from '@/lib/search'
 import type { SearchEntry } from '@/lib/search'
 import { turnStructurePhases, turnStructureSourceIds } from '@/routes/learn/turn-structure'
 import { castingSourceIds, castingSteps } from '@/routes/learn/casting-resolution'
-import { combatSourceIds, combatSteps } from '@/routes/learn/combat'
+import { combatActionExamples, combatSourceIds, combatSteps } from '@/routes/learn/combat'
 import { coreConceptSections, coreConceptSourceIds } from '@/routes/learn/core-concepts'
 import {
   getSearchDestination,
@@ -107,12 +107,14 @@ describe('verified content', () => {
   })
 
   it('keeps the verified attacking and blocking Learn outline and sources complete', () => {
-    expect(combatSteps.map(([title]) => title)).toEqual(['1. Begin combat', '2. Declare attackers', '3. Handle attack triggers and responses', '4. Declare blockers', '5. Handle block triggers and responses', '6. Deal combat damage', '7. End combat'])
+    expect(combatSteps.map(([title]) => title)).toEqual(['1. Beginning of combat — act before attacking', '2. Declare attackers — choose all at once', '3. After attackers — respond before blocks', '4. Declare blockers — choose all at once', '5. After blockers — respond before damage', '6. Combat damage — deal the assigned damage', '7. End of combat — one final window'])
+    expect(combatActionExamples).toEqual(['After blockers: cast an instant that gives your blocked 3/3 +2/+2 before combat damage.', 'After attackers or blockers: activate a legal ability such as “{1}: This creature gets +1/+1 until end of turn” before combat damage.'])
     expect(combatSourceIds.every((sourceId) => resolveSourceReference(sourceId))).toBe(true)
   })
 
   it('discovers attacking and blocking from beginner questions', () => {
     expect(searchContent('when can I respond after blockers combat damage')[0]).toMatchObject({ title: 'Attacking and blocking', href: '/learn/combat' })
+    expect(searchContent('can I use an instant after blockers')[0]).toMatchObject({ title: 'Attacking and blocking', href: '/learn/combat' })
   })
 
   it('keeps the verified core-concepts Learn outline and sources complete', () => {

@@ -105,8 +105,8 @@ export const searchEntries: SearchEntry[] = [
     kind: 'learn',
     href: '/learn/combat',
     slug: 'combat',
-    aliases: 'how do I attack block when can I respond combat order summoning sickness vigilance',
-    body: 'beginning of combat declare attackers tap attackers attack triggers priority declare blockers block triggers combat damage end of combat unblocked creature defending player',
+    aliases: 'how do I attack block when can I respond before attackers after attackers after blockers combat damage first strike combat timing can I use an instant after blocks combat activated ability',
+    body: 'beginning of combat priority before attackers declare attackers turn based action no response tap attackers attack triggers priority after attackers declare blockers turn based action no response block triggers priority after blockers combat damage first strike regular damage end of combat unblocked creature defending player',
   },
   {
     id: 'learn:core-concepts',

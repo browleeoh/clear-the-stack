@@ -357,7 +357,7 @@ describe('authoritative source records', () => {
   })
 
   it('keeps precise combat-step Learn locators', () => {
-    const ids = ['cr-rule-506-1', 'cr-rule-507-2', 'cr-rule-508-1', 'cr-rule-508-2', 'cr-rule-509-1', 'cr-rule-509-2', 'cr-rule-510-1', 'cr-rule-511-1']
+    const ids = ['cr-rule-506-1', 'cr-rule-506-3', 'cr-rule-506-4', 'cr-rule-506-4b', 'cr-rule-507-2', 'cr-rule-508-1', 'cr-rule-508-1a', 'cr-rule-508-1f', 'cr-rule-508-2', 'cr-rule-509-1', 'cr-rule-509-1a', 'cr-rule-509-1h', 'cr-rule-509-2', 'cr-rule-510-1', 'cr-rule-510-1a-e', 'cr-rule-511-1']
     expect(sourceLocators.filter((locator) => ids.includes(locator.id)).map((locator) => locator.id).sort()).toEqual([...ids].sort())
   })
 
